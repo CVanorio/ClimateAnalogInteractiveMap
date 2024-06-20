@@ -1,0 +1,39 @@
+/* src/App.css */
+.App {
+  display: flex;
+  height: 100vh;
+  flex-direction: row;
+  }
+  
+  .sidebar {
+  background-color: #f0f0f0;
+  overflow-x: hidden;
+  transition: width 0.3s ease;
+  width: 0;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  z-index: 1;
+  padding-top: 60px; /* Adjust as needed */
+  }
+  
+  .sidebar.visible {
+  width: 250px; /* Adjust width as needed */
+  }
+  
+  .menu-content {
+  padding: 20px;
+  }
+  
+  .menu-toggle {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  z-index: 2;
+  }
+  
+  .map-container {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  }
