@@ -4,32 +4,33 @@ import React from 'react';
 const DataTypeSelector = ({ selectedDataType, onChange }) => {
   return (
     <div>
-      <input
-        type="radio"
-        id="temperature"
-        value="temperature"
-        checked={selectedDataType === 'temperature'}
-        onChange={onChange}
-      />
-      <label htmlFor="temperature">Temperature</label>
-
-      <input
-        type="radio"
-        id="precipitation"
-        value="precipitation"
-        checked={selectedDataType === 'precipitation'}
-        onChange={onChange}
-      />
-      <label htmlFor="precipitation">Precipitation</label>
-
-      <input
-        type="radio"
-        id="both"
-        value="both"
-        checked={selectedDataType === 'both'}
-        onChange={onChange}
-      />
-      <label htmlFor="both">Both</label>
+      <label>
+        <input
+          type="radio"
+          value="temperature"
+          checked={selectedDataType === 'temperature'}
+          onChange={onChange}
+        />
+        Temperature
+      </label>
+      <label>
+        <input
+          type="radio"
+          value="precipitation"
+          checked={selectedDataType === 'precipitation'}
+          onChange={onChange}
+        />
+        Precipitation
+      </label>
+      <label>
+        <input
+          type="radio"
+          value="both"
+          checked={selectedDataType === 'both'}
+          onChange={onChange}
+        />
+        Both
+      </label>
     </div>
   );
 };
