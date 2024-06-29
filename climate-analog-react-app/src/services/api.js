@@ -1,22 +1,23 @@
-// src/api.js
 import axios from 'axios';
 
-const BASE_URL = 'https://localhost:3000'
+const BASE_URL = 'http://localhost:3000';
 
-export const fetchData = async (selectedCounty, timeScale, scaleValue, targetYear, selectedDataType) => {
+export const fetchData = async (selectedCounty, timeScale, targetYear, scaleValue, selectedDataType) => {
   try {
-    const response = await axios.get(`${BASE_URL}/data`, {
+    console.log("Inside API.js")
+    const response = await axios.get(`${BASE_URL}/getData`, {
       params: {
-        county: selectedCounty,
-        dateType: timeScale,
-        dateValue: scaleValue,
+        targetCounty: selectedCounty,
+        timeScale: timeScale,
+        timeScaleValue: scaleValue,
         year: targetYear,
         dataType: selectedDataType,
       },
     });
+    console.log('API response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching data:', error);
-    throw error;
+    return error;
   }
 };

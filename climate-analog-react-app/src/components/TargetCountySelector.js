@@ -1,4 +1,3 @@
-// src/components/TargetCountySelector.js
 import React from 'react';
 
 const counties = [
@@ -11,14 +10,13 @@ const counties = [
   "Menominee", "Milwaukee", "Monroe", "Oconto", "Oneida", "Outagamie",
   "Ozaukee", "Pepin", "Pierce", "Polk", "Portage", "Price", "Racine",
   "Richland", "Rock", "Rusk", "Sauk", "Sawyer", "Shawano", "Sheboygan",
-  "St. Croix", "Taylor", "Trempealeau", "Vernon", "Vilas", "Walworth",
-  "Washburn", "Washington", "Waukesha", "Waupaca", "Waushara", "Winnebago",
-  "Wood"
+  "St. Croix", "Taylor", "Trempealeau", "Vernon", "Vilas", "Walworth", 
+  "Washburn", "Washington", "Waukesha", "Waupaca", "Waushara", "Winnebago", "Wood"
 ];
 
-const TargetCountySelector = ({ onSelectCounty }) => {
+const TargetCountySelector = ({ selectedCounty, onSelectCounty }) => {
   return (
-    <select onChange={(e) => onSelectCounty(e.target.value)}>
+    <select value={selectedCounty} onChange={(e) => onSelectCounty(e.target.value)}>
       <option value="">Select a county</option>
       {counties.map((county) => (
         <option key={county} value={county}>

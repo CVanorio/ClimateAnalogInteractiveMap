@@ -1,26 +1,36 @@
-// src/components/Sidebar.js
 import React from 'react';
 import TargetCountySelector from './TargetCountySelector';
 import TimeScaleSelector from './TimeScaleSelector';
 import DataTypeSelector from './DataTypeSelector';
 
 const Sidebar = ({
+  selectedCounty,
   onSelectCounty,
+  timeScale,
   onToggleTimeScale,
+  scaleValue,
   onSelectScaleValue,
-  setFetchTemperature,
-  setFetchPrecipitation
+  selectedDataType,
+  onDataTypeChange,
+  targetYear,
+  onSelectTargetYear
 }) => {
   return (
     <div>
-      <TargetCountySelector onSelectCounty={onSelectCounty} />
+      <TargetCountySelector
+        selectedCounty={selectedCounty}
+        onSelectCounty={onSelectCounty}
+      />
       <TimeScaleSelector
+        timeScale={timeScale}
         onToggleTimeScale={onToggleTimeScale}
+        scaleValue={scaleValue}
         onSelectScaleValue={onSelectScaleValue}
+        onSelectTargetYear={onSelectTargetYear}
       />
       <DataTypeSelector
-        setFetchTemperature={setFetchTemperature}
-        setFetchPrecipitation={setFetchPrecipitation}
+        selectedDataType={selectedDataType}
+        onDataTypeChange={onDataTypeChange}
       />
     </div>
   );

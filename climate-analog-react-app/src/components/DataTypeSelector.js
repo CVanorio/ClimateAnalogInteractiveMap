@@ -1,7 +1,6 @@
-// src/components/DataTypeSelector.js
 import React from 'react';
 
-const DataTypeSelector = ({ selectedDataType, onChange }) => {
+const DataTypeSelector = ({ selectedDataType, onDataTypeChange }) => {
   return (
     <div>
       <label>
@@ -9,7 +8,7 @@ const DataTypeSelector = ({ selectedDataType, onChange }) => {
           type="radio"
           value="temperature"
           checked={selectedDataType === 'temperature'}
-          onChange={onChange}
+          onChange={(e) => onDataTypeChange(e.target.value)}
         />
         Temperature
       </label>
@@ -18,7 +17,7 @@ const DataTypeSelector = ({ selectedDataType, onChange }) => {
           type="radio"
           value="precipitation"
           checked={selectedDataType === 'precipitation'}
-          onChange={onChange}
+          onChange={(e) => onDataTypeChange(e.target.value)}
         />
         Precipitation
       </label>
@@ -27,7 +26,7 @@ const DataTypeSelector = ({ selectedDataType, onChange }) => {
           type="radio"
           value="both"
           checked={selectedDataType === 'both'}
-          onChange={onChange}
+          onChange={(e) => onDataTypeChange(e.target.value)}
         />
         Both
       </label>

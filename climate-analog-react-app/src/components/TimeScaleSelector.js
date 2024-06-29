@@ -1,36 +1,6 @@
-// src/components/TimeScaleSelector.js
-import React, { useState } from 'react';
+import React from 'react';
 
-const TimeScaleSelector = ({ onToggleTimeScale, onSelectScaleValue }) => {
-  const [timeScale, setTimeScale] = useState('by_year');
-  const [season, setSeason] = useState('');
-  const [month, setMonth] = useState('');
-  const [targetYear, setTargetYear] = useState('');
-
-  const handleTimeScaleChange = (e) => {
-    const scale = e.target.value;
-    setTimeScale(scale);
-    onToggleTimeScale(scale);
-  };
-
-  const handleSeasonChange = (e) => {
-    const selectedSeason = e.target.value;
-    setSeason(selectedSeason);
-    onSelectScaleValue(selectedSeason);
-  };
-
-  const handleMonthChange = (e) => {
-    const selectedMonth = e.target.value;
-    setMonth(selectedMonth);
-    onSelectScaleValue(selectedMonth);
-  };
-
-  const handleYearChange = (e) => {
-    const selectedYear = e.target.value;
-    setTargetYear(selectedYear);
-    onSelectScaleValue(selectedYear);
-  };
-
+const TimeScaleSelector = ({ timeScale, onToggleTimeScale, scaleValue, onSelectScaleValue, targetYear, onSelectTargetYear }) => {
   const yearOptions = Array.from({ length: new Date().getFullYear() - 1894 }, (_, i) => {
     const year = 1895 + i;
     return (
@@ -48,14 +18,14 @@ const TimeScaleSelector = ({ onToggleTimeScale, onSelectScaleValue }) => {
           id="by_year"
           value="by_year"
           checked={timeScale === 'by_year'}
-          onChange={handleTimeScaleChange}
+          onChange={(e) => onToggleTimeScale(e.target.value)}
         />
         <label htmlFor="by_year">By Year</label>
         {timeScale === 'by_year' && (
-          <select onChange={handleYearChange}>
+          <select value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)}>
             <option value="">Select a year</option>
             {yearOptions}
-            <option value="top_analogs">Top analogs from each year</option>
+            <option key="top_analogs" value="top_analogs">Top analogs from each year</option>
           </select>
         )}
       </div>
@@ -65,19 +35,19 @@ const TimeScaleSelector = ({ onToggleTimeScale, onSelectScaleValue }) => {
           id="by_season"
           value="by_season"
           checked={timeScale === 'by_season'}
-          onChange={handleTimeScaleChange}
+          onChange={(e) => onToggleTimeScale(e.target.value)}
         />
         <label htmlFor="by_season">By Season</label>
         {timeScale === 'by_season' && (
           <>
-            <select onChange={handleSeasonChange}>
+            <select value={scaleValue} onChange={(e) => onSelectScaleValue(e.target.value)}>
               <option value="">Select a season</option>
               <option value="Winter">Winter</option>
               <option value="Spring">Spring</option>
               <option value="Summer">Summer</option>
               <option value="Fall">Fall</option>
             </select>
-            <select onChange={handleYearChange}>
+            <select value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)}>
               <option value="">Select a year</option>
               {yearOptions}
               <option value="top_analogs">Top analogs from each year</option>
@@ -91,12 +61,12 @@ const TimeScaleSelector = ({ onToggleTimeScale, onSelectScaleValue }) => {
           id="by_month"
           value="by_month"
           checked={timeScale === 'by_month'}
-          onChange={handleTimeScaleChange}
+          onChange={(e) => onToggleTimeScale(e.target.value)}
         />
         <label htmlFor="by_month">By Month</label>
         {timeScale === 'by_month' && (
           <>
-            <select onChange={handleMonthChange}>
+            <select value={scaleValue} onChange={(e) => onSelectScaleValue(e.target.value)}>
               <option value="">Select a month</option>
               {Array.from({ length: 12 }, (_, i) => {
                 const monthNumber = i + 1;
@@ -107,7 +77,7 @@ const TimeScaleSelector = ({ onToggleTimeScale, onSelectScaleValue }) => {
                 );
               })}
             </select>
-            <select onChange={handleYearChange}>
+            <select value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)}>
               <option value="">Select a year</option>
               {yearOptions}
               <option value="top_analogs">Top analogs from each year</option>
