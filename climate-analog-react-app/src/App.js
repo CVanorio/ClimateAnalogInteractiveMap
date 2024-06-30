@@ -13,6 +13,7 @@ const App = () => {
   const [menuVisible, setMenuVisible] = useState(true); // State to control menu visibility
   const [mapData, setMapData] = useState(null); // State to store fetched data
   const [error, setError] = useState(''); // State to store any errors
+  const [loading, setLoading] = useState(false); // State to manage loading
 
   const handleCountySelect = (county) => {
     setSelectedCounty(county);
@@ -39,7 +40,7 @@ const App = () => {
   };
 
   const fetchDataFromApi = async () => {
-    // // Check if all required parameters are provided
+    // Check if all required parameters are provided
     // if (!selectedCounty) {
     //   setError('Please select a county.');
     //   return;
@@ -60,20 +61,22 @@ const App = () => {
     //   return;
     // }
 
-    // setError(''); // Clear any previous errors
+    setError(''); // Clear any previous errors
+    setLoading(true); // Set loading to true when fetching data
 
     try {
       console.log('Fetching data with params:', {
         selectedCounty, timeScale, targetYear, scaleValue, selectedDataType
       });
       const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType);
-      console.log(`res: ${res.data[0][0][0]}`)
-       // console.log('Data fetched successfully:', res.data[0][0][0]);
+      console.log(`res: ${res.data[0][0][0]}`);
       setMapData(res.data[0][0][0]);
     } catch (error) {
       console.error('Failed to fetch data:', error);
       setError('Failed to fetch data.');
     }
+
+    setLoading(false); // Set loading to false after data is fetched
   };
 
   // Fetch data whenever relevant state changes
@@ -107,6 +110,7 @@ const App = () => {
           targetYear={targetYear}
           selectedDataType={selectedDataType}
           mapData={mapData} // Pass fetched data to MapComponent
+          loading={loading} // Pass loading state to MapComponent
         />
       </section>
     </div>

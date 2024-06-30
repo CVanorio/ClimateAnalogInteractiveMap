@@ -1,54 +1,90 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster';
+import { PulseLoader } from 'react-spinners';
 import stateData from '../data/us-states.json';
 import countyData from '../data/us-counties.json';
 
-// CSS style for circular marker icon
 const circleIconStyle = `
   .leaflet-marker-icon.circular-marker {
     background-color: red;
     border-radius: 50%;
     width: 12px;
     height: 12px;
-    margin-left: -6px; /* Half of width */
-    margin-top: -6px; /* Half of height */
+    line-height: 12px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    border: 2px solid white;
   }
 `;
 
-const MapComponent = ({ selectedCounty, timeScale, scaleValue, targetYear, selectedDataType, mapData }) => {
+const overlayStyle = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'rgba(128, 128, 128, 0.5)', // Slight grey with reduced opacity
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  zIndex: 1000,
+};
+
+const textStyle = {
+  color: '#ffffff',
+  fontSize: '32px', // Increased font size
+  marginBottom: '10px',
+};
+
+const MapComponent = ({ selectedCounty, timeScale, scaleValue, targetYear, selectedDataType, mapData, loading }) => {
   const mapRef = useRef(null);
   const markersRef = useRef([]);
   const countyLayerRef = useRef(null);
   const [highlightedCountyLayer, setHighlightedCountyLayer] = useState(null);
+  const [focusToMarkers, setFocusToMarkers] = useState(false); // State for toggle
 
-  // Initialize map on component mount
+  const toggleFocus = () => {
+    setFocusToMarkers(prevFocusToMarkers => !prevFocusToMarkers); // Toggle focus state
+  };
+
   useEffect(() => {
     mapRef.current = L.map('map', {
-      center: [44.5, -89.5], // Initial map center coordinates (Wisconsin)
-      zoom: 7, // Initial zoom level
+      center: [44.5, -89.5],
+      zoom: 7,
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
     }).addTo(mapRef.current);
 
+    const focusControl = L.control({ position: 'topright' });
+    focusControl.onAdd = function () {
+      const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+      container.innerHTML = `<button class="leaflet-control-button" title="Toggle Focus"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Font_Awesome_5_solid_expand.svg/1200px-Font_Awesome_5_solid_expand.svg.png" alt="Toggle Focus" style="width: 20px; height: 20px;" /></button>`;
+      L.DomEvent.on(container, 'click', toggleFocus.bind(this));
+      return container;
+    };
+    focusControl.addTo(mapRef.current);
+
     return () => {
       mapRef.current.remove();
     };
   }, []);
 
-  // Update county and state layers when component mounts or selectedCounty changes
   useEffect(() => {
     if (mapRef.current) {
-      // Clear previous layers
       mapRef.current.eachLayer(layer => {
-        if (!layer._url) { // Check if it's a tile layer
+        if (!layer._url) {
           mapRef.current.removeLayer(layer);
         }
       });
 
-      // Add state layer
       L.geoJSON(stateData, {
         style: {
           color: '#4F4F4F',
@@ -58,26 +94,23 @@ const MapComponent = ({ selectedCounty, timeScale, scaleValue, targetYear, selec
         },
       }).addTo(mapRef.current);
 
-      // Add county layer
       countyLayerRef.current = L.geoJSON(countyData, {
         style: getCountyStyle,
         onEachFeature: onEachCountyFeature,
       }).addTo(mapRef.current);
     }
-  }, [selectedCounty]); // Update when selectedCounty changes
+  }, [selectedCounty]);
 
-  // Update highlighted county layer style when selectedCounty changes
   useEffect(() => {
     if (highlightedCountyLayer) {
       highlightedCountyLayer.setStyle({
         weight: 0.8,
-        color: '#696969', // Reset previous highlighted county style
+        color: '#696969',
         fillColor: 'transparent',
         fillOpacity: 0,
       });
     }
 
-    // Find and highlight the selected county
     if (selectedCounty) {
       countyLayerRef.current.eachLayer(layer => {
         const countyName = layer.feature.properties.COUNTYNAME;
@@ -86,7 +119,7 @@ const MapComponent = ({ selectedCounty, timeScale, scaleValue, targetYear, selec
           setHighlightedCountyLayer(layer);
           layer.setStyle({
             weight: 4,
-            color: 'yellow', // Highlighted county outline color
+            color: 'yellow',
             fillColor: 'transparent',
             fillOpacity: 0,
           });
@@ -95,14 +128,13 @@ const MapComponent = ({ selectedCounty, timeScale, scaleValue, targetYear, selec
     }
   }, [selectedCounty]);
 
-  // Define county style based on selectedCounty
   const getCountyStyle = (feature) => {
     const countyName = feature.properties.COUNTYNAME;
     const stateName = feature.properties.STATEABBR;
     if (countyName === `${selectedCounty} County` && stateName === "WI") {
       return {
         weight: 4,
-        color: 'yellow', // Highlighted county color
+        color: 'yellow',
         fillColor: 'transparent',
         fillOpacity: 0,
       };
@@ -116,7 +148,6 @@ const MapComponent = ({ selectedCounty, timeScale, scaleValue, targetYear, selec
     }
   };
 
-  // Handle events on each county feature
   const onEachCountyFeature = (feature, layer) => {
     const countyName = feature.properties.COUNTYNAME;
     const stateName = feature.properties.STATEABBR;
@@ -124,13 +155,12 @@ const MapComponent = ({ selectedCounty, timeScale, scaleValue, targetYear, selec
       setHighlightedCountyLayer(layer);
       layer.setStyle({
         weight: 4,
-        color: 'yellow', // Highlighted county outline color
-        fillColor: 'transparent', // Fill color for the highlighted county
-        fillOpacity: 0, // Adjust opacity as needed (0.4 for example)
+        color: 'yellow',
+        fillColor: 'transparent',
+        fillOpacity: 0,
       });
     }
 
-    // Attach click event to update highlighted county
     layer.on({
       click: () => {
         setHighlightedCountyLayer(layer);
@@ -138,50 +168,74 @@ const MapComponent = ({ selectedCounty, timeScale, scaleValue, targetYear, selec
     });
   };
 
-  // Add markers based on mapData
   useEffect(() => {
     if (mapRef.current && mapData) {
-      // Clear previous markers
       markersRef.current.forEach(marker => marker.remove());
       markersRef.current = [];
 
-      // Create marker map to track duplicate coordinates
       const markerMap = new Map();
+      const latLngs = [];
 
-      // Add new markers
       mapData.forEach((item) => {
         const latlng = new L.LatLng(item.AnalogCountyLatitude, item.AnalogCountyLongitude);
-        
+        latLngs.push(latlng);
+
         let marker = L.marker(latlng, {
           icon: L.divIcon({
-            className: 'circular-marker', // Use the circular marker class
+            className: 'circular-marker',
           })
         })
-        .bindPopup(`
+          .bindPopup(`
           <strong>${item.AnalogCountyName} County, ${item.AnalogCountyStateAbbr}</strong><br>
           Year: ${item.Year}<br>
-          Analog Precipitation Norm: ${Number(item.AnalogCountyPrecipitationNorm)} in
+          Analog Precipitation Norm: ${Number(item.AnalogCountyPrecipitationNorm)} in<br>
+          Standardized Euclidean Distance: ${item.Distance}
         `);
 
-        // Check if coordinates already exist
         if (markerMap.has(latlng.toString())) {
-          const existingMarker = markerMap.get(latlng.toString());
-          const popupContent = existingMarker.getPopup().getContent() + '<br><br>' + marker.getPopup().getContent();
-          existingMarker.bindPopup(popupContent);
-          marker = existingMarker;
+          const existingMarkerData = markerMap.get(latlng.toString());
+          const popupContent = existingMarkerData.popupContent + '<br><br>' + marker.getPopup().getContent();
+          markerMap.set(latlng.toString(), {
+            count: existingMarkerData.count + 1,
+            popupContent: popupContent
+          });
         } else {
-          markerMap.set(latlng.toString(), marker);
+          markerMap.set(latlng.toString(), {
+            count: 1,
+            popupContent: marker.getPopup().getContent()
+          });
         }
-
-        markersRef.current.push(marker);
       });
 
-      // Add markers to the map
-      markersRef.current.forEach(marker => marker.addTo(mapRef.current));
-    }
-  }, [mapData]);
+      markerMap.forEach((data, latlngString) => {
+        const latLngArray = latlngString.slice(7, -1).split(',').map(Number);
+        if (latLngArray.length === 2 && !isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
+          const marker = L.marker(latLngArray, {
+            icon: L.divIcon({
+              html: data.count > 1 ? `<div class="circular-marker">${data.count}</div>` : `<div class="circular-marker"></div>`,
+              className: 'circular-marker',
+            })
+          })
+            .bindPopup(data.popupContent);
 
-  // Add the custom style for circular marker to the document head
+          markersRef.current.push(marker);
+          marker.addTo(mapRef.current);
+        } else {
+          console.error("Invalid coordinates:", latlngString);
+        }
+      });
+
+      if (latLngs.length > 0) {
+        if (focusToMarkers) {
+          const bounds = L.latLngBounds(latLngs);
+          mapRef.current.fitBounds(bounds);
+        } else {
+          mapRef.current.setView([44.5, -89.5], 7);
+        }
+      }
+    }
+  }, [mapData, focusToMarkers]);
+
   useEffect(() => {
     const styleElement = document.createElement('style');
     styleElement.textContent = circleIconStyle;
@@ -192,9 +246,21 @@ const MapComponent = ({ selectedCounty, timeScale, scaleValue, targetYear, selec
     };
   }, []);
 
-  // Render map component
+  // Set focus to markers when mapData changes
+  useEffect(() => {
+    if (mapRef.current && mapData) {
+      setFocusToMarkers(true); // Focus on markers
+    }
+  }, [mapData]);
+
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
+      {loading && (
+        <div style={overlayStyle}>
+          <div style={textStyle}>Calculating Climate Patterns...</div>
+          <PulseLoader size={15} color={"#ffffff"} loading={loading} />
+        </div>
+      )}
       <div id="map" style={{ height: '90vh', width: 'calc(100vw - 300px)' }}></div>
     </div>
   );
