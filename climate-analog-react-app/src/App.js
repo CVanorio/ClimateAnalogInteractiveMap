@@ -40,30 +40,34 @@ const App = () => {
   };
 
   const fetchDataFromApi = async () => {
-    // Check if all required parameters are provided
-    // if (!selectedCounty) {
-    //   setError('Please select a county.');
-    //   return;
-    // }
-
-    // if (timeScale === 'by_year' && !targetYear) {
-    //   setError('Please select a year.');
-    //   return;
-    // }
-
-    // if (timeScale === 'by_season' && !scaleValue) {
-    //   setError('Please select a season.');
-    //   return;
-    // }
-
-    // if (timeScale === 'by_month' && !scaleValue) {
-    //   setError('Please select a month.');
-    //   return;
-    // }
-
-    setError(''); // Clear any previous errors
-    setLoading(true); // Set loading to true when fetching data
-
+    // Check if selectedCounty is provided
+    if (!selectedCounty) {
+      setError('Please select a county.');
+      return;
+    }
+  
+    // Check conditions based on the timeScale value
+    if (timeScale === 'by_year') {
+      if (!targetYear) {
+        setError('Please select a year.');
+        return;
+      }
+    } else if (timeScale === 'by_season' || timeScale === 'by_month') {
+      if (!targetYear) {
+        setError('Please select a year.');
+        return;
+      }
+      if (!scaleValue) {
+        setError('Please select a season or month.');
+        return;
+      }
+    }
+  
+    // Clear any previous errors and set loading state
+    setError('');
+    setLoading(true);
+  
+    // Fetch data
     try {
       console.log('Fetching data with params:', {
         selectedCounty, timeScale, targetYear, scaleValue, selectedDataType
@@ -75,9 +79,11 @@ const App = () => {
       console.error('Failed to fetch data:', error);
       setError('Failed to fetch data.');
     }
-
-    setLoading(false); // Set loading to false after data is fetched
+  
+    // Set loading state to false after fetching data
+    setLoading(false);
   };
+  
 
   // Fetch data whenever relevant state changes
   useEffect(() => {

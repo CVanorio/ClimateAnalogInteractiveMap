@@ -170,71 +170,120 @@ const MapComponent = ({ selectedCounty, timeScale, scaleValue, targetYear, selec
 
   useEffect(() => {
     if (mapRef.current && mapData) {
-      markersRef.current.forEach(marker => marker.remove());
-      markersRef.current = [];
+        markersRef.current.forEach(marker => marker.remove());
+        markersRef.current = [];
 
-      const markerMap = new Map();
-      const latLngs = [];
+        const markerMap = new Map();
+        const latLngs = [];
 
-      mapData.forEach((item) => {
-        const latlng = new L.LatLng(item.AnalogCountyLatitude, item.AnalogCountyLongitude);
-        latLngs.push(latlng);
+        mapData.forEach((item) => {
+            const lat = Number(item.AnalogCountyLatitude);
+            const lng = Number(item.AnalogCountyLongitude);
 
-        let marker = L.marker(latlng, {
-          icon: L.divIcon({
-            className: 'circular-marker',
-          })
-        })
-          .bindPopup(`
-          <strong>${item.AnalogCountyName} County, ${item.AnalogCountyStateAbbr}</strong><br>
-          Year: ${item.Year}<br>
-          Analog Precipitation Norm: ${Number(item.AnalogCountyPrecipitationNorm)} in<br>
-          Standardized Euclidean Distance: ${item.Distance}
-        `);
+            if (!isNaN(lat) && !isNaN(lng)) {
+                const latlng = new L.LatLng(lat, lng);
+                latLngs.push(latlng);
 
-        if (markerMap.has(latlng.toString())) {
-          const existingMarkerData = markerMap.get(latlng.toString());
-          const popupContent = existingMarkerData.popupContent + '<br><br>' + marker.getPopup().getContent();
-          markerMap.set(latlng.toString(), {
-            count: existingMarkerData.count + 1,
-            popupContent: popupContent
-          });
-        } else {
-          markerMap.set(latlng.toString(), {
-            count: 1,
-            popupContent: marker.getPopup().getContent()
-          });
+                let popupHeader = `<strong>${item.AnalogCountyName} County, ${item.AnalogCountyStateAbbr}</strong><br>`;
+
+                let popupContent = '';
+
+                switch (selectedDataType) {
+                    case 'precipitation':
+                        popupContent = `Analog Precipitation Norm: ${Number(item.AnalogPrecipNormal)} in<br>`;
+                        break;
+                    case 'temperature':
+                        popupContent = `Analog Temperature Norm: ${Number(item.AnalogTempNormal)} °F<br>`;
+                        break;
+                    case 'both':
+                        popupContent = `Analog Precipitation Norm: ${Number(item.AnalogPrecipNormal)} in<br> Analog Temperature Norm: ${Number(item.AnalogTempNormal)} °F<br>`;
+                        break;
+                    default:
+                        popupContent = `Data Type Not Recognized<br>`;
+                        break;
+                }
+
+                const yearAndDistance = `<tr><td>${item.Year}</td><td>${item.Distance}</td></tr>`;
+
+                // Logic to handle multiple markers at the same location
+                if (markerMap.has(latlng.toString())) {
+                    const existingMarkerData = markerMap.get(latlng.toString());
+                    const existingYearsAndDistances = existingMarkerData.yearsAndDistances ? existingMarkerData.yearsAndDistances : [];
+                    const newYearsAndDistances = [...existingYearsAndDistances, yearAndDistance];
+
+                    const updatedPopupContent = `${popupHeader}<br>
+                                                 <table>
+                                                   <thead>
+                                                     <tr><th>Year</th><th>Difference Score</th></tr>
+                                                   </thead>
+                                                   <tbody>
+                                                     ${newYearsAndDistances.join('')}
+                                                   </tbody>
+                                                 </table>
+                                                 <br>
+                                                 ${popupContent}`;
+
+                    markerMap.set(latlng.toString(), {
+                        count: existingMarkerData.count + 1,
+                        popupContent: updatedPopupContent,
+                        yearsAndDistances: newYearsAndDistances
+                    });
+                } else {
+                    markerMap.set(latlng.toString(), {
+                        count: 1,
+                        popupContent: `${popupHeader}<br>
+                                       <table>
+                                         <thead>
+                                           <tr><th>Year</th><th>Difference Score</th></tr>
+                                         </thead>
+                                         <tbody>
+                                           ${yearAndDistance}
+                                         </tbody>
+                                       </table>
+                                       <br>
+                                       ${popupContent}`,
+                        yearsAndDistances: [yearAndDistance]
+                    });
+                }
+            } else {
+                console.error("Invalid coordinates:", item.AnalogCountyLatitude, item.AnalogCountyLongitude);
+            }
+        });
+
+        // Add markers to map
+        markerMap.forEach((data, latlngString) => {
+            const latLngArray = latlngString.slice(7, -1).split(',').map(Number);
+            if (latLngArray.length === 2 && !isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
+                const marker = L.marker(latLngArray, {
+                    icon: L.divIcon({
+                        html: data.count > 1 ? `<div class="circular-marker">${data.count}</div>` : `<div class="circular-marker"></div>`,
+                        className: 'circular-marker',
+                    })
+                })
+                .bindPopup(data.popupContent);
+
+                markersRef.current.push(marker);
+                marker.addTo(mapRef.current);
+            } else {
+                console.error("Invalid coordinates:", latlngString);
+            }
+        });
+
+        // Fit map bounds
+        if (latLngs.length > 0) {
+            if (focusToMarkers) {
+                const bounds = L.latLngBounds(latLngs);
+                mapRef.current.fitBounds(bounds);
+            } else {
+                mapRef.current.setView([44.5, -89.5], 7);
+            }
         }
-      });
-
-      markerMap.forEach((data, latlngString) => {
-        const latLngArray = latlngString.slice(7, -1).split(',').map(Number);
-        if (latLngArray.length === 2 && !isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
-          const marker = L.marker(latLngArray, {
-            icon: L.divIcon({
-              html: data.count > 1 ? `<div class="circular-marker">${data.count}</div>` : `<div class="circular-marker"></div>`,
-              className: 'circular-marker',
-            })
-          })
-            .bindPopup(data.popupContent);
-
-          markersRef.current.push(marker);
-          marker.addTo(mapRef.current);
-        } else {
-          console.error("Invalid coordinates:", latlngString);
-        }
-      });
-
-      if (latLngs.length > 0) {
-        if (focusToMarkers) {
-          const bounds = L.latLngBounds(latLngs);
-          mapRef.current.fitBounds(bounds);
-        } else {
-          mapRef.current.setView([44.5, -89.5], 7);
-        }
-      }
     }
-  }, [mapData, focusToMarkers]);
+}, [mapData, focusToMarkers, selectedDataType]);
+
+  
+  
+  
 
   useEffect(() => {
     const styleElement = document.createElement('style');

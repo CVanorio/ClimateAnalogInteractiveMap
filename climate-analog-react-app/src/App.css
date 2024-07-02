@@ -36,3 +36,21 @@ float: right;
 width: 700;
 height: 100%;
 }
+
+/* Add this CSS to your styles */
+.leaflet-popup-content table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .leaflet-popup-content th, .leaflet-popup-content td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .leaflet-popup-content th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
