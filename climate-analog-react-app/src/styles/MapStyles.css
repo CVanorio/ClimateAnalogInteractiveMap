@@ -20,7 +20,7 @@
 
   .leaflet-marker-icon.circular-marker.highlighted {
     background-color: black;
-    border: 2px solid black;
+    border: 2px solid yellow;
   }
   
   

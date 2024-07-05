@@ -2,8 +2,6 @@ import L from 'leaflet';
 
 const MarkerHandler = {
   handleMarkers: (map, markersRef, mapData, selectedDataType, focusToMarkers, highlightedYear) => {
-    console.log(highlightedYear);
-    
     if (!mapData || !Array.isArray(mapData)) {
       // If mapData is null or undefined, do nothing and return
       return;
@@ -42,7 +40,7 @@ const MarkerHandler = {
             break;
         }
 
-        const yearAndDistance = `<tr><td>${item.Year}</td><td>${item.Distance}</td></tr>`;
+        const yearAndDistance = `<tr><td>${Number(item.Year)}</td><td>${item.Distance}</td></tr>`; // Convert Year to Number
 
         if (markerMap.has(latlng.toString())) {
           const existingMarkerData = markerMap.get(latlng.toString());
@@ -65,7 +63,7 @@ const MarkerHandler = {
             count: existingMarkerData.count + 1,
             popupContent: updatedPopupContent,
             yearsAndDistances: newYearsAndDistances,
-            year: existingMarkerData.year
+            years: [...existingMarkerData.years, Number(item.Year)] // Store year as Number
           });
         } else {
           markerMap.set(latlng.toString(), {
@@ -82,7 +80,7 @@ const MarkerHandler = {
                            <br>
                            ${popupContent}`,
             yearsAndDistances: [yearAndDistance],
-            year: item.Year // Store year for this marker
+            years: [Number(item.Year)] // Store year as Number
           });
         }
       } else {
@@ -97,7 +95,7 @@ const MarkerHandler = {
         const marker = L.marker(latLngArray, {
           icon: L.divIcon({
             html: data.count > 1 ? `<div class="circular-marker">${data.count}</div>` : `<div class="circular-marker"></div>`,
-            className: `circular-marker ${highlightedYear === data.year ? 'highlighted' : ''}`,
+            className: `circular-marker ${data.years.includes(highlightedYear) ? 'highlighted' : ''}`,
           })
         }).bindPopup(data.popupContent);
 
@@ -108,16 +106,12 @@ const MarkerHandler = {
       }
     });
 
-    // Fit map bounds with buffer
-if (latLngs.length > 0) {
-  if (focusToMarkers) {
-    const bounds = L.latLngBounds(latLngs);
-    const buffer = 0.2; // Adjust the buffer as needed
-    map.fitBounds(bounds.pad(buffer));
-  } else {
-    map.setView([44.5, -89.5], 7);
-  }
-}
+    // Fit map bounds with buffer once, when data is first added
+    if (latLngs.length > 0 && focusToMarkers) {
+      const bounds = L.latLngBounds(latLngs);
+      const buffer = 0.2; // Adjust the buffer as needed
+      map.fitBounds(bounds.pad(buffer));
+    }
   },
 };
 

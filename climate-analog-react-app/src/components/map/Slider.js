@@ -1,14 +1,39 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import '../../styles/Slider.css';
 
-const Slider = ({ years, highlightedYear, onChange }) => {
+const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }) => {
+  const intervalRef = useRef(null);
+
   const handleSliderChange = (event) => {
     const year = parseInt(event.target.value);
     onChange(year);
   };
 
+  useEffect(() => {
+    if (isPlaying) {
+      intervalRef.current = setInterval(() => {
+        const currentIndex = years.findIndex(year => year === highlightedYear);
+        const nextIndex = (currentIndex + 1) % years.length;
+        onChange(years[nextIndex]);
+      }, 1000);
+    } else {
+      clearInterval(intervalRef.current);
+    }
+
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, [isPlaying, highlightedYear, onChange, years]);
+
+  const togglePlay = () => {
+    togglePlayPause();
+  };
+
   return (
     <div className="slider-container">
+      <div className="playPauseButton" onClick={togglePlay}>
+        <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+      </div>
       <input
         type="range"
         min={years[0]}

@@ -25,6 +25,11 @@ const MapComponent = ({
   const [focusToMarkers, setFocusToMarkers] = useState(true);
   const [highlightedYear, setHighlightedYear] = useState(null);
   const [initialBoundsSet, setInitialBoundsSet] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlayPause = () => {
+    setIsPlaying(prevIsPlaying => !prevIsPlaying);
+  };
 
   const toggleFocus = () => {
     setFocusToMarkers(prevFocusToMarkers => !prevFocusToMarkers);
@@ -48,20 +53,21 @@ const MapComponent = ({
   };
 
   useEffect(() => {
+    // Initialize map only once on component mount
     mapRef.current = MapInitialization.initializeMap('map', countyData);
     const bounds = [[-10, -200], [85, -30]];
     MapInitialization.setMaxBounds(mapRef.current, bounds);
 
-    return () => {
-      mapRef.current.remove();
-    };
-  }, []);
-
-  useEffect(() => {
+    // Setup base layers and custom controls
     MapInitialization.setupBaseLayers(mapRef.current, stateData);
     MapInitialization.setupCustomControl(mapRef.current, toggleFocus);
     countyLayerRef.current = MapInitialization.addCountyLayer(mapRef.current, countyData);
-  }, []);
+
+    // Cleanup function
+    return () => {
+      mapRef.current.remove();
+    };
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
   useEffect(() => {
     if (mapData && mapData.length > 0) {
@@ -79,6 +85,22 @@ const MapComponent = ({
     }
   }, [selectedCounty]);
 
+  useEffect(() => {
+    // Handle automatic slider movement logic when isPlaying changes
+    let interval;
+    if (isPlaying) {
+      interval = setInterval(() => {
+        const currentIndex = years.findIndex(year => year === highlightedYear);
+        const nextIndex = (currentIndex + 1) % years.length;
+        setHighlightedYear(years[nextIndex]);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [isPlaying, highlightedYear, years]);
+
   return (
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />
@@ -89,6 +111,8 @@ const MapComponent = ({
             highlightedYear={highlightedYear}
             years={years}
             onChange={(year) => setHighlightedYear(year)}
+            isPlaying={isPlaying}
+            togglePlayPause={togglePlayPause}
           />
         </div>
       )}
