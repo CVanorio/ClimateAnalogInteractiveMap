@@ -16,8 +16,8 @@ const counties = [
 
 const TargetCountySelector = ({ selectedCounty, onSelectCounty }) => {
   return (
-    <select value={selectedCounty} onChange={(e) => onSelectCounty(e.target.value)}>
-      <option value="">Select a county</option>
+    <select className='select-menu' value={selectedCounty} onChange={(e) => onSelectCounty(e.target.value)}>
+      <option className='selectPrompt' value="">-Select a county-</option>
       {counties.map((county) => (
         <option key={county} value={county}>
           {county}
