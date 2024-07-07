@@ -1,15 +1,17 @@
 /* MapStyles.css */
 .leaflet-marker-icon.circular-marker {
-  background-color: red;
+  background-color: rgb(95, 95, 95);
   border-radius: 50%;
-  width: 20px !important; /* Important to ensure override */
-  height: 20px !important; /* Important to ensure override */
-  line-height: 18px;
+  width: 18px !important; /* Important to ensure override */
+  height: 18px !important; /* Important to ensure override */
+  line-height: 16px;
   text-align: center;
-  font-size: 16px;
+  font-size: 14px;
   color: white;
   font-weight: bold;
   border: 2px solid white;
+  opacity: 0.75;
+  z-index: 500;
 }
   .leaflet-control-button {
     background: white;
@@ -19,8 +21,14 @@
   }
 
   .leaflet-marker-icon.circular-marker.highlighted {
-    background-color: black;
-    border: 2px solid yellow;
+    background-color: red;
+    border: 2px solid white;
+    opacity: 1;
+    width: 20px !important; /* Important to ensure override */
+    height: 20px !important; /* Important to ensure override */
+    line-height: 18px;
+    font-size: 16px;
+    z-index: 1000 !important;
   }
   
   

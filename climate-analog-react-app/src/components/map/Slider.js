@@ -3,11 +3,32 @@ import '../../styles/Slider.css';
 
 const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }) => {
   const intervalRef = useRef(null);
+  const sliderRef = useRef(null);
+  const [thumbPosition, setThumbPosition] = useState(0);
 
   const handleSliderChange = (event) => {
     const year = parseInt(event.target.value);
     onChange(year);
+    updateThumbPosition(event.target);
   };
+
+  const updateThumbPosition = (slider) => {
+    const max = slider.max;
+    const min = slider.min;
+    const value = slider.value;
+
+    const percent = ((value - min) / (max - min)) * 100;
+    const thumbWidth = 20; // Same width as the thumb
+    const offset = (percent / 100) * (slider.clientWidth - thumbWidth);
+
+    setThumbPosition(offset);
+  };
+
+  useEffect(() => {
+    if (sliderRef.current) {
+      updateThumbPosition(sliderRef.current);
+    }
+  }, [highlightedYear, sliderRef.current]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -42,20 +63,13 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }
         value={highlightedYear || ''}
         onChange={handleSliderChange}
         className="slider"
+        ref={sliderRef}
       />
-      <div className="ticks">
-        {years.map((year) => (
-          <div
-            key={year}
-            className={`tick ${highlightedYear === year ? 'highlighted' : ''}`}
-            style={{ left: `${((year - years[0]) / (years[years.length - 1] - years[0])) * 100}%` }}
-          >
-            {highlightedYear === year && (
-              <span className="tick-label">{year}</span>
-            )}
-          </div>
-        ))}
-      </div>
+      {highlightedYear && (
+        <div className="slider-label" style={{ left: `${thumbPosition}px` }}>
+          {highlightedYear}
+        </div>
+      )}
     </div>
   );
 };

@@ -3,6 +3,7 @@ import './App.css';
 import MapComponent from './components/map/MapComponent';
 import Sidebar from './components/Sidebar';
 import { fetchData } from './services/api';
+import Graph from './components/Graph';
 
 const App = () => {
   const [selectedCounty, setSelectedCounty] = useState('');
@@ -75,7 +76,7 @@ const App = () => {
           targetYear={targetYear}
           onSelectTargetYear={handleTargetYearSelect}
         />
-        {error && <div className="error-message">{error}</div>}
+        {error && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{error}</div>}
       </aside>
       <section className="map-container">
         <MapComponent
@@ -89,6 +90,14 @@ const App = () => {
           years={years}
         />
       </section>
+      {mapData && (
+      <section >
+        <Graph 
+          graphData={mapData}
+          years={years} 
+        />
+      </section>
+      )}
     </div>
   );
 };

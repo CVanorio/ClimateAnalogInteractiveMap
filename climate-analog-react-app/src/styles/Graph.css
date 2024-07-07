@@ -1,0 +1,12 @@
+.graph-container {
+    padding: 10px 20px 10px 20px;
+    float: right !important;
+    position: relative;
+    margin-top: -30px; /* Adjust this value as needed to raise the graph */
+    width: calc(100vw - 290px);
+    height: 200px;
+}
+
+.chartjs-tooltip {
+    color: black;
+  }

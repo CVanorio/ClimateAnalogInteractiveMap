@@ -1,77 +1,45 @@
-/* ../styles/Slider.css */
-
 .slider-container {
     position: relative;
-    width: 100%; /* Adjust width as needed */
+    width: 100%;
     margin: 20px 0;
-    background-color: rgba(255, 255, 255, 0.85); /* White background with 0.75 opacity */
-    border-radius: 5px; /* Rounded corners for the box */
-    padding: 10px; /* Adjust padding as needed */
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 5px;
+    padding: 20px 10px;
+  }
+  
+  .playPauseButton {
+    position: absolute;
+    top: 50%;
+    left: 10px; /* Adjust as needed */
+    transform: translateY(-40%);
+    cursor: pointer;
   }
   
   .slider {
-    width: 100%;
+    width: calc(100% - 50px); /* Adjust for the button width and padding */
     height: 8px;
     -webkit-appearance: none;
     appearance: none;
-    background: lightgray; /* Slider bar background */
+    background: lightgray;
     outline: none;
     border-radius: 5px;
     margin: 0;
     padding: 0;
-    position: relative;
-    z-index: 2; /* Ensure slider is above other elements */
-  }
-  
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #555; /* Thumb color */
-    border: 2px solid #fff; /* Thumb border */
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out;
-    position: relative;
-    z-index: 3; /* Ensure thumb is above ticks and labels */
-  }
-  
-  .slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background: #555;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out;
-    position: relative;
-    z-index: 3; /* Ensure thumb is above ticks and labels */
-  }
-  
-  .ticks {
     position: absolute;
-    bottom: 30px; /* Adjust position as needed */
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-between;
-    z-index: 4; /* Ensure ticks are above slider */
-  }
-  
-  .tick {
-    width: 1px;
-    height: 0px; /* Adjust height to match slider height */
-    background-color: transparent;
-  }
-  
-  .tick-label {
-    font-size: 12px;
-    white-space: nowrap;
-    color: #555;
-    position: absolute;
-    bottom: -2px; /* Adjust position as needed */
+    top: 50%;
+    left: 51%;
     transform: translateX(-50%);
-    z-index: 5; /* Ensure labels are above all other elements */
+    z-index: 2;
+  }
+  
+  .slider-label {
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+    position: absolute;
+    top: -5px; /* 5px above the slider thumb */
+    text-align: center;
+    transform: translateX(100%) translateY(10%);
+    pointer-events: none; /* Prevent label from interfering with slider interaction */
   }
   

@@ -104,7 +104,7 @@ const MapComponent = ({
   return (
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />
-      <div id="map" style={{ height: '80vh', width: 'calc(100vw - 315px)' }}></div>
+      <div id="map" style={{ height: '80vh', width: 'calc(100vw - 330px)' }}></div>
       {mapData && (
         <div className="sliderDiv" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 1000 }}>
           <Slider
