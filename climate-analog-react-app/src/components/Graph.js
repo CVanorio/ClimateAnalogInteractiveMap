@@ -5,7 +5,7 @@ import '../styles/Graph.css';
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-const Graph = ({ graphData, years}) => {
+const Graph = ({ graphData, years, menuVisible }) => {
   // Extract the precipitation and temperature values from the data
   const precipitationValues = graphData.map(item => Number(item.TargetPrecipValue));
   const temperatureValues = graphData.map(item => Number(item.TargetTempValue));
@@ -19,12 +19,15 @@ const Graph = ({ graphData, years}) => {
   // Determine the county name for the title
   const targetCountyName = graphData[0].TargetCountyName;
 
+  // Check if precipitation and temperature data exist
+  const hasPrecipitationData = precipitationValues.some(value => !isNaN(value));
+  const hasTemperatureData = temperatureValues.some(value => !isNaN(value));
 
   // Create the chart data object
   const chartData = {
     labels: years,
     datasets: [
-      {
+      hasPrecipitationData && {
         label: 'Precipitation',
         data: precipitationValues,
         fill: false,
@@ -36,7 +39,7 @@ const Graph = ({ graphData, years}) => {
         borderWidth: 1,
         pointRadius: 2 // Adjust point radius for graph
       },
-      {
+      hasTemperatureData && {
         label: 'Temperature',
         data: temperatureValues,
         fill: false,
@@ -48,7 +51,7 @@ const Graph = ({ graphData, years}) => {
         borderWidth: 1,
         pointRadius: 2 // Adjust point radius for graph
       }
-    ]
+    ].filter(Boolean) // Filter out false values
   };
 
   // Options for the chart
@@ -86,9 +89,11 @@ const Graph = ({ graphData, years}) => {
             return `${years[index]} - ${targetCountyName} County, WI`;
           }
         },
-        backgroundColor: 'black',
-        fontColor: 'black',
-        displayColors: true
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        titleColor: 'black',
+        bodyColor: 'black',
+        displayColors: true,
+        caretPadding: 80
       }
     },
     scales: {
@@ -105,8 +110,11 @@ const Graph = ({ graphData, years}) => {
           display: true,
           text: 'Precipitation (in)'
         },
-        min: Math.min(...precipitationValues) - 3,
-        max: Math.max(...precipitationValues) + 3
+        min: hasPrecipitationData ? Math.min(...precipitationValues) - 3 : undefined,
+        max: hasPrecipitationData ? Math.max(...precipitationValues) + 3 : undefined,
+        grid: {
+          drawOnChartArea: false // To avoid grid lines overlapping
+        }
       },
       'y-axis-temperature': {
         type: 'linear',
@@ -115,8 +123,8 @@ const Graph = ({ graphData, years}) => {
           display: true,
           text: 'Temperature (°F)'
         },
-        min: Math.min(...temperatureValues) - 1,
-        max: Math.max(...temperatureValues) + 1,
+        min: hasTemperatureData ? Math.min(...temperatureValues) - 1 : undefined,
+        max: hasTemperatureData ? Math.max(...temperatureValues) + 1 : undefined,
         grid: {
           drawOnChartArea: false // To avoid grid lines overlapping
         }
@@ -154,7 +162,7 @@ const Graph = ({ graphData, years}) => {
   }, []);
 
   return (
-    <div className="graph-container">
+    <div className="graph-container" style = {{width: menuVisible ? '80vw' : '98vw'}}>
       <Line ref={chartRef} data={chartData} options={options} />
     </div>
   );

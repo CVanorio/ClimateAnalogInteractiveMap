@@ -15,10 +15,6 @@ const MapInitialization = {
       attribution: '© OpenStreetMap contributors',
     }).addTo(map);
 
-    map.on('zoomend', () => {
-      // Handle zoom events if needed
-    });
-
     return map;
   },
 

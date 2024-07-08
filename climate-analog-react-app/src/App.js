@@ -10,13 +10,14 @@ const App = () => {
   const [timeScale, setTimeScale] = useState('by_year');
   const [scaleValue, setScaleValue] = useState('');
   const [targetYear, setTargetYear] = useState('');
-  const [highlightedYear, setHighlightedYear] = useState(null); // New state for highlighted year
+  const [highlightedYear, setHighlightedYear] = useState(null);
   const [selectedDataType, setSelectedDataType] = useState('both');
   const [menuVisible, setMenuVisible] = useState(true);
   const [mapData, setMapData] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [years, setYears] = useState([]); // New state for the years available in the data
+  const [years, setYears] = useState([]);
+  const [showChart, setShowChart] = useState(false);
 
   const handleCountySelect = (county) => setSelectedCounty(county);
   const handleTimeScaleToggle = (scale) => setTimeScale(scale);
@@ -24,6 +25,7 @@ const App = () => {
   const handleTargetYearSelect = (year) => setTargetYear(year);
   const handleDataTypeChange = (dataType) => setSelectedDataType(dataType);
   const toggleMenu = () => setMenuVisible(!menuVisible);
+  const toggleChart = () => setShowChart(!showChart);
 
   const fetchDataFromApi = async () => {
     if (!selectedCounty) {
@@ -57,12 +59,14 @@ const App = () => {
   };
 
   useEffect(() => {
+    // set isFocused or whatever false
     fetchDataFromApi();
   }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType]);
 
+
   return (
     <div className="app-container">
-      <button className="menu-toggle" onClick={toggleMenu}>Toggle Menu</button>
+      <i className={`${menuVisible ? 'fas fa-angle-left' : 'fas fa-angle-right'}`} onClick={toggleMenu}></i>
       <aside className={`sidebar ${menuVisible ? 'visible' : ''}`}>
         <Sidebar
           selectedCounty={selectedCounty}
@@ -75,6 +79,9 @@ const App = () => {
           onDataTypeChange={handleDataTypeChange}
           targetYear={targetYear}
           onSelectTargetYear={handleTargetYearSelect}
+          showChart={showChart}
+          toggleChart={toggleChart}
+          mapData={mapData} // Pass mapData to Sidebar
         />
         {error && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{error}</div>}
       </aside>
@@ -88,15 +95,20 @@ const App = () => {
           mapData={mapData}
           loading={loading}
           years={years}
+          showChart={showChart}
+          menuVisible={menuVisible}
         />
       </section>
       {mapData && (
-      <section >
-        <Graph 
-          graphData={mapData}
-          years={years} 
-        />
-      </section>
+        <section>
+          {showChart && (
+            <Graph 
+              graphData={mapData}
+              years={years} 
+              menuVisible={menuVisible}
+            />
+          )}
+        </section>
       )}
     </div>
   );

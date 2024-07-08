@@ -1,7 +1,7 @@
 import L from 'leaflet';
 
 const MarkerHandler = {
-  handleMarkers: (map, markersRef, mapData, selectedDataType, focusToMarkers, highlightedYear) => {
+  handleMarkers: (map, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear) => {
     if (!mapData || !Array.isArray(mapData)) {
       // If mapData is null or undefined, do nothing and return
       return;
@@ -17,76 +17,84 @@ const MarkerHandler = {
     mapData.forEach((item) => {
       const lat = Number(item.AnalogCountyLatitude);
       const lng = Number(item.AnalogCountyLongitude);
-
-      if (!isNaN(lat) && !isNaN(lng)) {
-        const latlng = new L.LatLng(lat, lng);
-        latLngs.push(latlng);
-
-        let popupHeader = `<strong>${item.AnalogCountyName} County, ${item.AnalogCountyStateAbbr}</strong><br>`;
-        let popupContent = '';
-
-        switch (selectedDataType) {
-          case 'precipitation':
-            popupContent = `<i class="fas fa-cloud-rain"></i> Precipitation Norm: ${Number(item.AnalogPrecipNormal)} in<br>`;
-            break;
-          case 'temperature':
-            popupContent = `<i class="fas fa-thermometer-half"></i> Temperature Norm: ${Number(item.AnalogTempNormal)} °F<br>`;
-            break;
-          case 'both':
-            popupContent = `<i class="fas fa-cloud-rain"></i> Precipitation Norm: ${Number(item.AnalogPrecipNormal)} in<br><i class="fas fa-thermometer-half"></i> Temperature Norm: ${Number(item.AnalogTempNormal)} °F<br>`;
-            break;
-          default:
-            popupContent = `Data Type Not Recognized<br>`;
-            break;
-        }
-
-        const yearAndDistance = `<tr><td>${Number(item.Year)}</td><td>${item.Distance}</td></tr>`; // Convert Year to Number
-
-        if (markerMap.has(latlng.toString())) {
-          const existingMarkerData = markerMap.get(latlng.toString());
-          const existingYearsAndDistances = existingMarkerData.yearsAndDistances ? existingMarkerData.yearsAndDistances : [];
-          const newYearsAndDistances = [...existingYearsAndDistances, yearAndDistance];
-
-          const updatedPopupContent = `${popupHeader}<br>
-                                       <table>
-                                         <thead>
-                                           <tr><th>Year</th><th>Difference Score</th></tr>
-                                         </thead>
-                                         <tbody>
-                                           ${newYearsAndDistances.join('')}
-                                         </tbody>
-                                       </table>
-                                       <br>
-                                       ${popupContent}`;
-
-          markerMap.set(latlng.toString(), {
-            count: existingMarkerData.count + 1,
-            popupContent: updatedPopupContent,
-            yearsAndDistances: newYearsAndDistances,
-            years: [...existingMarkerData.years, Number(item.Year)] // Store year as Number
-          });
-        } else {
-          markerMap.set(latlng.toString(), {
-            count: 1,
-            popupContent: `${popupHeader}<br>
-                           <table>
-                             <thead>
-                               <tr><th>Year</th><th>Difference Score</th></tr>
-                             </thead>
-                             <tbody>
-                               ${yearAndDistance}
-                             </tbody>
-                           </table>
-                           <br>
-                           ${popupContent}`,
-            yearsAndDistances: [yearAndDistance],
-            years: [Number(item.Year)] // Store year as Number
-          });
-        }
-      } else {
+    
+      if (isNaN(lat) || isNaN(lng)) {
         console.error("Invalid coordinates:", item.AnalogCountyLatitude, item.AnalogCountyLongitude);
+        return;
+      }
+    
+      const latlng = new L.LatLng(lat, lng);
+      latLngs.push(latlng);
+    
+      const popupHeader = `<strong>${item.AnalogCountyName} County, ${item.AnalogCountyStateAbbr}</strong><br>`;
+      let popupContent = '';
+    
+      if (selectedDataType === 'precipitation' || selectedDataType === 'both') {
+        popupContent += `<i class="fas fa-cloud-rain"></i> Precipitation Norm: ${Number(item.AnalogPrecipNormal)} in<br>`;
+      }
+      
+      if (selectedDataType === 'temperature' || selectedDataType === 'both') {
+        popupContent += `<i class="fas fa-thermometer-half"></i> Temperature Norm: ${Number(item.AnalogTempNormal)} °F<br>`;
+      }
+    
+      const yearAndDistance = `<tr><td>${Number(item.Year)}</td><td>${item.Distance}</td>`;
+      const precipValue = selectedDataType === 'precipitation' || selectedDataType === 'both' ? `<td>${Number(item.TargetPrecipValue)} in</td>` : '';
+      const tempValue = selectedDataType === 'temperature' || selectedDataType === 'both' ? `<td>${Number(item.TargetTempValue)} °F</td>` : '';
+      const row = `${yearAndDistance}${precipValue}${tempValue}</tr>`;
+    
+      if (markerMap.has(latlng.toString())) {
+        const existingMarkerData = markerMap.get(latlng.toString());
+        const newYearsAndDistances = [...existingMarkerData.yearsAndDistances, row];
+    
+        const updatedPopupContent = `${popupHeader}<br>
+                                     <table>
+                                       <thead>
+                                         <tr>
+                                           <th>Year</th>
+                                           <th>Difference Score</th>
+                                           ${selectedDataType === 'precipitation' || selectedDataType === 'both' ? '<th>Precipitation</th>' : ''}
+                                           ${selectedDataType === 'temperature' || selectedDataType === 'both' ? '<th>Temperature</th>' : ''}
+                                         </tr>
+                                       </thead>
+                                       <tbody>
+                                         ${newYearsAndDistances.join('')}
+                                       </tbody>
+                                     </table>
+                                     <br>
+                                     ${popupContent}`;
+    
+        markerMap.set(latlng.toString(), {
+          count: existingMarkerData.count + 1,
+          popupContent: updatedPopupContent,
+          yearsAndDistances: newYearsAndDistances,
+          years: [...existingMarkerData.years, Number(item.Year)]
+        });
+      } else {
+        markerMap.set(latlng.toString(), {
+          count: 1,
+          popupContent: `${popupHeader}<br>
+                         <table>
+                           <thead>
+                             <tr>
+                               <th>Year</th>
+                               <th>Difference Score</th>
+                               ${selectedDataType === 'precipitation' || selectedDataType === 'both' ? '<th>Precipitation</th>' : ''}
+                               ${selectedDataType === 'temperature' || selectedDataType === 'both' ? '<th>Temperature</th>' : ''}
+                             </tr>
+                           </thead>
+                           <tbody>
+                             ${row}
+                           </tbody>
+                         </table>
+                         <br>
+                         ${popupContent}`,
+          yearsAndDistances: [row],
+          years: [Number(item.Year)]
+        });
       }
     });
+    
+    
 
     // Add markers to map
     markerMap.forEach((data, latlngString) => {
@@ -106,8 +114,11 @@ const MarkerHandler = {
       }
     });
 
+    console.log(initialBoundsSet)
+
     // Fit map bounds with buffer once, when data is first added
-    if (latLngs.length > 0 && focusToMarkers) {
+    if (!initialBoundsSet) {
+      
       const bounds = L.latLngBounds(latLngs);
       const buffer = 0.2; // Adjust the buffer as needed
       map.fitBounds(bounds.pad(buffer));

@@ -6,6 +6,12 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }
   const sliderRef = useRef(null);
   const [thumbPosition, setThumbPosition] = useState(0);
 
+  useEffect(() => {
+    if (!highlightedYear && years.length > 0) {
+      onChange(years[0]);
+    }
+  }, [highlightedYear, years, onChange]);
+
   const handleSliderChange = (event) => {
     const year = parseInt(event.target.value);
     onChange(year);
@@ -18,10 +24,10 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }
     const value = slider.value;
 
     const percent = ((value - min) / (max - min)) * 100;
-    const thumbWidth = 20; // Same width as the thumb
+    const thumbWidth = 45; // Same width as the thumb
     const offset = (percent / 100) * (slider.clientWidth - thumbWidth);
 
-    setThumbPosition(offset);
+    setThumbPosition(offset + thumbWidth / 2); // Center the label
   };
 
   useEffect(() => {
@@ -36,6 +42,7 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }
         const currentIndex = years.findIndex(year => year === highlightedYear);
         const nextIndex = (currentIndex + 1) % years.length;
         onChange(years[nextIndex]);
+        updateThumbPosition(sliderRef.current);
       }, 1000);
     } else {
       clearInterval(intervalRef.current);
@@ -60,7 +67,7 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }
         min={years[0]}
         max={years[years.length - 1]}
         step={1}
-        value={highlightedYear || ''}
+        value={highlightedYear || years[0]}
         onChange={handleSliderChange}
         className="slider"
         ref={sliderRef}

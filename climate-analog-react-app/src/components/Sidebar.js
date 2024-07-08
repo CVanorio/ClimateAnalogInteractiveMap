@@ -2,6 +2,7 @@ import React from 'react';
 import TargetCountySelector from './TargetCountySelector';
 import TimeScaleSelector from './TimeScaleSelector';
 import DataTypeSelector from './DataTypeSelector';
+import { Tooltip } from 'react-tooltip';
 import '../styles/Sidebar.css';
 
 const Sidebar = ({
@@ -14,7 +15,10 @@ const Sidebar = ({
   selectedDataType,
   onDataTypeChange,
   targetYear,
-  onSelectTargetYear
+  onSelectTargetYear,
+  showChart,
+  toggleChart,
+  mapData
 }) => {
   return (
     <div>
@@ -47,6 +51,17 @@ const Sidebar = ({
             onDataTypeChange={onDataTypeChange}
           />
         </div>
+      </div>
+      <div className='menuSection'>
+        <button
+          className="chart-toggle"
+          onClick={toggleChart}
+          disabled={!mapData} // Disable button if mapData is null
+          data-tip={!mapData ? "Chart is available after data is displayed on the map" : ""}
+        >
+          {showChart ? 'Hide Chart' : 'Show Chart'}
+        </button>
+        <Tooltip place="top" type="dark" effect="solid" />
       </div>
     </div>
   );

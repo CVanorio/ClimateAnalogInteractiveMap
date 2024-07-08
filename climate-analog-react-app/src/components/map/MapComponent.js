@@ -17,7 +17,9 @@ const MapComponent = ({
   selectedDataType,
   mapData,
   loading,
-  years
+  years,
+  showChart,
+  menuVisible
 }) => {
   const mapRef = useRef(null);
   const markersRef = useRef([]);
@@ -33,23 +35,6 @@ const MapComponent = ({
 
   const toggleFocus = () => {
     setFocusToMarkers(prevFocusToMarkers => !prevFocusToMarkers);
-  };
-
-  const setInitialMapBounds = () => {
-    if (!initialBoundsSet && mapRef.current && mapData && mapData.length > 0) {
-      const latLngs = mapData.map(item => {
-        const lat = Number(item.AnalogCountyLatitude);
-        const lng = Number(item.AnalogCountyLongitude);
-        return L.latLng(lat, lng);
-      });
-
-      if (latLngs.length > 0) {
-        const bounds = L.latLngBounds(latLngs);
-        const buffer = 0.5; // Adjust the buffer as needed
-        mapRef.current.fitBounds(bounds.pad(buffer));
-        setInitialBoundsSet(true);
-      }
-    }
   };
 
   useEffect(() => {
@@ -71,13 +56,14 @@ const MapComponent = ({
 
   useEffect(() => {
     if (mapData && mapData.length > 0) {
-      setInitialMapBounds();
+      setInitialBoundsSet(false);
     }
   }, [mapData]);
 
   useEffect(() => {
-    MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, focusToMarkers, highlightedYear);
-  }, [mapData, selectedDataType, focusToMarkers, highlightedYear]);
+    MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear);
+    setInitialBoundsSet(true);
+  }, [mapData, selectedDataType, highlightedYear]);
 
   useEffect(() => {
     if (countyLayerRef.current) {
@@ -104,7 +90,7 @@ const MapComponent = ({
   return (
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />
-      <div id="map" style={{ height: '80vh', width: 'calc(100vw - 330px)' }}></div>
+      <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? '80vw' : '98vw' }}></div>
       {mapData && (
         <div className="sliderDiv" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 1000 }}>
           <Slider
