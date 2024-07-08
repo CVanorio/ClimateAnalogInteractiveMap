@@ -72,11 +72,12 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }
         className="slider"
         ref={sliderRef}
       />
-      {highlightedYear && (
-        <div className="slider-label" style={{ left: `${thumbPosition}px` }}>
-          {highlightedYear}
-        </div>
-      )}
+      <div
+        className="custom-thumb"
+        style={{ left: `${thumbPosition}px` }}
+      >
+        {highlightedYear}
+      </div>
     </div>
   );
 };

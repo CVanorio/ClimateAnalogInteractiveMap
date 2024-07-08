@@ -31,5 +31,9 @@
     font-size: 16px;
     z-index: 1000 !important;
   }
+
+  div[class*='leaflet-tooltip'] {
+    font-size: 50;
+  }
   
   

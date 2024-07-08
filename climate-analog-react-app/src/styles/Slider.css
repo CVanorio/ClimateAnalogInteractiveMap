@@ -6,17 +6,17 @@
     border-radius: 5px;
     padding: 12px 10px;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
-}
-
-.playPauseButton {
+  }
+  
+  .playPauseButton {
     position: absolute;
     top: 50%;
     left: 10px; /* Adjust as needed */
     transform: translateY(-50%);
     cursor: pointer;
-}
-
-.slider {
+  }
+  
+  .slider {
     width: calc(100% - 50px); /* Adjust for the button width and padding */
     height: 8px;
     -webkit-appearance: none;
@@ -31,43 +31,43 @@
     left: 51%; /* Center the slider */
     transform: translateX(-50%);
     z-index: 2;
-}
-
-.slider::-webkit-slider-thumb {
+  }
+  
+  .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
+    width: 45px;
+    height: 20px;
+    background: transparent; /* Make it transparent */
+    cursor: pointer;
+    position: relative;
+    z-index: 3; /* Ensure thumb is above ticks and labels */
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 45px;
+    height: 20px;
+    background: transparent; /* Make it transparent */
+    cursor: pointer;
+    position: relative;
+    z-index: 3; /* Ensure thumb is above ticks and labels */
+  }
+  
+  .custom-thumb {
+    position: absolute;
     width: 45px;
     height: 20px;
     background: #555; /* Thumb color */
     border: 2px solid #fff; /* Thumb border */
     border-radius: 40px; /* Rounded corners */
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out;
-    position: relative;
-    z-index: 3; /* Ensure thumb is above ticks and labels */
-}
-
-.slider::-moz-range-thumb {
-    width: 45px;
-    height: 20px;
-    background: #555;
-    border: 2px solid #fff;
-    border-radius: 40px;
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out;
-    position: relative;
-    z-index: 3; /* Ensure thumb is above ticks and labels */
-}
-
-.slider-label {
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: white;
     font-weight: 500;
-    position: absolute;
-    top: 0px; /* Adjust as needed */
-    text-align: center;
-    transform: translateX(75%);
-    pointer-events: none; /* Prevent label from interfering with slider interaction */
+    pointer-events: none; /* Prevent thumb from interfering with slider interaction */
     z-index: 5;
-    width: 30;
-}
+    transform: translateX(-50%) translateY(-55%);
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
+  }
+  
