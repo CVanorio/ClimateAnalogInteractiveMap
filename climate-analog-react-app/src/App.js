@@ -59,18 +59,16 @@ const App = () => {
   };
 
   useEffect(() => {
-    // set isFocused or whatever false
     fetchDataFromApi();
   }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType]);
 
-
   return (
     <div className="app-container">
-      <i className={`${menuVisible ? 'fas fa-angle-left' : 'fas fa-angle-right'}`} onClick={toggleMenu}></i>
+      <i className={`${menuVisible ? 'fas fa-angle-left' : 'fas fa-angle-right'}`} onClick={toggleMenu} title="Toggle Menu"></i>
       <aside className={`sidebar ${menuVisible ? 'visible' : ''}`}>
         <Sidebar
           selectedCounty={selectedCounty}
-          onSelectCounty={handleCountySelect}
+          onSelectCounty={handleCountySelect} // Pass handleCountySelect to update selectedCounty
           timeScale={timeScale}
           onToggleTimeScale={handleTimeScaleToggle}
           scaleValue={scaleValue}
@@ -82,8 +80,8 @@ const App = () => {
           showChart={showChart}
           toggleChart={toggleChart}
           mapData={mapData} // Pass mapData to Sidebar
+          error={error}
         />
-        {error && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{error}</div>}
       </aside>
       <section className="map-container">
         <MapComponent
@@ -97,6 +95,7 @@ const App = () => {
           years={years}
           showChart={showChart}
           menuVisible={menuVisible}
+          handleCountyClick={handleCountySelect} // Pass handleCountySelect as handleCountyClick
         />
       </section>
       {mapData && (

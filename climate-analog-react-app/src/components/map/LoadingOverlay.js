@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PulseLoader } from 'react-spinners';
 
 const overlayStyle = {
@@ -28,34 +28,46 @@ const textStyle = {
   color: 'black',
   fontSize: '32px', // Increased font size
   marginBottom: '10px', // Space between text and spinner
-  /*fontWeight: 'bold',*/
-  /*fontFamily: 'Georgia',*/
 };
 
 const spinnerStyle = {
   marginBottom: '20px', // Space between text and spinner
-}
+};
 
 const subtextStyle = {
   color: 'black',
   fontSize: '18px', // Increased font size
-  /*fontWeight: 'bold',*/
-  /*fontFamily: 'Georgia',*/
-}
+};
 
-const LoadingOverlay = ({ loading }) => (
-  loading && (
-    <div style={overlayStyle}>
-      <div style={boxStyle}>
-      <div style={spinnerStyle}>
-          <PulseLoader size={15} color={"red"} loading={loading} />
+const LoadingOverlay = ({ loading }) => {
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (loading) {
+      timer = setTimeout(() => {
+        setShowOverlay(true);
+      }, 1000); // Show overlay after 1 seconds
+    } else {
+      setShowOverlay(false);
+    }
+
+    return () => clearTimeout(timer);
+  }, [loading]);
+
+  return (
+    showOverlay && (
+      <div style={overlayStyle}>
+        <div style={boxStyle}>
+          <div style={spinnerStyle}>
+            <PulseLoader size={15} color={"red"} loading={loading} />
+          </div>
+          <div style={textStyle}>Calculating Climate Patterns...</div>
+          <div style={subtextStyle}>Please wait, this could take a few seconds</div>
         </div>
-        <div style={textStyle}>Calculating Climate Patterns...</div>
-        <div style={subtextStyle}>Please wait, this could take a few seconds</div>
-        
       </div>
-    </div>
-  )
-);
+    )
+  );
+};
 
 export default LoadingOverlay;

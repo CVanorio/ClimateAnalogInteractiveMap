@@ -1,10 +1,10 @@
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css'; // Ensure Leaflet CSS is imported
 
 const MarkerHandler = {
-  handleMarkers: (map, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear) => {
+  handleMarkers: (map, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors) => {
     if (!mapData || !Array.isArray(mapData)) {
-      // If mapData is null or undefined, do nothing and return
-      return;
+      return; // If mapData is null or undefined, do nothing and return
     }
 
     // Remove existing markers
@@ -94,17 +94,21 @@ const MarkerHandler = {
       }
     });
     
-    
-
     // Add markers to map
     markerMap.forEach((data, latlngString) => {
       const latLngArray = latlngString.slice(7, -1).split(',').map(Number);
       if (latLngArray.length === 2 && !isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
+        const markerColor = yearColors[data.years[0]];
+        const className = data.years.includes(highlightedYear) ? 'circular-marker highlighted' : 'circular-marker';
+
         const marker = L.marker(latLngArray, {
           icon: L.divIcon({
-            html: data.count > 1 ? `<div class="circular-marker">${data.count}</div>` : `<div class="circular-marker"></div>`,
-            className: `circular-marker ${data.years.includes(highlightedYear) ? 'highlighted' : ''}`,
-          })
+            html: `<div class="${className}" style="background-color: ${markerColor};">${data.count > 1 ? data.count : ''}</div>`,
+            className: '', // Leave className empty to avoid default styling
+            iconSize: [16, 16], // Set size to avoid default size
+            popupAnchor: [0, -8] // Adjust popup position if necessary
+          }),
+          interactive: true // Ensuring marker is interactive
         }).bindPopup(data.popupContent);
 
         markersRef.current.push(marker);
@@ -114,11 +118,8 @@ const MarkerHandler = {
       }
     });
 
-    console.log(initialBoundsSet)
-
     // Fit map bounds with buffer once, when data is first added
     if (!initialBoundsSet) {
-      
       const bounds = L.latLngBounds(latLngs);
       const buffer = 0.2; // Adjust the buffer as needed
       map.fitBounds(bounds.pad(buffer));

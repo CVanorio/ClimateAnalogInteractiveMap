@@ -10,20 +10,22 @@ const counties = [
   "Menominee", "Milwaukee", "Monroe", "Oconto", "Oneida", "Outagamie",
   "Ozaukee", "Pepin", "Pierce", "Polk", "Portage", "Price", "Racine",
   "Richland", "Rock", "Rusk", "Sauk", "Sawyer", "Shawano", "Sheboygan",
-  "St. Croix", "Taylor", "Trempealeau", "Vernon", "Vilas", "Walworth", 
+  "St. Croix", "Taylor", "Trempealeau", "Vernon", "Vilas", "Walworth",
   "Washburn", "Washington", "Waukesha", "Waupaca", "Waushara", "Winnebago", "Wood"
 ];
 
 const TargetCountySelector = ({ selectedCounty, onSelectCounty }) => {
   return (
-    <select className='select-menu' value={selectedCounty} onChange={(e) => onSelectCounty(e.target.value)}>
-      <option className='selectPrompt' value="">-Select a county-</option>
-      {counties.map((county) => (
-        <option key={county} value={county}>
-          {county}
-        </option>
-      ))}
-    </select>
+    <div className="time-scale-options">
+      <select value={selectedCounty} onChange={(e) => onSelectCounty(e.target.value)}>
+        <option className='selectPrompt' value="">-Select a county-</option>
+        {counties.map((county) => (
+          <option key={county} value={county}>
+            {county}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 };
 

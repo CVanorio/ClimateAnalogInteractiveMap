@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import '../../styles/Slider.css';
 
-const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }) => {
+const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, selectedDataType }) => {
   const intervalRef = useRef(null);
   const sliderRef = useRef(null);
   const [thumbPosition, setThumbPosition] = useState(0);
@@ -39,7 +39,7 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }
   useEffect(() => {
     if (isPlaying) {
       intervalRef.current = setInterval(() => {
-        const currentIndex = years.findIndex(year => year === highlightedYear);
+        const currentIndex = years.findIndex((year) => year === highlightedYear);
         const nextIndex = (currentIndex + 1) % years.length;
         onChange(years[nextIndex]);
         updateThumbPosition(sliderRef.current);
@@ -72,10 +72,7 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause }
         className="slider"
         ref={sliderRef}
       />
-      <div
-        className="custom-thumb"
-        style={{ left: `${thumbPosition}px` }}
-      >
+      <div className="custom-thumb" style={{ left: `${thumbPosition}px` }}>
         {highlightedYear}
       </div>
     </div>

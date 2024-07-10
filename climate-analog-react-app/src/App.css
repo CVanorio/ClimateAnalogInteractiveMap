@@ -11,7 +11,6 @@ height: 100%;
 position: fixed;
 left: 0;
 z-index: 1;
-padding-top: 60px; /* Adjust as needed */
 box-shadow: 3px 0px 3px rgb(0, 0, 0, 0.25);
 }
 
@@ -20,7 +19,8 @@ box-shadow: 3px 0px 3px rgb(0, 0, 0, 0.25);
 } */
 
 .sidebar.visible {
-width: 18vw; /* Adjust width as needed */
+width: 325px; /* Adjust width as needed */
+z-index: 3000;
 }
 
 .menu-content {
@@ -31,7 +31,7 @@ padding: 20px;
 position: fixed;
 left: 10px;
 top: 10px;
-z-index: 2;
+z-index: 3000;
 }
 
 .map-container {
@@ -72,6 +72,7 @@ box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
   .fa-triangle-exclamation {
     color: red;
     font-size: 18px;
+    margin: 10px;
   }
 
   .menuSection {
@@ -121,10 +122,11 @@ box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
   font-size: 30px;
   z-index: 1000;
   position: absolute;
-  transform: translateX(18vw);
+  transform: translateX(325px);
   background-color: white;
   box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
-  padding: 2px;
+  padding: 13px 2px;
+  cursor: pointer;
 }
 
 .fa-angle-right {
@@ -135,5 +137,6 @@ box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
   transform: translateX(2px);
   background-color: white;
   box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
-  padding: 2px;
+  padding: 13px 2px;
+  cursor: pointer;
 }

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import * as d3 from 'd3';
 import stateData from '../../data/us-states.json';
 import countyData from '../../data/us-counties.json';
 import MapInitialization from './MapInitialization';
@@ -28,6 +29,7 @@ const MapComponent = ({
   const [highlightedYear, setHighlightedYear] = useState(null);
   const [initialBoundsSet, setInitialBoundsSet] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [yearColors, setYearColors] = useState({}); // State to store year colors
 
   const togglePlayPause = () => {
     setIsPlaying(prevIsPlaying => !prevIsPlaying);
@@ -36,6 +38,28 @@ const MapComponent = ({
   const toggleFocus = () => {
     setFocusToMarkers(prevFocusToMarkers => !prevFocusToMarkers);
   };
+
+  // Define handleCountyClick function to handle county clicks
+  const handleCountyClick = (countyName) => {
+    console.log(`Clicked on county: ${countyName}`);
+    // Implement logic to set selectedCounty here
+  };
+
+  // Calculate year colors based on a gradient from white to blue
+  useEffect(() => {
+    if (years && years.length > 0) {
+      const minYear = Math.min(...years);
+      const maxYear = Math.max(...years);
+      const colorScale = d3.scaleLinear().domain([minYear, maxYear]).range(['#000000', '#ffffff']);
+
+      const colors = {};
+      years.forEach(year => {
+        colors[year] = colorScale(year);
+      });
+
+      setYearColors(colors);
+    }
+  }, [years]);
 
   useEffect(() => {
     // Initialize map only once on component mount
@@ -46,11 +70,12 @@ const MapComponent = ({
     // Setup base layers and custom controls
     MapInitialization.setupBaseLayers(mapRef.current, stateData);
     MapInitialization.setupCustomControl(mapRef.current, toggleFocus);
-    countyLayerRef.current = MapInitialization.addCountyLayer(mapRef.current, countyData);
+    countyLayerRef.current = MapInitialization.addCountyLayer(mapRef.current, countyData, handleCountyClick);
 
-    // Cleanup function
     return () => {
-      mapRef.current.remove();
+      if (mapRef.current) {
+        mapRef.current.remove();
+      }
     };
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
@@ -61,37 +86,21 @@ const MapComponent = ({
   }, [mapData]);
 
   useEffect(() => {
-    MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear);
+    MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors);
     setInitialBoundsSet(true);
   }, [mapData, selectedDataType, highlightedYear]);
 
   useEffect(() => {
     if (countyLayerRef.current) {
-      MapInitialization.highlightCounty(countyLayerRef.current, selectedCounty);
+      MapInitialization.highlightCounty(countyLayerRef.current, selectedCounty, countyData);
     }
   }, [selectedCounty]);
-
-  useEffect(() => {
-    // Handle automatic slider movement logic when isPlaying changes
-    let interval;
-    if (isPlaying) {
-      interval = setInterval(() => {
-        const currentIndex = years.findIndex(year => year === highlightedYear);
-        const nextIndex = (currentIndex + 1) % years.length;
-        setHighlightedYear(years[nextIndex]);
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-
-    return () => clearInterval(interval);
-  }, [isPlaying, highlightedYear, years]);
 
   return (
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />
-      <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? '80vw' : '98vw' }}></div>
-      {mapData && (
+      <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}></div>
+      {mapData && targetYear === 'top_analogs' && (
         <div className="sliderDiv" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 1000 }}>
           <Slider
             highlightedYear={highlightedYear}
@@ -99,6 +108,8 @@ const MapComponent = ({
             onChange={(year) => setHighlightedYear(year)}
             isPlaying={isPlaying}
             togglePlayPause={togglePlayPause}
+            selectedDataType={selectedDataType}
+            yearColors={yearColors} // Pass yearColors to the Slider component
           />
         </div>
       )}
