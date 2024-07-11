@@ -99,17 +99,22 @@ const MarkerHandler = {
     markerMap.forEach((data, latlngString) => {
       const latLngArray = latlngString.slice(7, -1).split(',').map(Number);
       if (latLngArray.length === 2 && !isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
-        const markerColors = data.years.map(year => yearColors[year]);
-        const averagedColor = averageColors(markerColors);
+        var markerColor = '#000000'
+        if (data.years.length > 1){
+          const medianYear = getMedianYear(data.years);
+          markerColor = yearColors[medianYear]
+        } else {
+           markerColor = yearColors[data.years]
+        }
 
         const className = data.years.includes(highlightedYear) ? 'circular-marker highlighted' : 'circular-marker';
 
         // Calculate contrast color for text based on averagedColor
-        const fontColor = getContrastColor(averagedColor);
+        const fontColor = getContrastColor(markerColor);
 
         const marker = L.marker(latLngArray, {
           icon: L.divIcon({
-            html: `<div class="${className}" style="background-color: ${averagedColor}; color: ${fontColor};">${data.count > 1 ? data.count : ''}</div>`,
+            html: `<div class="${className}" style="background-color: ${markerColor}; color: ${fontColor};">${data.count > 1 ? data.count : ''}</div>`,
             className: '', // Leave className empty to avoid default styling
             iconSize: [16, 16], // Set size to avoid default size
             popupAnchor: [0, -8] // Adjust popup position if necessary
@@ -138,30 +143,14 @@ const MarkerHandler = {
   },
 };
 
-// Function to calculate average color
-function averageColors(colors) {
-  if (colors.length === 0) {
-    return '#000000'; // Default to black if no colors provided
-  }
+// Function to calculate median year
+function getMedianYear(values) {
+  if (values.length === 0) return 0;
 
-  // Convert colors to RGB
-  const rgbColors = colors.map(color => {
-    const hex = color.replace('#', '');
-    const r = parseInt(hex.slice(0, 2), 16);
-    const g = parseInt(hex.slice(2, 4), 16);
-    const b = parseInt(hex.slice(4, 6), 16);
-    return { r, g, b };
-  });
+  values.sort((a, b) => a - b);
+  const half = Math.floor(values.length / 2);
 
-  // Calculate average RGB values
-  const avgR = Math.round(rgbColors.reduce((acc, curr) => acc + curr.r, 0) / rgbColors.length);
-  const avgG = Math.round(rgbColors.reduce((acc, curr) => acc + curr.g, 0) / rgbColors.length);
-  const avgB = Math.round(rgbColors.reduce((acc, curr) => acc + curr.b, 0) / rgbColors.length);
-
-  // Convert average RGB to hex
-  const averagedHex = `#${((avgR << 16) | (avgG << 8) | avgB).toString(16).padStart(6, '0')}`;
-
-  return averagedHex;
+  return values[half];
 }
 
 
@@ -186,7 +175,7 @@ function getContrastColor(hexColor) {
   const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
 
   // Return black or white based on YIQ ratio
-  return yiq >= 128 ? '#000000' : '#ffffff';
+  return yiq >= 1 ? '#000000' : '#ffffff';
 }
 
 export default MarkerHandler;
