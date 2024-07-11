@@ -1,4 +1,4 @@
-/* MapStyles.css */
+/* Marker styling */
 .circular-marker {
   border-radius: 50%;
   border: 2px solid white;
@@ -9,35 +9,30 @@
   font-size: 12px;
   font-weight: bold;
   opacity: 1;
-  z-index: 100 !important;
+  z-index: 100; /* Lower z-index to ensure non-highlighted markers are below */
 }
 
 /* Additional styling for highlighted markers */
-.circular-marker.highlighted{
-  border: 2px solid red;
-  color: white;
+.circular-marker.highlighted {
+  border: 2px solid #FF5733; /* Adjust border color for highlighted marker */
   opacity: 1;
   width: 20px !important; /* Important to ensure override */
   height: 20px !important; /* Important to ensure override */
   line-height: 18px;
   font-size: 16px;
-  z-index: 1000 !important;
+  z-index: 1000; /* Higher z-index to ensure highlighted marker is above all others */
 }
 
-  .leaflet-control-button {
-    background: white;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-  }
+/* Optional: Adjust Leaflet control button styling */
+.leaflet-control-button {
+  background: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+}
 
-  .fa-location-dot {
-    font-size: 24px;
-    color: blueviolet; /* Adjust the color as needed */
-    /* transform: translateX(-50%) translateY(-100%); */
-    z-index: 1000;
-  }
-    
-  
-  
-  
+/* Optional: Customize other visual elements */
+.fa-location-dot {
+  font-size: 24px;
+  color: #FF5733; /* Adjust the color as needed */
+}

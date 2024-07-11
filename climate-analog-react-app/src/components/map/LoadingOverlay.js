@@ -60,7 +60,7 @@ const LoadingOverlay = ({ loading }) => {
       <div style={overlayStyle}>
         <div style={boxStyle}>
           <div style={spinnerStyle}>
-            <PulseLoader size={15} color={"red"} loading={loading} />
+            <PulseLoader size={15} color={"#007bff"} loading={loading} />
           </div>
           <div style={textStyle}>Calculating Climate Patterns...</div>
           <div style={subtextStyle}>Please wait, this could take a few seconds</div>

@@ -4,7 +4,7 @@
   position: relative;
   width: calc(100% - 10px); /* Fixed width calculation */
   margin: 20px 5px;
-  background-color: lightgrey;
+  background-color: white;
   opacity: 0.85;
   border-radius: 5px;
   padding: 12px 10px;
@@ -14,7 +14,7 @@
 .playPauseButton {
   position: absolute;
   top: 50%;
-  left: 10px; /* Adjust as needed */
+  left: 10px; 
   transform: translateY(-50%);
   cursor: pointer;
 }
@@ -24,7 +24,13 @@
   height: 8px;
   -webkit-appearance: none;
   appearance: none;
-  background: linear-gradient(to right, #000000, #ffffff); /* Default gradient for precipitation */
+  background: linear-gradient(to right, 
+  #440154,
+  #3B528B,
+  #21918C,
+  #5DC863,
+  #FDE725
+);
   outline: none;
   border-radius: 5px;
   margin: 0;

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import '../../styles/Slider.css';
 
-const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, selectedDataType }) => {
+const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, selectedDataType, yearColors }) => {
   const intervalRef = useRef(null);
   const sliderRef = useRef(null);
   const [thumbPosition, setThumbPosition] = useState(0);

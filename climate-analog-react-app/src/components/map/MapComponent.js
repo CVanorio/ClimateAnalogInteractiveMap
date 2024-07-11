@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import * as d3 from 'd3';
+import { scaleSequential } from 'd3-scale';
+import { interpolateViridis } from 'd3-scale-chromatic';
 import stateData from '../../data/us-states.json';
 import countyData from '../../data/us-counties.json';
 import MapInitialization from './MapInitialization';
@@ -50,13 +52,15 @@ const MapComponent = ({
     if (years && years.length > 0) {
       const minYear = Math.min(...years);
       const maxYear = Math.max(...years);
-      const colorScale = d3.scaleLinear().domain([minYear, maxYear]).range(['#000000', '#ffffff']);
-
+  
+      const colorScale = scaleSequential(interpolateViridis)
+        .domain([minYear, maxYear]);
+  
       const colors = {};
       years.forEach(year => {
         colors[year] = colorScale(year);
       });
-
+  
       setYearColors(colors);
     }
   }, [years]);

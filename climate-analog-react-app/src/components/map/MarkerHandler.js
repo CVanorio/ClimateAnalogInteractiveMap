@@ -17,35 +17,35 @@ const MarkerHandler = {
     mapData.forEach((item) => {
       const lat = Number(item.AnalogCountyLatitude);
       const lng = Number(item.AnalogCountyLongitude);
-    
+
       if (isNaN(lat) || isNaN(lng)) {
         console.error("Invalid coordinates:", item.AnalogCountyLatitude, item.AnalogCountyLongitude);
         return;
       }
-    
+
       const latlng = new L.LatLng(lat, lng);
       latLngs.push(latlng);
-    
+
       const popupHeader = `<strong>${item.AnalogCountyName} County, ${item.AnalogCountyStateAbbr}</strong><br>`;
       let popupContent = '';
-    
+
       if (selectedDataType === 'precipitation' || selectedDataType === 'both') {
         popupContent += `<i class="fas fa-cloud-rain"></i> Precipitation Norm: ${Number(item.AnalogPrecipNormal)} in<br>`;
       }
-      
+
       if (selectedDataType === 'temperature' || selectedDataType === 'both') {
         popupContent += `<i class="fas fa-thermometer-half"></i> Temperature Norm: ${Number(item.AnalogTempNormal)} °F<br>`;
       }
-    
+
       const yearAndDistance = `<tr><td>${Number(item.Year)}</td><td>${item.Distance}</td>`;
       const precipValue = selectedDataType === 'precipitation' || selectedDataType === 'both' ? `<td>${Number(item.TargetPrecipValue)} in</td>` : '';
       const tempValue = selectedDataType === 'temperature' || selectedDataType === 'both' ? `<td>${Number(item.TargetTempValue)} °F</td>` : '';
       const row = `${yearAndDistance}${precipValue}${tempValue}</tr>`;
-    
+
       if (markerMap.has(latlng.toString())) {
         const existingMarkerData = markerMap.get(latlng.toString());
         const newYearsAndDistances = [...existingMarkerData.yearsAndDistances, row];
-    
+
         const updatedPopupContent = `${popupHeader}<br>
                                      <table>
                                        <thead>
@@ -62,7 +62,7 @@ const MarkerHandler = {
                                      </table>
                                      <br>
                                      ${popupContent}`;
-    
+
         markerMap.set(latlng.toString(), {
           count: existingMarkerData.count + 1,
           popupContent: updatedPopupContent,
@@ -93,17 +93,23 @@ const MarkerHandler = {
         });
       }
     });
-    
-    // Add markers to map
+
+    // Prepare markers with averaged colors
+    const averagedMarkers = [];
     markerMap.forEach((data, latlngString) => {
       const latLngArray = latlngString.slice(7, -1).split(',').map(Number);
       if (latLngArray.length === 2 && !isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
-        const markerColor = yearColors[data.years[0]];
+        const markerColors = data.years.map(year => yearColors[year]);
+        const averagedColor = averageColors(markerColors);
+
         const className = data.years.includes(highlightedYear) ? 'circular-marker highlighted' : 'circular-marker';
+
+        // Calculate contrast color for text based on averagedColor
+        const fontColor = getContrastColor(averagedColor);
 
         const marker = L.marker(latLngArray, {
           icon: L.divIcon({
-            html: `<div class="${className}" style="background-color: ${markerColor};">${data.count > 1 ? data.count : ''}</div>`,
+            html: `<div class="${className}" style="background-color: ${averagedColor}; color: ${fontColor};">${data.count > 1 ? data.count : ''}</div>`,
             className: '', // Leave className empty to avoid default styling
             iconSize: [16, 16], // Set size to avoid default size
             popupAnchor: [0, -8] // Adjust popup position if necessary
@@ -111,11 +117,16 @@ const MarkerHandler = {
           interactive: true // Ensuring marker is interactive
         }).bindPopup(data.popupContent);
 
-        markersRef.current.push(marker);
-        marker.addTo(map);
+        averagedMarkers.push(marker);
       } else {
         console.error("Invalid coordinates:", latlngString);
       }
+    });
+
+    // Add averaged markers to map
+    averagedMarkers.forEach(marker => {
+      markersRef.current.push(marker);
+      marker.addTo(map);
     });
 
     // Fit map bounds with buffer once, when data is first added
@@ -126,5 +137,56 @@ const MarkerHandler = {
     }
   },
 };
+
+// Function to calculate average color
+function averageColors(colors) {
+  if (colors.length === 0) {
+    return '#000000'; // Default to black if no colors provided
+  }
+
+  // Convert colors to RGB
+  const rgbColors = colors.map(color => {
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+    return { r, g, b };
+  });
+
+  // Calculate average RGB values
+  const avgR = Math.round(rgbColors.reduce((acc, curr) => acc + curr.r, 0) / rgbColors.length);
+  const avgG = Math.round(rgbColors.reduce((acc, curr) => acc + curr.g, 0) / rgbColors.length);
+  const avgB = Math.round(rgbColors.reduce((acc, curr) => acc + curr.b, 0) / rgbColors.length);
+
+  // Convert average RGB to hex
+  const averagedHex = `#${((avgR << 16) | (avgG << 8) | avgB).toString(16).padStart(6, '0')}`;
+
+  return averagedHex;
+}
+
+
+// Function to calculate contrast color for readability
+function getContrastColor(hexColor) {
+  if (!hexColor) {
+    return '#000000'; // Default to black if hexColor is not provided
+  }
+
+  // Convert hex color to RGB
+  const hex = hexColor.replace('#', '');
+  if (hex.length !== 6) {
+    console.error('Invalid hex color format:', hexColor);
+    return '#000000'; // Return black for invalid format
+  }
+
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+
+  // Calculate YIQ ratio for contrast
+  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
+  // Return black or white based on YIQ ratio
+  return yiq >= 128 ? '#000000' : '#ffffff';
+}
 
 export default MarkerHandler;
