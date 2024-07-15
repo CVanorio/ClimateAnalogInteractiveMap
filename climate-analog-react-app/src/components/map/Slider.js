@@ -4,7 +4,9 @@ import '../../styles/Slider.css';
 const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, selectedDataType, yearColors }) => {
   const intervalRef = useRef(null);
   const sliderRef = useRef(null);
+  const speedOptionsRef = useRef(null); // Ref for speed options dropdown
   const [thumbPosition, setThumbPosition] = useState(0);
+  const [speed, setSpeed] = useState(1);
 
   useEffect(() => {
     if (!highlightedYear && years.length > 0) {
@@ -16,6 +18,33 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
     const year = parseInt(event.target.value);
     onChange(year);
     updateThumbPosition(event.target);
+  };
+
+  const handleSpeedChange = (event) => {
+    const selectedSpeed = parseFloat(event.target.value);
+    setSpeed(selectedSpeed);
+
+    // Update interval immediately if playing
+    if (isPlaying) {
+      updateInterval(selectedSpeed);
+    }
+  };
+
+  const updateInterval = (selectedSpeed) => {
+    let interval = 1000; // Default interval
+    if (selectedSpeed === 0.5) {
+      interval = 2000;
+    } else if (selectedSpeed === 2) {
+      interval = 500;
+    }
+
+    clearInterval(intervalRef.current); // Clear previous interval
+    intervalRef.current = setInterval(() => {
+      const currentIndex = years.findIndex((year) => year === highlightedYear);
+      const nextIndex = (currentIndex + 1) % years.length;
+      onChange(years[nextIndex]);
+      updateThumbPosition(sliderRef.current);
+    }, interval);
   };
 
   const updateThumbPosition = (slider) => {
@@ -38,12 +67,7 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
 
   useEffect(() => {
     if (isPlaying) {
-      intervalRef.current = setInterval(() => {
-        const currentIndex = years.findIndex((year) => year === highlightedYear);
-        const nextIndex = (currentIndex + 1) % years.length;
-        onChange(years[nextIndex]);
-        updateThumbPosition(sliderRef.current);
-      }, 1000);
+      updateInterval(speed); // Initial update with current speed
     } else {
       clearInterval(intervalRef.current);
     }
@@ -51,7 +75,7 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
     return () => {
       clearInterval(intervalRef.current);
     };
-  }, [isPlaying, highlightedYear, onChange, years]);
+  }, [isPlaying, highlightedYear, onChange, years, speed]);
 
   const togglePlay = () => {
     togglePlayPause();
@@ -61,6 +85,16 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
     <div className="slider-container">
       <div className="playPauseButton" onClick={togglePlay}>
         <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+      </div>
+      <div className="speedControl">
+        <div className="speedSelector" onMouseEnter={() => speedOptionsRef.current.style.display = 'block'} onMouseLeave={() => speedOptionsRef.current.style.display = 'none'}>
+          {speed}x
+          <div className="speedOptions" ref={speedOptionsRef}>
+            <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 0.5 } })}>0.5x</div>
+            <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 1 } })}>1x</div>
+            <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 2 } })}>2x</div>
+          </div>
+        </div>
       </div>
       <input
         type="range"
