@@ -9,8 +9,8 @@ const MapInitialization = {
     const map = L.map(id, {
       center: [44.5, -89.5],
       zoom: 7,
-      zoomDelta: 0.50,
-      // zoomSnap: 0,
+      zoomDelta: 0.25,
+      zoomSnap: 0,
       minZoom: 3,
     });
 

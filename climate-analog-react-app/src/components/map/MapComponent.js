@@ -90,7 +90,7 @@ const MapComponent = ({
   }, [mapData]);
 
   useEffect(() => {
-    MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors);
+    MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear);
     setInitialBoundsSet(true);
   }, [mapData, selectedDataType, highlightedYear]);
 
