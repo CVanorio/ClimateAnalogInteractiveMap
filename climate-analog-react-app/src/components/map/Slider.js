@@ -87,7 +87,7 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
         <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
       </div>
       <div className="speedControl">
-        <div className="speedSelector" onMouseEnter={() => speedOptionsRef.current.style.display = 'block'} onMouseLeave={() => speedOptionsRef.current.style.display = 'none'}>
+        <div className="speedSelector">
           {speed}x
           <div className="speedOptions" ref={speedOptionsRef}>
             <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 0.5 } })}>0.5x</div>
