@@ -27,7 +27,7 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 5px;
   background-color: #fff;
   font-size: 16px;
   color: #000;
@@ -35,14 +35,21 @@
   outline: none; /* Remove default outline */
   position: relative;
   font-weight: 500;
+  text-align: center; /* Center text */
+  min-width: 50px; /* Ensure the selector is always wide enough */
+  display: flex;
+  justify-content: center; /* Center the text horizontally */
+  align-items: center; /* Center the text vertically */
 }
 
-.speedSelector:hover {
+.speedSelector:hover,
+.speedSelector:focus {
   background-color: #f0f0f0; /* Change background color on hover */
 }
 
-.speedSelector:hover .speedOptions {
-  display: block; /* Show options on hover */
+.speedControl:hover .speedOptions,
+.speedControl:focus-within .speedOptions {
+  display: block; /* Show options on hover or focus */
 }
 
 .speedOptions {
@@ -55,15 +62,19 @@
   background-color: #fff;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
   border-radius: 5px;
-  padding: 5px 0;
+  padding: 5px 0px;
   z-index: 10;
+  text-align: center; /* Center text in options */
 }
 
 .speedOption {
-  padding: 8px 10px;
+  padding: 8px 5px;
   font-size: 14px;
   color: #000;
   cursor: pointer;
+  display: flex;
+  justify-content: center; /* Center the text horizontally */
+  align-items: center; /* Center the text vertically */
 }
 
 .speedOption:hover {
@@ -76,11 +87,13 @@
   -webkit-appearance: none;
   appearance: none;
   background: linear-gradient(to right, 
-    #440154,
-    #3B528B,
-    #21918C,
-    #5DC863,
-    #FDE725);
+    #b10026,
+    #e31a1c,
+    #fc4e2a,
+    #fd8d3c,
+    #feb24c,
+    #fed976,
+    #ffffb2);
   outline: none;
   border-radius: 5px;
   margin-left: 10px;
@@ -122,6 +135,6 @@
   font-weight: 500;
   pointer-events: none; /* Prevent thumb from interfering with slider interaction */
   z-index: 5;
-  transform: translateX(135%) translateY(-10%);
+  transform: translateX(140%) translateY(-10%);
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
 }

@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import * as d3 from 'd3';
 import { scaleSequential } from 'd3-scale';
-import { interpolateViridis } from 'd3-scale-chromatic';
+import { interpolateViridis, interpolateYlOrRd} from 'd3-scale-chromatic';
 import stateData from '../../data/us-states.json';
 import countyData from '../../data/us-counties.json';
 import MapInitialization from './MapInitialization';
@@ -53,8 +53,8 @@ const MapComponent = ({
       const minYear = Math.min(...years);
       const maxYear = Math.max(...years);
   
-      const colorScale = scaleSequential(interpolateViridis)
-        .domain([minYear, maxYear]);
+      const colorScale = scaleSequential(interpolateYlOrRd)
+        .domain([maxYear, minYear]);
   
       const colors = {};
       years.forEach(year => {

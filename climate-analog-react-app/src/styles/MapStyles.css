@@ -14,7 +14,7 @@
 
 /* Additional styling for highlighted markers */
 .circular-marker.highlighted {
-  border: 2px solid #FF5733; /* Adjust border color for highlighted marker */
+  border: 2px solid red; /* Adjust border color for highlighted marker */
   opacity: 1;
   width: 20px !important; /* Important to ensure override */
   height: 20px !important; /* Important to ensure override */
@@ -34,5 +34,11 @@
 /* Optional: Customize other visual elements */
 .fa-location-dot {
   font-size: 24px;
-  color: #FF5733; /* Adjust the color as needed */
+  color: red; /* Adjust the color as needed */
 }
+
+.popup-table-container {
+  max-width: 300px; /* Adjust the maximum width as per your design */
+  overflow: auto; /* Add scrollbar if content overflows */
+}
+

@@ -28,6 +28,7 @@ const MapInitialization = {
         weight: 1.5,
         fillColor: 'transparent',
         fillOpacity: 0,
+        zIndex: 1,
       },
     }).addTo(map);
   },
@@ -53,6 +54,7 @@ const MapInitialization = {
           color: 'grey',
           fillColor: 'transparent',
           fillOpacity: 0.15,
+          zIndex: 1,
         };
       } else {
         return {
@@ -60,61 +62,65 @@ const MapInitialization = {
           color: 'grey',
           fillColor: 'transparent',
           fillOpacity: 0,
+          zIndex: 1,
         };
       }
     },
     onEachFeature: (feature, layer) => {
       let tooltip;
-
-      if (feature.properties.STATEABBR === 'WI'){
-        // Mouseover event to show tooltip and change fill color
-      layer.on('mouseover', function (e) {
-        tooltip = L.tooltip({
-          permanent: true,
-          direction: 'right',
-          className: 'leaflet-tooltip'
-        }).setContent(`${feature.properties.COUNTYNAME}, ${feature.properties.STATEABBR}`);
-
-        this.bindTooltip(tooltip).openTooltip();
-
-        if (feature.properties.STATEABBR === 'WI') {
-          layer.setStyle({
-            fillColor: 'blue',
-            fillOpacity: 0.25
-          });
-        }
-      });
-
-      // Mouseout event to hide tooltip and reset fill color
-      layer.on('mouseout', function (e) {
-        if (tooltip) {
-          this.unbindTooltip();
-          tooltip = null;
-        }
-
-        if (feature.properties.STATEABBR === 'WI') {
-          layer.setStyle({
-            fillColor: 'transparent',
-            fillOpacity: 0.15
-          });
-        }
-      });
-
-      // Enable click only for WI counties
+      let originalColor; // Variable to store the original color
+      let originalOpacity;
+    
       if (feature.properties.STATEABBR === 'WI') {
-        layer.on('click', function (e) {
-          handleCountyClick(feature.properties.COUNTYNAME); // Call the handleCountyClick function
+        // Mouseover event to show tooltip and change fill color
+        layer.on('mouseover', function (e) {
+          // Get the current style
+          originalColor = layer.options.fillColor;
+          originalOpacity = layer.options.fillOpacity;
+    
+          tooltip = L.tooltip({
+            permanent: true,
+            direction: 'right',
+            className: 'leaflet-tooltip'
+          }).setContent(`${feature.properties.COUNTYNAME}, ${feature.properties.STATEABBR}`);
+    
+          this.bindTooltip(tooltip).openTooltip();
+    
+          if (feature.properties.STATEABBR === 'WI') {
+            layer.setStyle({
+              fillColor: 'blue',
+              fillOpacity: 0.25
+            });
+          }
+        });
+    
+        // Mouseout event to hide tooltip and reset fill color
+        layer.on('mouseout', function (e) {
+          if (tooltip) {
+            this.unbindTooltip();
+            tooltip = null;
+          }
+    
+          if (feature.properties.STATEABBR === 'WI') {
+            layer.setStyle({
+              fillColor: originalColor, // Reset to the original color
+              fillOpacity: originalOpacity
+            });
+          }
+        });
+    
+        // Enable click only for WI counties
+        if (feature.properties.STATEABBR === 'WI') {
+          layer.on('click', function (e) {
+            handleCountyClick(feature.properties.COUNTYNAME); // Call the handleCountyClick function
+          });
+        }
+    
+        // Prevent default behavior on mousedown to disable selection box
+        layer.on('mousedown', function (e) {
+          L.DomEvent.stopPropagation(e); // Prevent default Leaflet behavior
         });
       }
-
-      // Prevent default behavior on mousedown to disable selection box
-      layer.on('mousedown', function (e) {
-        L.DomEvent.stopPropagation(e); // Prevent default Leaflet behavior
-      });
-
-      }
-
-      
     }
   }).addTo(map);
 
@@ -128,6 +134,7 @@ const MapInitialization = {
       color: 'grey',
       fillColor: 'transparent',
       fillOpacity: 0,
+      zIndex: 1,
     };
   },
 
@@ -160,6 +167,7 @@ const MapInitialization = {
               color: 'black',
               fillColor: 'transparent',
               fillOpacity: 0.25,
+              zIndex: 1,
             },
             onEachFeature: (feature, layer) => {
               let tooltip;

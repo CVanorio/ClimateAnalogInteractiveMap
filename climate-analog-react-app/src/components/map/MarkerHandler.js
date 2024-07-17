@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css'; // Ensure Leaflet CSS is imported
 import { ColorRampCollection } from "@maptiler/sdk";
+import '../../styles/MapStyles.css';
 
 let coloredCounties = []; // Maintain a list of colored counties
 
@@ -25,6 +26,9 @@ const MarkerHandler = {
         layer.setStyle({
           fillColor: '',
           fillOpacity: 0,
+          weight: 0.7,
+          color: 'grey',
+          className: ''
         });
         layer.unbindPopup();
       }
@@ -55,7 +59,7 @@ const MarkerHandler = {
           popupContent += `<i class="fas fa-thermometer-half"></i> Temperature Norm: ${Number(item.AnalogTempNormal)} °F<br>`;
         }
 
-        const yearAndDistance = `<tr><td>${Number(item.Year)}</td><td>${item.Distance}</td>`;
+        const yearAndDistance = `<tr><td>${Number(item.Year)}</td><td>${item.Distance}</td><td>${item.RowNumber}</td>`;
         const precipValue = selectedDataType === 'precipitation' || selectedDataType === 'both' ? `<td>${Number(item.TargetPrecipValue)} in</td>` : '';
         const tempValue = selectedDataType === 'temperature' || selectedDataType === 'both' ? `<td>${Number(item.TargetTempValue)} °F</td>` : '';
         const row = `${yearAndDistance}${precipValue}${tempValue}</tr>`;
@@ -65,19 +69,22 @@ const MarkerHandler = {
           const newYearsAndDistances = [...existingMarkerData.yearsAndDistances, row];
 
           const updatedPopupContent = `${popupHeader}<br>
-                                       <table>
-                                         <thead>
-                                           <tr>
-                                             <th>Year</th>
-                                             <th>Difference Score</th>
-                                             ${selectedDataType === 'precipitation' || selectedDataType === 'both' ? '<th>Precipitation</th>' : ''}
-                                             ${selectedDataType === 'temperature' || selectedDataType === 'both' ? '<th>Temperature</th>' : ''}
-                                           </tr>
-                                         </thead>
-                                         <tbody>
-                                           ${newYearsAndDistances.join('')}
-                                         </tbody>
-                                       </table>
+                                       <div class="popup-table-container">
+                                         <table>
+                                           <thead>
+                                             <tr>
+                                               <th>Year</th>
+                                               <th>Difference Score</th>
+                                               <th>Rank</th>
+                                               ${selectedDataType === 'precipitation' || selectedDataType === 'both' ? '<th>Precipitation</th>' : ''}
+                                               ${selectedDataType === 'temperature' || selectedDataType === 'both' ? '<th>Temperature</th>' : ''}
+                                             </tr>
+                                           </thead>
+                                           <tbody>
+                                             ${newYearsAndDistances.join('')}
+                                           </tbody>
+                                         </table>
+                                       </div>
                                        <br>
                                        ${popupContent}`;
 
@@ -91,19 +98,22 @@ const MarkerHandler = {
           markerMap.set(latlng.toString(), {
             count: 1,
             popupContent: `${popupHeader}<br>
-                           <table>
-                             <thead>
-                               <tr>
-                                 <th>Year</th>
-                                 <th>Difference Score</th>
-                                 ${selectedDataType === 'precipitation' || selectedDataType === 'both' ? '<th>Precipitation</th>' : ''}
-                                 ${selectedDataType === 'temperature' || selectedDataType === 'both' ? '<th>Temperature</th>' : ''}
-                               </tr>
-                             </thead>
-                             <tbody>
-                               ${row}
-                             </tbody>
-                           </table>
+                           <div class="popup-table-container">
+                             <table>
+                               <thead>
+                                 <tr>
+                                   <th>Year</th>
+                                   <th>Difference Score</th>
+                                   <th>Rank</th>
+                                   ${selectedDataType === 'precipitation' || selectedDataType === 'both' ? '<th>Precipitation</th>' : ''}
+                                   ${selectedDataType === 'temperature' || selectedDataType === 'both' ? '<th>Temperature</th>' : ''}
+                                 </tr>
+                               </thead>
+                               <tbody>
+                                 ${row}
+                               </tbody>
+                             </table>
+                           </div>
                            <br>
                            ${popupContent}`,
             yearsAndDistances: [row],
@@ -180,7 +190,7 @@ const MarkerHandler = {
           popupContent += `<i class="fas fa-thermometer-half"></i> Temperature Norm: ${Number(item.AnalogTempNormal)} °F<br>`;
         }
 
-        const yearAndDistance = `<tr><td>${Number(item.Year)}</td><td>${item.Distance}</td>`;
+        const yearAndDistance = `<tr><td>${Number(item.Year)}</td><td>${item.Distance}</td><td>${item.RowNumber}</td>`;
         const precipValue = selectedDataType === 'precipitation' || selectedDataType === 'both' ? `<td>${Number(item.TargetPrecipValue)} in</td>` : '';
         const tempValue = selectedDataType === 'temperature' || selectedDataType === 'both' ? `<td>${Number(item.TargetTempValue)} °F</td>` : '';
         const row = `${yearAndDistance}${precipValue}${tempValue}</tr>`;
@@ -188,25 +198,39 @@ const MarkerHandler = {
         // Update the existing county layer's style and popup
         map.eachLayer((layer) => {
           if (layer.feature && layer.feature.properties && layer.feature.properties.COUNTYNAME === countyKey && layer.feature.properties.STATEABBR === stateKey) {
-            layer.setStyle({
-              fillColor: fillColor,
-              fillOpacity: 0.8,
-            });
+            if (Number(item.RowNumber) === 1) {
+              layer.setStyle({
+                fillColor: fillColor,
+                fillOpacity: 1,
+                color:  'white', // Set border color
+                weight: 2, // Set border width
+                opacity: 1,
+                zIndex: 5000,
+              });
+            } else {
+              layer.setStyle({
+                fillColor: fillColor,
+                fillOpacity: 0.8
+              });
+            }
 
             layer.bindPopup(`${popupHeader}<br>
-                             <table>
-                               <thead>
-                                 <tr>
-                                   <th>Year</th>
-                                   <th>Difference Score</th>
-                                   ${selectedDataType === 'precipitation' || selectedDataType === 'both' ? '<th>Precipitation</th>' : ''}
-                                   ${selectedDataType === 'temperature' || selectedDataType === 'both' ? '<th>Temperature</th>' : ''}
-                                 </tr>
-                               </thead>
-                               <tbody>
-                                 ${row}
-                               </tbody>
-                             </table>
+                             <div class="popup-table-container">
+                               <table>
+                                 <thead>
+                                   <tr>
+                                     <th>Year</th>
+                                     <th>Difference Score</th>
+                                     <th>Rank</th>
+                                     ${selectedDataType === 'precipitation' || selectedDataType === 'both' ? '<th>Precipitation</th>' : ''}
+                                     ${selectedDataType === 'temperature' || selectedDataType === 'both' ? '<th>Temperature</th>' : ''}
+                                   </tr>
+                                 </thead>
+                                 <tbody>
+                                   ${row}
+                                 </tbody>
+                               </table>
+                             </div>
                              <br>
                              ${popupContent}`);
 
@@ -251,23 +275,16 @@ function getContrastColor(hexColor) {
   const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
 
   // Return black or white based on YIQ ratio
-  return yiq >= 128 ? '#000000' : '#ffffff';
+  return yiq >= 100 ? '#000000' : '#ffffff';
 }
 
 // Let's use the builtin TURBO color ramp
-const turbo = ColorRampCollection.TURBO.scale(0, 1.5).reverse();
+const turbo = ColorRampCollection.TURBO.scale(0, 1.75).reverse();
 
 // Function to interpolate the Turbo color map
 const interpolateTurbo = (value) => {
-
   const color = turbo.getColorHex(value);
-  
   return color;
 };
-
-
-
-
-
 
 export default MarkerHandler;

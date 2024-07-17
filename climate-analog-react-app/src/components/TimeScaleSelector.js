@@ -9,7 +9,7 @@ const TimeScaleSelector = ({
   onSelectTargetYear,
 }) => {
   const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from({ length: currentYear - 1894 }, (_, i) => {
+  const yearOptions = Array.from({ length: currentYear - 1895 }, (_, i) => {
     const year = currentYear - 1 - i;
     return (
       <option key={year} value={year}>
