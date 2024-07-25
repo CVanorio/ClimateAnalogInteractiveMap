@@ -83,8 +83,8 @@ const Sidebar = ({
             <button
               className={`chart-toggle ${showChart ? 'active' : ''}`}
               onClick={toggleChart}
-              disabled={!mapData} // Disable button if mapData is null
-              data-tip={!mapData ? "Chart is available after data is displayed on the map" : ""}
+              disabled={!mapData || targetYear !== "top_analogs"} // Disable button if mapData is null or targetYear is not "top_analogs"
+              data-tip={!mapData ? "Chart is available after data is displayed on the map" : (targetYear !== "top_analogs" ? "Chart is only available for top analogs by year" : "")}
             >
               <span className="toggle-knob"></span>
               <span className="toggle-label">{showChart ? 'Hide Chart' : 'Show Chart'}</span>
@@ -92,6 +92,7 @@ const Sidebar = ({
 
             <Tooltip place="top" type="dark" effect="solid" />
           </div>
+
           {error && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{error}</div>}
         </>
       ) : (

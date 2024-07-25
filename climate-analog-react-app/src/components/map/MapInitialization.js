@@ -1,8 +1,7 @@
 import L from 'leaflet';
 import '../../styles/MapStyles.css';
 
-let currentTargetLayer = null; // Global variable to keep track of the current target county layer
-let currentMarker = null; // Global variable to keep track of the current marker
+
 
 const MapInitialization = {
   initializeMap: (id, countyData) => {
@@ -136,95 +135,6 @@ const MapInitialization = {
       fillOpacity: 0,
       zIndex: 1,
     };
-  },
-
-  highlightCounty: (map, selectedCounty, countyData) => {
-    if (selectedCounty) {
-      const targetCounty = `${selectedCounty} County`;
-
-      // Remove the previous target county layer and marker if they exist
-      if (currentTargetLayer) {
-        map.removeLayer(currentTargetLayer);
-        currentTargetLayer = null;
-      }
-      if (currentMarker) {
-        map.removeLayer(currentMarker);
-        currentMarker = null;
-      }
-
-      // Check if countyData is defined and has features
-      if (countyData && countyData.features) {
-        // Find the selected county feature from the county data
-        const selectedFeature = countyData.features.find(
-          feature => feature.properties.COUNTYNAME === targetCounty && feature.properties.STATEABBR === 'WI'
-        );
-
-        if (selectedFeature) {
-          // Create a new layer for the selected county
-          currentTargetLayer = L.geoJSON(selectedFeature, {
-            style: {
-              weight: 0.7,
-              color: 'black',
-              fillColor: 'transparent',
-              fillOpacity: 0.25,
-              zIndex: 1,
-            },
-            onEachFeature: (feature, layer) => {
-              let tooltip;
-
-              // Mouseover event to show tooltip
-              layer.on('mouseover', function (e) {
-                tooltip = L.tooltip({
-                  permanent: true,
-                  direction: 'right',
-                  className: 'leaflet-tooltip'
-                }).setContent(`${feature.properties.COUNTYNAME}, ${feature.properties.STATEABBR}`);
-
-                this.bindTooltip(tooltip).openTooltip();
-              });
-
-              // Mouseout event to hide tooltip
-              layer.on('mouseout', function (e) {
-                if (tooltip) {
-                  this.unbindTooltip();
-                  tooltip = null;
-                }
-              });
-
-              // Enable click only for WI counties
-              if (feature.properties.STATEABBR === 'WI') {
-                layer.on('click', function (e) {
-                  // Handle click event for WI counties
-                  // Example: map.removeLayer(this);
-                });
-              }
-
-              // Prevent default behavior on mousedown to disable selection box
-              layer.on('mousedown', function (e) {
-                L.DomEvent.stopPropagation(e); // Prevent default Leaflet behavior
-              });
-            }
-          }).addTo(map);
-
-          // Extract latitude and longitude from feature properties
-          const latitude = selectedFeature.properties.LAT;
-          const longitude = selectedFeature.properties.LONG;
-
-          // Add a marker with the custom icon to the specified latitude and longitude
-          const icon = L.divIcon({
-            html: '<i class="fa-solid fa-location-dot"></i>',
-            className: 'target-icon',
-            iconAnchor: [8, 24] // Center horizontally and bottom vertically
-          });
-
-          currentMarker = L.marker([latitude, longitude], { icon }).addTo(map);
-        } else {
-          console.error(`Cannot find feature for ${targetCounty} in countyData.`);
-        }
-      } else {
-        console.error('County data is undefined or does not contain features.');
-      }
-    }
   },
 
   setMaxBounds: (map, bounds) => {

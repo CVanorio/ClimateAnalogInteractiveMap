@@ -3,13 +3,14 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import * as d3 from 'd3';
 import { scaleSequential } from 'd3-scale';
-import { interpolateViridis, interpolateYlOrRd} from 'd3-scale-chromatic';
+import { interpolateYlOrRd } from 'd3-scale-chromatic';
 import stateData from '../../data/us-states.json';
 import countyData from '../../data/us-counties.json';
 import MapInitialization from './MapInitialization';
 import MarkerHandler from './MarkerHandler';
 import LoadingOverlay from './LoadingOverlay';
 import Slider from './Slider';
+import Legend from './Legend'; // Import the Legend component
 import '../../styles/MapStyles.css';
 
 const MapComponent = ({
@@ -73,7 +74,7 @@ const MapComponent = ({
 
     // Setup base layers and custom controls
     MapInitialization.setupBaseLayers(mapRef.current, stateData);
-    MapInitialization.setupCustomControl(mapRef.current, toggleFocus);
+    //MapInitialization.setupCustomControl(mapRef.current, toggleFocus);
     countyLayerRef.current = MapInitialization.addCountyLayer(mapRef.current, countyData, handleCountyClick);
 
     return () => {
@@ -90,15 +91,15 @@ const MapComponent = ({
   }, [mapData]);
 
   useEffect(() => {
-    MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear);
+    MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear, timeScale, scaleValue);
     setInitialBoundsSet(true);
   }, [mapData, selectedDataType, highlightedYear]);
 
   useEffect(() => {
     if (countyLayerRef.current) {
-      MapInitialization.highlightCounty(countyLayerRef.current, selectedCounty, countyData);
+      MarkerHandler.highlightCounty(countyLayerRef.current, selectedCounty, countyData, mapData, timeScale, scaleValue, targetYear, selectedDataType);
     }
-  }, [selectedCounty]);
+  }, [selectedCounty, mapData]);
 
   return (
     <div style={{ position: 'relative' }}>
@@ -116,6 +117,9 @@ const MapComponent = ({
             yearColors={yearColors} // Pass yearColors to the Slider component
           />
         </div>
+      )}
+      {targetYear && targetYear !== 'top_analogs' && (
+        <Legend />
       )}
     </div>
   );

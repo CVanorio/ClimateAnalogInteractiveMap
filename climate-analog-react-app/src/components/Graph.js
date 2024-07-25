@@ -162,7 +162,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
   }, []);
 
   return (
-    <div className="graph-container" style = {{width: menuVisible ? '80vw' : '98vw'}}>
+    <div className="graph-container" style = {{width: menuVisible ? '77vw' : '98vw'}}>
       <Line ref={chartRef} data={chartData} options={options} />
     </div>
   );

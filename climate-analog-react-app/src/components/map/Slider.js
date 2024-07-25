@@ -32,10 +32,10 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
 
   const updateInterval = (selectedSpeed) => {
     let interval = 1000; // Default interval
-    if (selectedSpeed === 0.5) {
-      interval = 2000;
-    } else if (selectedSpeed === 2) {
+    if (selectedSpeed === 2) {
       interval = 500;
+    } else if (selectedSpeed === 3) {
+      interval = 300;
     }
 
     clearInterval(intervalRef.current); // Clear previous interval
@@ -90,9 +90,9 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
         <div className="speedSelector">
           {speed}x
           <div className="speedOptions" ref={speedOptionsRef}>
-            <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 0.5 } })}>0.5x</div>
             <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 1 } })}>1x</div>
             <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 2 } })}>2x</div>
+            <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 3 } })}>3x</div>
           </div>
         </div>
       </div>

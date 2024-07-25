@@ -37,7 +37,8 @@
   }
   
   .menuSection {
-    margin-bottom: 16px;
+    margin-bottom: 0px;
+    margin-top: 2px;
   }
   
   .menuOption {

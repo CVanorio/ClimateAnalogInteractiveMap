@@ -85,14 +85,19 @@ const TimeScaleSelector = ({
               </option>
               {Array.from({ length: 12 }, (_, i) => {
                 const monthNumber = i + 1;
+                // Format the month number to always be two digits
+                const formattedMonthNumber = monthNumber.toString().padStart(2, '0');
+                // Get the month name
                 const monthName = new Date(0, monthNumber - 1).toLocaleString('default', { month: 'long' });
                 return (
-                  <option key={monthNumber} value={monthNumber}>
-                    {monthNumber} - {monthName}
+                  <option key={formattedMonthNumber} value={formattedMonthNumber}>
+                    {monthName} ({formattedMonthNumber})
                   </option>
                 );
               })}
             </select>
+
+
             <br />
             <label>For:</label>
             <select value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
