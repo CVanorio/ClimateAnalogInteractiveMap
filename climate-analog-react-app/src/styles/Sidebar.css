@@ -28,7 +28,7 @@
   }
 
   .buttonGroup button:hover i {
-    color: #007bff; /* Highlight color */
+    color: #002fa3; /* Highlight color */
   }
   
   .buttonGroup button i {
@@ -105,7 +105,7 @@
   }
   
   .time-scale-button.active {
-    background-color: #007bff;
+    background-color: #002fa3;
     color: white;
   }
   
@@ -163,7 +163,7 @@
   }
   
   .data-type-button.active {
-    background-color: #007bff; /* Active button background color */
+    background-color: #002fa3; /* Active button background color */
     color: white; /* Active button text color */
     outline: none; /* Remove outline on focus */
   }
@@ -231,7 +231,7 @@
   }
 
   .chart-toggle.active {
-    background-color: #007bff;
+    background-color: #002fa3;
   }
   
   .chart-toggle.active .toggle-label {

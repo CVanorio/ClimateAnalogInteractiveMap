@@ -4,7 +4,7 @@ import '../../styles/Legend.css';
 
 const Legend = () => {
   // Create a color scale for the legend
-  const colorScale = d3.scaleSequential(d3.interpolateSpectral).domain([1, 0]);
+  const colorScale = d3.scaleSequential(d3.interpolateInferno).domain([0, 1]);
 
   // Generate CSS gradient string
   const gradient = d3.range(0, 1.01, 0.01).map(i => colorScale(i)).join(',');
@@ -12,7 +12,7 @@ const Legend = () => {
   return (
     <div className="legend-container">
       <div className="legend-title">Climate Similarity</div>
-      <div className="legend-best">Best</div>
+      <div className="legend-best"><i class="fa-solid fa-crown"></i> Best</div>
       <div className="legend-rectangle-container">
         <div className="legend-labels">
           <div className="legend-high">High</div>

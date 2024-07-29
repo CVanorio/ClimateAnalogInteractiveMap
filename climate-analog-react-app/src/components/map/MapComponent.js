@@ -44,7 +44,7 @@ const MapComponent = ({
 
   // Define handleCountyClick function to handle county clicks
   const handleCountyClick = (countyName) => {
-    console.log(`Clicked on county: ${countyName}`);
+    //console.log(`Clicked on county: ${countyName}`);
     // Implement logic to set selectedCounty here
   };
 

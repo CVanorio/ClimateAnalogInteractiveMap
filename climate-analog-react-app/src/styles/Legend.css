@@ -38,20 +38,20 @@
   .legend-rectangle {
     height: 50px; /* Adjust height as needed */
     width: 20px;
-    /* border: 1px solid #000; */
     border-radius: 3px;
     align-self: center;
+    opacity: 0.7;
   }
   
   .legend-low {
     margin-top: 5px;
     text-align: center;
+    font-size: 18px;
   }
   
   .legend-best {
     text-align: center;
     margin-top: 10px;
-    border: 3px solid cyan;
     padding: 2px;
     border-radius: 3px;
   }

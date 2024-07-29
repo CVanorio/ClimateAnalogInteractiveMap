@@ -86,7 +86,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
           },
           title: function(tooltipItems) {
             const index = tooltipItems[0].dataIndex;
-            return `${years[index]} - ${targetCountyName} County, WI`;
+            return `${years[index]} - ${targetCountyName}, WI`;
           }
         },
         backgroundColor: 'rgba(255, 255, 255, 0.9)',
