@@ -81,6 +81,11 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
     togglePlayPause();
   };
 
+  const generateSliderBackground = () => {
+    const colorStops = years.map(year => `${yearColors[year]} ${(year - years[0]) / (years[years.length - 1] - years[0]) * 100}%`).join(', ');
+    return `linear-gradient(to right, ${colorStops})`;
+  };
+
   return (
     <div className="slider-container">
       <div className="playPauseButton" onClick={togglePlay}>
@@ -105,6 +110,7 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
         onChange={handleSliderChange}
         className="slider"
         ref={sliderRef}
+        style={{ background: generateSliderBackground() }} // Set the slider background dynamically
       />
       <div className="custom-thumb" style={{ left: `${thumbPosition}px` }}>
         {highlightedYear}

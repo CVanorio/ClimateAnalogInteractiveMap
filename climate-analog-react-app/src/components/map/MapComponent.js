@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import * as d3 from 'd3';
 import { scaleSequential } from 'd3-scale';
-import { interpolateYlOrRd } from 'd3-scale-chromatic';
+import { interpolateYlOrRd, interpolatePurples, interpolateBlues,  interpolateReds} from 'd3-scale-chromatic';
 import stateData from '../../data/us-states.json';
 import countyData from '../../data/us-counties.json';
 import MapInitialization from './MapInitialization';
@@ -53,9 +53,23 @@ const MapComponent = ({
     if (years && years.length > 0) {
       const minYear = Math.min(...years);
       const maxYear = Math.max(...years);
+
+      let colorScale
+
+      if(selectedDataType === 'both')
+      {
+        colorScale = scaleSequential(interpolatePurples)
+        .domain([minYear, maxYear]);
+      } else if (selectedDataType === 'precipitation')
+      {
+        colorScale = scaleSequential(interpolateBlues)
+        .domain([minYear, maxYear]);
+      } else {
+        colorScale = scaleSequential(interpolateReds)
+        .domain([minYear, maxYear]);
+      }
   
-      const colorScale = scaleSequential(interpolateYlOrRd)
-        .domain([maxYear, minYear]);
+      
   
       const colors = {};
       years.forEach(year => {
@@ -64,7 +78,7 @@ const MapComponent = ({
   
       setYearColors(colors);
     }
-  }, [years]);
+  }, [years, selectedDataType]);
 
   useEffect(() => {
     // Initialize map only once on component mount
