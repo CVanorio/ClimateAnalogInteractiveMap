@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/ClimateAnalogInteractiveMap/static/css/main.e5853721.css",
+    "main.js": "/ClimateAnalogInteractiveMap/static/js/main.c53182ce.js",
+    "static/js/453.a0b5c5ef.chunk.js": "/ClimateAnalogInteractiveMap/static/js/453.a0b5c5ef.chunk.js",
+    "static/media/WSCO_Logo.png": "/ClimateAnalogInteractiveMap/static/media/WSCO_Logo.c595e71b19e6ba09e048.png",
+    "index.html": "/ClimateAnalogInteractiveMap/index.html",
+    "main.e5853721.css.map": "/ClimateAnalogInteractiveMap/static/css/main.e5853721.css.map",
+    "main.c53182ce.js.map": "/ClimateAnalogInteractiveMap/static/js/main.c53182ce.js.map",
+    "453.a0b5c5ef.chunk.js.map": "/ClimateAnalogInteractiveMap/static/js/453.a0b5c5ef.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e5853721.css",
+    "static/js/main.c53182ce.js"
+  ]
+}
