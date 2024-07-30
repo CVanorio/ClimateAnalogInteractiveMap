@@ -456,8 +456,11 @@ const MarkerHandler = {
         console.error('County data is undefined or does not contain features.');
       }
     }
+    // Set variables to null for garbage collection
+    // coloredCounties = null;
+    // currentTargetLayer = null;
+    // currentMarker = null;
   }
-
 
 };
 
@@ -509,7 +512,7 @@ function getContrastColor(rgbColor) {
 }
 
 const colorScale = scaleSequential(interpolateInferno)
-  .domain([2, 0]);
+  .domain([2, -0.1]);
 
 // Function to get color for a given distance
 const getColorForDistance = (distance) => {

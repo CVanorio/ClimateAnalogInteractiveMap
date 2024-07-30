@@ -9,7 +9,7 @@ const MapInitialization = {
       center: [44.5, -89.5],
       zoom: 7,
       zoomDelta: 0.25,
-      zoomSnap: 0,
+      zoomSnap: 0.25,
       minZoom: 3,
     });
 

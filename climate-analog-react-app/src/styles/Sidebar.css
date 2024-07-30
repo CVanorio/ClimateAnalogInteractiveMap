@@ -1,288 +1,403 @@
+/* Button Group Styles */
 .buttonGroup {
-    display: flex;
-    width: 100%;
-    margin-bottom: 16px;
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for active tab */
-  }
-  
-  .buttonGroup button {
-    flex: 1;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    padding: 16px;
-    color: white;
-    text-align: center;
-    background-color: rgb(184, 184, 184); /* Inactive tab background color */
-    transition: background-color 0.3s, box-shadow 0.3s;
-    outline: none;
-  }
-  
-  .buttonGroup button.active {
-    background-color: #fff; /* Active tab background color */
-  }
-  
-  .buttonGroup button.active i {
-    color: black; /* Highlight color */
-  }
+  display: flex;
+  flex-wrap: wrap; /* Allow buttons to wrap to the next line */
+  width: 100%;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for active tab */
+}
 
-  .buttonGroup button:hover i {
-    color: #002fa3; /* Highlight color */
-  }
-  
-  .buttonGroup button i {
-    display: block;
-    margin: 0 auto;
-  }
-  
-  .menuSection {
-    margin-bottom: 0px;
-    margin-top: 2px;
-  }
-  
-  .menuOption {
-    margin-top: 8px;
-  }
-  
-  .chart-toggle {
-    display: inline-block;
-    padding: 8px 16px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .selectPrompt {
-    color: #888;
-  }
+.buttonGroup button {
+  flex: 1 1 auto; /* Allow buttons to grow and shrink */
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  padding: 16px;
+  color: white;
+  text-align: center;
+  background-color: rgb(184, 184, 184); /* Inactive tab background color */
+  transition: background-color 0.3s, box-shadow 0.3s;
+  outline: none;
+  box-sizing: border-box; /* Include padding and border in element's total width */
+}
 
-  .target-county-options {
-    margin-top: 10px;
-  }
-  
-  .target-county-options select {
-    margin-right: 10px;
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline: none;
-    cursor: pointer;
-  }
-  
-  .target-county-options label {
-    display: block;
-    margin-top: 5px;
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
+.buttonGroup button.active {
+  background-color: #fff; /* Active tab background color */
+}
 
-  
-/* TimeScaleSelector.css */
+.buttonGroup button.active i {
+  color: black; /* Highlight color */
+}
 
+.buttonGroup button:hover i {
+  color: #002fa3; /* Highlight color */
+}
+
+.buttonGroup button i {
+  display: block;
+  margin: 0 auto;
+}
+
+.menuSection {
+  margin-bottom: 0;
+  margin-top: 2px;
+}
+
+.menuOption {
+  margin-top: 8px;
+}
+
+.chart-toggle {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.selectPrompt {
+  color: #888;
+}
+
+.target-county-options {
+  margin-top: 10px;
+}
+
+.target-county-options select {
+  margin-right: 10px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box; /* Include padding and border in element's total width */
+}
+
+.target-county-options label {
+  display: block;
+  margin-top: 5px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Time Scale Selector Styles */
 .time-scale-selector {
-    width: 100%;
-  }
-  
-  .time-scale-button-group {
-    width: 100%;
-  }
-  
-  .time-scale-button {
-    background-color: #f0f0f0;
-    border: none;
-    width: calc(100%/3);
-    color: #333;
-    padding: 12px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-  }
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap; /* Ensure buttons stay on the same line */
+}
 
-  .time-scale-button:hover {
-    background-color: #ddd; /* Darker background color on hover */
-  }
-  
-  .time-scale-button.active {
-    background-color: #002fa3;
-    color: white;
-  }
-  
-  .time-scale-options {
-    margin-top: 10px;
-  }
-  
-  .time-scale-options select {
-    margin-right: 10px;
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline: none;
-    cursor: pointer;
-  }
-  
-  .time-scale-options label {
-    display: block;
-    margin-top: 5px;
-    font-size: 16px;
-    font-weight: bold;
-  }
+.time-scale-button-group {
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap; /* Prevent wrapping */
+}
 
-/* DataTypeSelector.css */
+.time-scale-button {
+  background-color: #f0f0f0;
+  border: none;
+  color: #333;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  flex: 1; /* Allow buttons to grow and shrink */
+  min-width: 0; /* Allow flex items to shrink below their content size */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+  text-align: center; /* Center align text */
+}
 
+.time-scale-button:hover {
+  background-color: #ddd; /* Darker background color on hover */
+}
+
+.time-scale-button.active {
+  background-color: #002fa3; /* Active button background color */
+  color: white; /* Active button text color */
+}
+
+/* Time Scale Selector Styles */
+.time-scale-selector {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  width: 100%;
+}
+
+.time-scale-button-group {
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap; /* Prevent wrapping */
+}
+
+.time-scale-button {
+  background-color: #f0f0f0;
+  border: none;
+  color: #333;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  flex: 1; /* Allow buttons to grow and shrink */
+  min-width: 0; /* Allow flex items to shrink below their content size */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+  text-align: center; /* Center align text */
+}
+
+.time-scale-button:hover {
+  background-color: #ddd; /* Darker background color on hover */
+}
+
+.time-scale-button.active {
+  background-color: #002fa3; /* Active button background color */
+  color: white; /* Active button text color */
+}
+
+/* Time Scale Options Styles */
+/* Time Scale Options Styles */
+.time-scale-options {
+  margin-top: 10px; /* Space above the options */
+}
+
+.year-selector-container {
+  display: flex;
+  align-items: center; /* Center align items vertically */
+  margin-top: 5px;
+}
+
+.year-selector-container label {
+  margin-right: 10px; /* Space between label and select */
+  font-size: 16px; /* Font size for label */
+  font-weight: bold; /* Bold font weight for label */
+}
+
+.time-scale-options select {
+  padding: 8px; /* Padding for select */
+  font-size: 16px; /* Font size for select */
+  border: 1px solid #ccc; /* Border for select */
+  border-radius: 4px; /* Border radius for select */
+  outline: none; /* Remove outline on focus */
+  box-sizing: border-box; /* Include padding and border in element's total width */
+}
+
+
+/* Data Type Selector Styles */
 .data-type-selector {
-    display: flex;
-    flex-wrap: wrap; /* Allow buttons to wrap if space is limited */
-    width: 100%; /* Full width initially */
-    max-width: 100%; /* Maximum width */
-    margin: 0 auto; /* Center align within the container */
-    background-color: #f0f0f0; /* Light background color */
-    position: relative; /* Required for absolute positioning of background */
-  }
-  
-  .data-type-button {
-    background-color: #f0f0f0; /* Light background color */
-    border: none;
-    color: #333; /* Text color */
-    padding: 12px; /* Padding around text */
-    font-size: 16px; /* Font size */
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and color */
-    flex-grow: 1; /* Each button takes up available space */
-    box-sizing: border-box; /* Include padding and border in element's total width and height */
-    text-align: center; /* Center align text */
-    overflow: hidden; /* Hide overflow text */
-    white-space: normal; /* Allow text to wrap */
-    outline: none; /* Remove outline on focus */
-  }
-  
-  .data-type-button:hover {
-    background-color: #ddd; /* Darker background color on hover */
-  }
-  
-  .data-type-button.active {
-    background-color: #002fa3; /* Active button background color */
-    color: white; /* Active button text color */
-    outline: none; /* Remove outline on focus */
-  }
-  
-  .data-type-options {
-    margin-top: 10px; /* Top margin for options */
-  }
-  
-  .data-type-options select {
-    margin-right: 10px; /* Right margin for select */
-    padding: 8px; /* Padding for select */
-    font-size: 16px; /* Font size for select */
-    border: 1px solid #ccc; /* Border for select */
-    border-radius: 4px; /* Border radius for select */
-    outline: none; /* Remove outline on focus */
-  }
-  
-  .data-type-options label {
-    display: block; /* Display block for label */
-    margin-top: 5px; /* Top margin for label */
-    font-size: 16px; /* Font size for label */
-    font-weight: bold; /* Bold font weight for label */
-  }
+  display: flex;
+  flex-wrap: wrap; /* Allow buttons to wrap if space is limited */
+  width: 100%; /* Full width initially */
+  max-width: 100%; /* Maximum width */
+  margin: 0 auto; /* Center align within the container */
+  background-color: #f0f0f0; /* Light background color */
+  position: relative; /* Required for absolute positioning of background */
+}
+
+.data-type-button {
+  background-color: #f0f0f0; /* Light background color */
+  border: none;
+  color: #333; /* Text color */
+  padding: 12px; /* Padding around text */
+  font-size: 16px; /* Font size */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and color */
+  flex: 1 1 auto; /* Allow buttons to grow and shrink */
+  box-sizing: border-box; /* Include padding and border in element's total width */
+  text-align: center; /* Center align text */
+  overflow: hidden; /* Hide overflow text */
+  white-space: normal; /* Allow text to wrap */
+  outline: none; /* Remove outline on focus */
+}
+
+.data-type-button:hover {
+  background-color: #ddd; /* Darker background color on hover */
+}
+
+.data-type-button.active {
+  background-color: #002fa3; /* Active button background color */
+  color: white; /* Active button text color */
+  outline: none; /* Remove outline on focus */
+}
+
+.data-type-options {
+  margin-top: 10px; /* Top margin for options */
+}
+
+.data-type-options select {
+  margin-right: 10px; /* Right margin for select */
+  padding: 8px; /* Padding for select */
+  font-size: 16px; /* Font size for select */
+  border: 1px solid #ccc; /* Border for select */
+  border-radius: 4px; /* Border radius for select */
+  outline: none; /* Remove outline on focus */
+  box-sizing: border-box; /* Include padding and border in element's total width */
+}
+
+.data-type-options label {
+  display: block; /* Display block for label */
+  margin-top: 5px; /* Top margin for label */
+  font-size: 16px; /* Font size for label */
+  font-weight: bold; /* Bold font weight for label */
+}
+
+.chart-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+  width: 100px; /* Adjust the width as needed */
+  height: 40px; /* Adjust the height as needed */
+  background-color: #ccc;
+  color: #333;
+  outline: none !important;
+  transition: background-color 0.3s, color 0.3s; /* Transition for color change */
+}
+
+.chart-toggle .toggle-knob {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 28px; /* Adjust the width as needed */
+  height: 28px; /* Adjust the height as needed */
+  background-color: #fff;
+  border-radius: 50%;
+  animation: slideKnob 0.3s ease forwards; /* Animation for sliding knob */
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Box shadow for active tab */
+}
+
+.chart-toggle .toggle-label {
+  margin-left: 40px; /* Margin to separate from knob */
+  margin-right: 0;
+  text-align: center;
+  transition: margin 0.3s; /* Transition for margin change */
+  line-height: 14px;
+}
+
+.chart-toggle.active .toggle-knob {
+  animation-name: slideKnobActive; /* Animation for active state */
+}
+
+.chart-toggle.active {
+  background-color: #002fa3;
+}
+
+.chart-toggle.active .toggle-label {
+  margin-left: 0; /* Text on the right when active */
+  margin-right: 50px; /* Text on the left when active */
+  color: white;
+}
+
+.chart-toggle:hover {
+  background-color: #b3b3b3; /* Darker background on hover */
+  color: #222; /* Darker text color on hover */
+}
+
+.chart-toggle:disabled {
+  background-color: #eee;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.chart-toggle:disabled .toggle-knob {
+  background-color: #ddd;
+}
+
+/* Logo Container */
+.logoContainer {
+  flex-shrink: 0; /* Prevent shrinking */
+  margin-top: auto; /* Push to the bottom */
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: center; /* Center align logo */
+  position: absolute;
+  bottom: 10px;
+}
+
+.responsive-image {
+  width: 100%; /* Adjust the width of the logo */
+  height: auto; /* Maintain aspect ratio */
+  margin: 10 auto; /* Center align within container */
+  display: block; /* Ensure it's a block element */
+}
 
 
-  .chart-toggle {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 20px;
-    width: 100px; /* Adjust the width as needed */
-    height: 40px; /* Adjust the height as needed */
-    background-color: #ccc;
-    color: #333;
-    outline: none !important;
-    transition: background-color 0.3s, color 0.3s; /* Transition for color change */
-  }
-  
-  .chart-toggle .toggle-knob {
-    position: absolute;
-    top: 6px;
-    left: 6px;
-    width: 28px; /* Adjust the width as needed */
-    height: 28px; /* Adjust the height as needed */
-    background-color: #fff;
-    border-radius: 50%;
-    animation: slideKnob 0.3s ease forwards; /* Animation for sliding knob */
-    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Box shadow for active tab */
-  }
-  
-  .chart-toggle .toggle-label {
-    margin-left: 40px; /* Margin to separate from knob */
-    margin-right: 0;
-    text-align: center;
-    transition: margin 0.3s; /* Transition for margin change */
-    line-height: 14px;
-  }
-  
-  .chart-toggle.active .toggle-knob {
-    animation-name: slideKnobActive; /* Animation for active state */
-  }
+.methodology-content {
+  padding: 1em;
+}
 
-  .chart-toggle.active {
-    background-color: #002fa3;
-  }
-  
-  .chart-toggle.active .toggle-label {
-    margin-left: 0; /* Text on the right when active */
-    margin-right: 50px; /* Text on the left when active */
-    color: white;
-  }
-  
-  .chart-toggle:hover {
-    background-color: #b3b3b3; /* Darker background on hover */
-    color: #222; /* Darker text color on hover */
-  }
-  
+details {
+  margin-bottom: 1em;
+}
 
-  
-  .chart-toggle:disabled {
-    background-color: #eee;
-    color: #666;
-    cursor: not-allowed;
+summary {
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  padding: 0.5em;
+  border-radius: 5px;
+}
+
+summary:hover {
+  background-color: #e0e0e0;
+}
+
+.content {
+  margin-left: 1em;
+}
+
+ul, ol, p {
+  /* margin-left: 0.1em; */
+}
+
+/* Keyframes for slideKnob animation */
+@keyframes slideKnob {
+  0% {
+    left: calc(100% - 37px); /* Start position */
   }
-  
-  .chart-toggle:disabled .toggle-knob {
-    background-color: #ddd;
+  100% {
+    left: 6px; /* End position */
   }
-  
-  /* Keyframes for slideKnob animation */
-  @keyframes slideKnob {
-    0% {
-      left: calc(100% - 37px); /* Start position */
-    }
-    100% {
-      left: 6px; /* End position */
-    }
+}
+
+/* Keyframes for slideKnobActive animation */
+@keyframes slideKnobActive {
+  0% {
+    left: 6px; /* Start position */
   }
-  
-  /* Keyframes for slideKnobActive animation */
-  @keyframes slideKnobActive {
-    0% {
-      left: 6px; /* Start position */
-    }
-    100% {
-      left: calc(100% - 37px); /* End position */
-    }
+  100% {
+    left: calc(100% - 37px); /* End position */
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+}
+
+
+/* Sidebar.css */
+
+/* General code block styling */
+.code-block {
+  display: block; /* Ensure code blocks take up full width */
+  font-family: 'Courier New', Courier, monospace; /* Monospaced font for code */
+  background-color: #1e1e1e; /* Very dark background for high contrast */
+  color: #dcdcdc; /* Light text color for high readability */
+  border: 1px solid #333; /* Darker border around code blocks */
+  border-radius: 4px; /* Slightly rounded corners */
+  padding: 10px; /* Space inside code blocks */
+  margin: 20px 0; /* Space above and below code blocks */
+  overflow-x: auto; /* Horizontal scroll if code is too long */
+  white-space: pre-wrap; /* Preserve spaces and line breaks */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Stronger shadow for better separation */
+}
+
+/* Style for inline code */
+.code-inline {
+  background-color: #eeeeee; /* Light background for inline code */
+  color: rgb(155, 0, 0); /* Dark text color for readability */
+  border-radius: 4px; /* Rounded corners */
+  padding: 2px 4px; /* Space inside inline code */
+  font-size: 0.9em; /* Slightly smaller font */
+  font-family: 'Courier New', Courier, monospace; /* Monospaced font */
+  display: inline-block; /* Inline block for correct spacing */
+  margin: 0; /* No extra margin */
+}
+

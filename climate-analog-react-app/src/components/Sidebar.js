@@ -3,11 +3,9 @@ import TargetCountySelector from './TargetCountySelector';
 import TimeScaleSelector from './TimeScaleSelector';
 import DataTypeSelector from './DataTypeSelector';
 import { Tooltip } from 'react-tooltip';
+import WSCO_Logo from '../assets/WSCO_Logo.png';
 import '../styles/Sidebar.css';
-
-const NewComponent = () => {
-  return <div>Methodology Content</div>;
-};
+import MethodologyComponent from './MethodologyComponent'; // Import the MethodologyComponent
 
 const Sidebar = ({
   selectedCounty,
@@ -58,7 +56,7 @@ const Sidebar = ({
             </div>
           </div>
           <div className='menuSection'>
-            <p>Timeframe</p>
+            <p>Time Frame</p>
             <div className='menuOption'>
               <TimeScaleSelector
                 timeScale={timeScale}
@@ -83,7 +81,7 @@ const Sidebar = ({
             <button
               className={`chart-toggle ${showChart ? 'active' : ''}`}
               onClick={toggleChart}
-              disabled={!mapData || targetYear !== "top_analogs"} // Disable button if mapData is null or targetYear is not "top_analogs"
+              disabled={!mapData || targetYear !== "top_analogs"}
               data-tip={!mapData ? "Chart is available after data is displayed on the map" : (targetYear !== "top_analogs" ? "Chart is only available for top analogs by year" : "")}
             >
               <span className="toggle-knob"></span>
@@ -94,9 +92,13 @@ const Sidebar = ({
           </div>
 
           {error && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{error}</div>}
+
+          <div className="logoContainer">
+            <img src={WSCO_Logo} alt="WSCO Logo" className="responsive-image" />
+          </div>
         </>
       ) : (
-        <NewComponent />
+        <MethodologyComponent /> // Use MethodologyComponent here
       )}
     </div>
   );

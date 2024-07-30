@@ -9,14 +9,75 @@ const TimeScaleSelector = ({
   onSelectTargetYear,
 }) => {
   const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from({ length: currentYear - 1895 }, (_, i) => {
-    const year = currentYear - 1 - i;
-    return (
-      <option key={year} value={year}>
-        {year}
-      </option>
-    );
-  });
+  const currentMonth = new Date().getMonth() + 1; // Months are 0-based (Jan is 0, Dec is 11)
+
+  // Generate years in "YYYY-YYYY" format for Winter, including the current year if the season has ended
+  const getYearOptionsForWinter = () => {
+    const years = [];
+    if (currentMonth > 2) { // Winter season ends in February
+      for (let i = currentYear; i >= 1895; i--) {
+        if (i === 1895) continue; // Skip 1894-1895
+        const displayYear = `${i - 1}-${i}`;
+        years.push(
+          <option key={i} value={i}>
+            {displayYear}
+          </option>
+        );
+      }
+    }
+    // Otherwise, do not include the current year
+    else {
+      for (let i = currentYear - 1; i >= 1895; i--) {
+        const displayYear = `${i - 1}-${i}`;
+        years.push(
+          <option key={i} value={i}>
+            {displayYear}
+          </option>
+        );
+      }
+    }
+    return years;
+  };
+
+  // Generate years from 1895 to current year
+  const getYearOptionsFrom1895 = () => {
+    return Array.from({ length: currentYear - 1894 }, (_, i) => {
+      const year = currentYear - i;
+      return (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      );
+    });
+  };
+
+  // Generate years from 1895 to current year - 1
+  const getYearOptionsFrom1895ToCurrentYearMinusOne = () => {
+    return Array.from({ length: currentYear - 1895 }, (_, i) => {
+      const year = currentYear - 1 - i;
+      return (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      );
+    });
+  };
+
+  // Determine if the current season has ended
+  const hasSeasonEnded = () => {
+    switch (scaleValue) {
+      case 'Winter':
+        return currentMonth > 2; // Winter ends in February
+      case 'Spring':
+        return currentMonth > 5; // Spring ends in May
+      case 'Summer':
+        return currentMonth > 8; // Summer ends in August
+      case 'Fall':
+        return currentMonth > 11; // Fall ends in November
+      default:
+        return false;
+    }
+  };
 
   return (
     <div className="time-scale-selector">
@@ -52,7 +113,7 @@ const TimeScaleSelector = ({
             <option key="top_analogs" value="top_analogs">
               Top analog from each year
             </option>
-            {yearOptions}
+            {getYearOptionsFrom1895ToCurrentYearMinusOne()}
           </select>
         )}
         {timeScale === 'by_season' && (
@@ -73,7 +134,7 @@ const TimeScaleSelector = ({
                 -Select a year-
               </option>
               <option value="top_analogs">Top analog from each year</option>
-              {yearOptions}
+              {scaleValue === 'Winter' ? getYearOptionsForWinter() : (hasSeasonEnded() ? getYearOptionsFrom1895() : getYearOptionsFrom1895ToCurrentYearMinusOne())}
             </select>
           </>
         )}
@@ -85,9 +146,7 @@ const TimeScaleSelector = ({
               </option>
               {Array.from({ length: 12 }, (_, i) => {
                 const monthNumber = i + 1;
-                // Format the month number to always be two digits
                 const formattedMonthNumber = monthNumber.toString().padStart(2, '0');
-                // Get the month name
                 const monthName = new Date(0, monthNumber - 1).toLocaleString('default', { month: 'long' });
                 return (
                   <option key={formattedMonthNumber} value={formattedMonthNumber}>
@@ -96,16 +155,14 @@ const TimeScaleSelector = ({
                 );
               })}
             </select>
-
-
             <br />
-            <label>For:</label>
+            <label>For: </label>
             <select value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
               <option className="selectPrompt" value="">
                 -Select a year-
               </option>
               <option value="top_analogs">Top analog from each year</option>
-              {yearOptions}
+              {getYearOptionsFrom1895()}
             </select>
           </>
         )}
