@@ -3,7 +3,6 @@
   display: flex;
   flex-wrap: wrap; /* Allow buttons to wrap to the next line */
   width: 100%;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for active tab */
 }
 
 .buttonGroup button {
@@ -16,9 +15,10 @@
   color: white;
   text-align: center;
   background-color: rgb(184, 184, 184); /* Inactive tab background color */
-  transition: background-color 0.3s, box-shadow 0.3s;
+  transition: background-color 0.3s;
   outline: none;
   box-sizing: border-box; /* Include padding and border in element's total width */
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .buttonGroup button.active {
@@ -38,14 +38,7 @@
   margin: 0 auto;
 }
 
-.menuSection {
-  margin-bottom: 0;
-  margin-top: 2px;
-}
 
-.menuOption {
-  margin-top: 8px;
-}
 
 .chart-toggle {
   display: inline-block;
@@ -305,26 +298,32 @@
 }
 
 /* Logo Container */
+/* Logo Container */
 .logoContainer {
-  flex-shrink: 0; /* Prevent shrinking */
-  margin-top: auto; /* Push to the bottom */
-  margin-left: 5px;
-  margin-right: 5px;
-  text-align: center; /* Center align logo */
-  position: absolute;
-  bottom: 10px;
+  position: fixed; /* Fix the logo relative to the viewport */
+  bottom: 0; /* Align to the bottom of the viewport */
+  left: 0; /* Align to the left edge of the viewport */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+  background-color: white; /* Ensure the background color is set */
+  z-index: 1000; /* Ensure it's on top of other content */
+  width: 300px; /* Adjust the width to account for padding or margins on the sidebar */
+  box-sizing: border-box; /* Include padding and border in width calculation */
 }
 
-.responsive-image {
-  width: 100%; /* Adjust the width of the logo */
+/* Ensure the logo spans the width of its container */
+.logoContainer .responsive-image {
+  max-width: 100%; /* Adjust the width of the logo to fit within the container */
   height: auto; /* Maintain aspect ratio */
-  margin: 10 auto; /* Center align within container */
   display: block; /* Ensure it's a block element */
+  padding: 10px 5px; /* Add padding */
 }
 
-
+/* Methodology Content */
 .methodology-content {
   padding: 1em;
+  padding-bottom: 80px; /* Provide space at the bottom for the fixed logo */
+  position: relative; /* Ensure it is positioned correctly in the layout */
 }
 
 details {
@@ -401,3 +400,35 @@ ul, ol, p {
   margin: 0; /* No extra margin */
 }
 
+/* SidebarOverlay.css */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 325px; /* Same width as the sidebar */
+  height: 100%;
+  background-color: rgba(140, 140, 140, 0); /* Slight grey with reduced opacity */
+  z-index: 10000; /* Ensure it is above the sidebar content */
+  cursor: not-allowed; /* Change cursor to not-allowed */
+  pointer-events: all; /* Enable pointer events on the overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-overlay-tooltip {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay:hover .sidebar-overlay-tooltip {
+  visibility: visible;
+  opacity: 1;
+}

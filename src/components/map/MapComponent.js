@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import * as d3 from 'd3';
 import { scaleSequential } from 'd3-scale';
-import { interpolateYlOrRd, interpolatePurples, interpolateBlues,  interpolateReds} from 'd3-scale-chromatic';
+import { interpolatePurples, interpolateBlues, interpolateReds } from 'd3-scale-chromatic';
 import stateData from '../../data/us-states.json';
 import countyData from '../../data/us-counties.json';
 import MapInitialization from './MapInitialization';
@@ -29,7 +29,7 @@ const MapComponent = ({
   const markersRef = useRef([]);
   const countyLayerRef = useRef(null);
   const [focusToMarkers, setFocusToMarkers] = useState(true);
-  const [highlightedYear, setHighlightedYear] = useState(null);
+  const [highlightedYear, setHighlightedYear] = useState(years[0] || null); // Initialize with the first year or null
   const [initialBoundsSet, setInitialBoundsSet] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [yearColors, setYearColors] = useState({}); // State to store year colors
@@ -42,43 +42,9 @@ const MapComponent = ({
     setFocusToMarkers(prevFocusToMarkers => !prevFocusToMarkers);
   };
 
-  // Define handleCountyClick function to handle county clicks
   const handleCountyClick = (countyName) => {
-    //console.log(`Clicked on county: ${countyName}`);
     // Implement logic to set selectedCounty here
   };
-
-  // Calculate year colors based on a gradient from white to blue
-  useEffect(() => {
-    if (years && years.length > 0) {
-      const minYear = Math.min(...years);
-      const maxYear = Math.max(...years);
-
-      let colorScale
-
-      if(selectedDataType === 'both')
-      {
-        colorScale = scaleSequential(interpolatePurples)
-        .domain([minYear, maxYear]);
-      } else if (selectedDataType === 'precipitation')
-      {
-        colorScale = scaleSequential(interpolateBlues)
-        .domain([minYear, maxYear]);
-      } else {
-        colorScale = scaleSequential(interpolateReds)
-        .domain([minYear, maxYear]);
-      }
-  
-      
-  
-      const colors = {};
-      years.forEach(year => {
-        colors[year] = colorScale(year);
-      });
-  
-      setYearColors(colors);
-    }
-  }, [years, selectedDataType]);
 
   useEffect(() => {
     // Initialize map only once on component mount
@@ -88,7 +54,6 @@ const MapComponent = ({
 
     // Setup base layers and custom controls
     MapInitialization.setupBaseLayers(mapRef.current, stateData);
-    //MapInitialization.setupCustomControl(mapRef.current, toggleFocus);
     countyLayerRef.current = MapInitialization.addCountyLayer(mapRef.current, countyData, handleCountyClick);
 
     return () => {
@@ -99,15 +64,34 @@ const MapComponent = ({
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
   useEffect(() => {
-    if (mapData && mapData.length > 0) {
-      setInitialBoundsSet(false);
+    if (years && years.length > 0) {
+      const minYear = Math.min(...years);
+      const maxYear = Math.max(...years);
+      let colorScale;
+
+      if (selectedDataType === 'both') {
+        colorScale = scaleSequential(interpolatePurples).domain([minYear, maxYear]);
+      } else if (selectedDataType === 'precipitation') {
+        colorScale = scaleSequential(interpolateBlues).domain([minYear, maxYear]);
+      } else {
+        colorScale = scaleSequential(interpolateReds).domain([minYear, maxYear]);
+      }
+
+      const colors = {};
+      years.forEach(year => {
+        colors[year] = colorScale(year);
+      });
+
+      setYearColors(colors);
     }
-  }, [mapData]);
+  }, [years, selectedDataType]);
 
   useEffect(() => {
-    MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear, timeScale, scaleValue);
-    setInitialBoundsSet(true);
-  }, [mapData, selectedDataType, highlightedYear]);
+    if (mapData && yearColors && Object.keys(yearColors).length > 0) {
+      MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear, timeScale, scaleValue);
+      setInitialBoundsSet(true);
+    }
+  }, [mapData, selectedDataType, highlightedYear, yearColors, targetYear, timeScale, scaleValue]);
 
   useEffect(() => {
     if (countyLayerRef.current) {

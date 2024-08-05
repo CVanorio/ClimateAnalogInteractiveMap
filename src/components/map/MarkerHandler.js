@@ -168,7 +168,11 @@ const MarkerHandler = {
             const className = data.years.includes(highlightedYear) ? 'circular-marker highlighted' : 'circular-marker';
 
             // Calculate contrast color for text based on averagedColor
-            const fontColor = getContrastColor(markerColor); // Adjust contrast color if needed
+            let fontColor = ''
+            if (yearColors){
+              fontColor = getContrastColor(markerColor); // Adjust contrast color if needed
+            }
+           
 
             const marker = L.marker(latLngArray, {
               icon: L.divIcon({

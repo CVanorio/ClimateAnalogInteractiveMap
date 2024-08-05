@@ -1,7 +1,15 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import '../../styles/Slider.css';
 
-const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, selectedDataType, yearColors }) => {
+const Slider = ({
+  years,
+  highlightedYear,
+  onChange,
+  isPlaying,
+  togglePlayPause,
+  selectedDataType,
+  yearColors
+}) => {
   const intervalRef = useRef(null);
   const sliderRef = useRef(null);
   const speedOptionsRef = useRef(null); // Ref for speed options dropdown
@@ -9,13 +17,21 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
   const [speed, setSpeed] = useState(1);
 
   useEffect(() => {
+    // If highlightedYear is not set, initialize with the first year
     if (!highlightedYear && years.length > 0) {
       onChange(years[0]);
     }
   }, [highlightedYear, years, onChange]);
 
+  useEffect(() => {
+    // Update thumb position when highlightedYear or years change
+    if (sliderRef.current) {
+      updateThumbPosition(sliderRef.current);
+    }
+  }, [highlightedYear, years]);
+
   const handleSliderChange = (event) => {
-    const year = parseInt(event.target.value);
+    const year = parseInt(event.target.value, 10);
     onChange(year);
     updateThumbPosition(event.target);
   };
@@ -58,24 +74,6 @@ const Slider = ({ years, highlightedYear, onChange, isPlaying, togglePlayPause, 
 
     setThumbPosition(offset + thumbWidth / 2); // Center the label
   };
-
-  useEffect(() => {
-    if (sliderRef.current) {
-      updateThumbPosition(sliderRef.current);
-    }
-  }, [highlightedYear, sliderRef.current]);
-
-  useEffect(() => {
-    if (isPlaying) {
-      updateInterval(speed); // Initial update with current speed
-    } else {
-      clearInterval(intervalRef.current);
-    }
-
-    return () => {
-      clearInterval(intervalRef.current);
-    };
-  }, [isPlaying, highlightedYear, onChange, years, speed]);
 
   const togglePlay = () => {
     togglePlayPause();

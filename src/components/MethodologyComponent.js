@@ -1,8 +1,10 @@
 import React from 'react';
+import WSCO_Logo from '../assets/WSCO_Logo.png';
 import '../styles/Sidebar.css';
 
 const MethodologyComponent = () => {
     return (
+      
         <div className="methodology-content">
             <h3>Methodology</h3><br />
 
@@ -62,7 +64,8 @@ const MethodologyComponent = () => {
 
                 <strong>Selection:</strong> The top 50 analog counties are selected for Temperature and Precipitation comparisons, while the top 100 are chosen for Temperature Only and Precipitation Only. For annual comparisons, the best analog match from each year is displayed.
             </details>
-        </div>
+            </div>
+
     );
 };
 

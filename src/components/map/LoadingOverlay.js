@@ -12,6 +12,7 @@ const overlayStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   zIndex: 10000,
+
 };
 
 const boxStyle = {
@@ -47,7 +48,7 @@ const LoadingOverlay = ({ loading }) => {
     if (loading) {
       timer = setTimeout(() => {
         setShowOverlay(true);
-      }, 1000); // Show overlay after 1 seconds
+      }, 500); // Show overlay after 1 seconds
     } else {
       setShowOverlay(false);
     }
@@ -57,13 +58,15 @@ const LoadingOverlay = ({ loading }) => {
 
   return (
     showOverlay && (
-      <div style={overlayStyle}>
-        <div style={boxStyle}>
-          <div style={spinnerStyle}>
-            <PulseLoader size={15} color={"#007bff"} loading={loading} />
+      <div className='overlayContainer'>
+        <div style={overlayStyle}>
+          <div style={boxStyle}>
+            <div style={spinnerStyle}>
+              <PulseLoader size={15} color={"#007bff"} loading={loading} />
+            </div>
+            <div style={textStyle}>Calculating Climate Patterns...</div>
+            <div style={subtextStyle}>Please wait, this could take a few seconds</div>
           </div>
-          <div style={textStyle}>Calculating Climate Patterns...</div>
-          <div style={subtextStyle}>Please wait, this could take a few seconds</div>
         </div>
       </div>
     )

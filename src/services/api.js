@@ -14,7 +14,7 @@ export const fetchData = async (selectedCounty, timeScale, targetYear, scaleValu
         dataType: selectedDataType,
       },
     });
-    console.log('API response:', response.data);
+   // console.log('API response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching data:', error);

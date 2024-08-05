@@ -1,5 +1,6 @@
 /* Slider.css */
 
+/* Slider container */
 .slider-container {
   position: relative;
   width: calc(100% - 10px); /* Fixed width calculation */
@@ -13,26 +14,25 @@
   align-items: center;
 }
 
+/* Play/Pause button */
 .playPauseButton {
   margin-right: 10px;
   cursor: pointer;
 }
 
+/* Speed control wrapper */
 .speedControl {
   position: relative;
 }
 
+/* Speed selector styling */
 .speedSelector {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   cursor: pointer;
   padding: 5px;
   background-color: #fff;
   font-size: 16px;
   color: #000;
   border: none;
-  outline: none; /* Remove default outline */
   position: relative;
   font-weight: 500;
   text-align: center; /* Center text */
@@ -42,30 +42,33 @@
   align-items: center; /* Center the text vertically */
 }
 
+/* Speed selector focus state */
 .speedSelector:focus {
-  background-color: #f0f0f0; /* Change background color on hover */
+  background-color: #f0f0f0; /* Change background color on focus */
 }
 
-.speedControl:hover .speedOptions,
-.speedControl:focus-within .speedOptions {
-  display: block; /* Show options on hover or focus */
-}
-
+/* Speed options dropdown */
 .speedOptions {
   display: none;
   position: absolute;
-  top: auto;
   bottom: calc(100% + 5px); /* Position above the speed selector */
   left: 0;
-  width: 100%; /* Take full width */
+  width: 100%;
   background-color: #fff;
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
+  border: 1px solid #ddd;
   border-radius: 5px;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
   padding: 5px 0px;
   z-index: 10;
   text-align: center; /* Center text in options */
 }
 
+/* Show the dropdown when active */
+.speedOptions.show {
+  display: block;
+}
+
+/* Dropdown item styling */
 .speedOption {
   padding: 8px 5px;
   font-size: 14px;
@@ -76,10 +79,12 @@
   align-items: center; /* Center the text vertically */
 }
 
+/* Dropdown item hover state */
 .speedOption:hover {
   background-color: #e0e0e0; /* Change background color of options on hover */
 }
 
+/* Slider styling */
 .slider {
   flex: 1;
   height: 8px;
@@ -93,6 +98,7 @@
   opacity: 1 !important;
 }
 
+/* Slider thumb */
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -104,6 +110,7 @@
   z-index: 3; /* Ensure thumb is above ticks and labels */
 }
 
+/* Slider thumb for Firefox */
 .slider::-moz-range-thumb {
   width: 45px;
   height: 20px;
@@ -113,6 +120,7 @@
   z-index: 3; /* Ensure thumb is above ticks and labels */
 }
 
+/* Custom thumb positioning */
 .custom-thumb {
   position: absolute;
   width: 45px;

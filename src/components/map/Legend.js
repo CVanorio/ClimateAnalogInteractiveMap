@@ -4,7 +4,7 @@ import '../../styles/Legend.css';
 
 const Legend = () => {
   // Create a color scale for the legend
-  const colorScale = d3.scaleSequential(d3.interpolateInferno).domain([0, 1]);
+  const colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, 1]);
 
   // Generate CSS gradient string
   const gradient = d3.range(0, 1.01, 0.01).map(i => colorScale(i)).join(',');
