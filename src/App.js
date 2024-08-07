@@ -83,6 +83,7 @@ const App = () => {
           toggleChart={toggleChart}
           mapData={mapData} // Pass mapData to Sidebar
           error={error}
+          menuVisible={menuVisible}
         />
         <SidebarOverlay loading={loading} /> {/* Add the SidebarOverlay component */}
       </aside>

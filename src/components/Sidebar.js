@@ -21,7 +21,8 @@ const Sidebar = ({
   showChart,
   toggleChart,
   mapData,
-  error
+  error,
+  menuVisible
 }) => {
   const [activeButton, setActiveButton] = useState('mapOptions');
 
@@ -93,18 +94,19 @@ const Sidebar = ({
             </div>
 
             {error && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{error}</div>}
-            </div>
-          
+          </div>
+
         ) : (
           <MethodologyComponent /> // Use MethodologyComponent here
-          )}
+        )}
 
-</div>
+      </div>
+      {menuVisible && (
         <div className="logoContainer">
           <img src={WSCO_Logo} alt="WSCO Logo" className="responsive-image" />
-        </div>
-      </div>
-      
+        </div>)}
+    </div>
+
   );
 };
 
