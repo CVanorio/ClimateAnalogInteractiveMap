@@ -49,10 +49,15 @@ const App = () => {
     setLoading(true);
 
     try {
+      console.log("Hello AppDemo")
       const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType);
-      const dataYears = res.data[0][0][0].map(item => Number(item.Year));
+      console.log(`res: ${res[0]}`)
+      const dataYears = res.map(item => Number(item.Year));
+      console.log(dataYears)
       setYears(dataYears);
-      setMapData(res.data[0][0][0]);
+      setMapData(res);
+      console.log(`mapData: ${mapData}`)
+      
     } catch (error) {
       setError('Failed to fetch data.');
     }
