@@ -316,7 +316,7 @@
   max-width: 100%; /* Adjust the width of the logo to fit within the container */
   height: auto; /* Maintain aspect ratio */
   display: block; /* Ensure it's a block element */
-  padding: 10px 5px; /* Add padding */
+  padding: 10px 10px; /* Add padding */
 }
 
 /* Methodology Content */
