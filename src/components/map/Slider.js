@@ -12,23 +12,47 @@ const Slider = ({
 }) => {
   const intervalRef = useRef(null);
   const sliderRef = useRef(null);
-  const speedOptionsRef = useRef(null); // Ref for speed options dropdown
+  const speedSelectorRef = useRef(null);
   const [thumbPosition, setThumbPosition] = useState(0);
   const [speed, setSpeed] = useState(1);
+  const [showSpeedOptions, setShowSpeedOptions] = useState(false);
 
   useEffect(() => {
-    // If highlightedYear is not set, initialize with the first year
     if (!highlightedYear && years.length > 0) {
       onChange(years[0]);
     }
   }, [highlightedYear, years, onChange]);
 
   useEffect(() => {
-    // Update thumb position when highlightedYear or years change
     if (sliderRef.current) {
       updateThumbPosition(sliderRef.current);
     }
   }, [highlightedYear, years]);
+
+  useEffect(() => {
+    if (isPlaying) {
+      updateInterval(speed);
+    } else {
+      clearInterval(intervalRef.current);
+    }
+
+    return () => clearInterval(intervalRef.current);
+  }, [isPlaying, speed, highlightedYear, years]);
+
+  useEffect(() => {
+    // Add event listener to detect clicks outside of the speed selector
+    const handleClickOutside = (event) => {
+      if (speedSelectorRef.current && !speedSelectorRef.current.contains(event.target)) {
+        setShowSpeedOptions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSliderChange = (event) => {
     const year = parseInt(event.target.value, 10);
@@ -36,25 +60,24 @@ const Slider = ({
     updateThumbPosition(event.target);
   };
 
-  const handleSpeedChange = (event) => {
-    const selectedSpeed = parseFloat(event.target.value);
-    setSpeed(selectedSpeed);
+  const handleSpeedChange = (newSpeed) => {
+    setSpeed(newSpeed);
+    setShowSpeedOptions(false);
 
-    // Update interval immediately if playing
     if (isPlaying) {
-      updateInterval(selectedSpeed);
+      updateInterval(newSpeed);
     }
   };
 
   const updateInterval = (selectedSpeed) => {
-    let interval = 1000; // Default interval
+    let interval = 1000;
     if (selectedSpeed === 2) {
       interval = 500;
     } else if (selectedSpeed === 3) {
       interval = 300;
     }
 
-    clearInterval(intervalRef.current); // Clear previous interval
+    clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       const currentIndex = years.findIndex((year) => year === highlightedYear);
       const nextIndex = (currentIndex + 1) % years.length;
@@ -69,14 +92,18 @@ const Slider = ({
     const value = slider.value;
 
     const percent = ((value - min) / (max - min)) * 100;
-    const thumbWidth = 45; // Same width as the thumb
+    const thumbWidth = 45;
     const offset = (percent / 100) * (slider.clientWidth - thumbWidth);
 
-    setThumbPosition(offset + thumbWidth / 2); // Center the label
+    setThumbPosition(offset + thumbWidth / 2);
   };
 
   const togglePlay = () => {
     togglePlayPause();
+  };
+
+  const toggleSpeedOptions = () => {
+    setShowSpeedOptions(!showSpeedOptions);
   };
 
   const generateSliderBackground = () => {
@@ -89,13 +116,13 @@ const Slider = ({
       <div className="playPauseButton" onClick={togglePlay}>
         <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
       </div>
-      <div className="speedControl">
-        <div className="speedSelector">
+      <div className="speedControl" ref={speedSelectorRef}>
+        <div className="speedSelector" onClick={toggleSpeedOptions}>
           {speed}x
-          <div className="speedOptions" ref={speedOptionsRef}>
-            <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 1 } })}>1x</div>
-            <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 2 } })}>2x</div>
-            <div className="speedOption" onClick={() => handleSpeedChange({ target: { value: 3 } })}>3x</div>
+          <div className={`speedOptions ${showSpeedOptions ? 'show' : ''}`}>
+            <div className="speedOption" onClick={() => handleSpeedChange(1)}>1x</div>
+            <div className="speedOption" onClick={() => handleSpeedChange(2)}>2x</div>
+            <div className="speedOption" onClick={() => handleSpeedChange(3)}>3x</div>
           </div>
         </div>
       </div>
@@ -108,7 +135,7 @@ const Slider = ({
         onChange={handleSliderChange}
         className="slider"
         ref={sliderRef}
-        style={{ background: generateSliderBackground() }} // Set the slider background dynamically
+        style={{ background: generateSliderBackground() }}
       />
       <div className="custom-thumb" style={{ left: `${thumbPosition}px` }}>
         {highlightedYear}

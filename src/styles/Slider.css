@@ -5,8 +5,7 @@
   position: relative;
   width: calc(100% - 10px); /* Fixed width calculation */
   margin: 20px 5px;
-  background-color: rgb(255, 255, 255);
-  opacity: 0.9;
+  background-color: rgba(255, 255, 255, 0.9); /* Use RGBA for background opacity */
   border-radius: 5px;
   padding: 0px 10px;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
@@ -29,37 +28,39 @@
 .speedSelector {
   cursor: pointer;
   padding: 5px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0);
   font-size: 16px;
   color: #000;
   border: none;
-  position: relative;
   font-weight: 500;
   text-align: center; /* Center text */
   min-width: 50px; /* Ensure the selector is always wide enough */
   display: flex;
   justify-content: center; /* Center the text horizontally */
   align-items: center; /* Center the text vertically */
+  position: relative;
+  z-index: 10; /* Ensure the selector is above the dropdown */
 }
 
 /* Speed selector focus state */
 .speedSelector:focus {
   background-color: #f0f0f0; /* Change background color on focus */
+  outline: none; /* Remove default focus outline */
 }
 
 /* Speed options dropdown */
 .speedOptions {
-  display: none;
+  display: none; /* Hidden by default */
   position: absolute;
   bottom: calc(100% + 5px); /* Position above the speed selector */
   left: 0;
   width: 100%;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.9);
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Add a drop shadow */
   padding: 5px 0px;
-  z-index: 10;
+  z-index: 9; /* Ensure the dropdown is below the selector */
   text-align: center; /* Center text in options */
 }
 
