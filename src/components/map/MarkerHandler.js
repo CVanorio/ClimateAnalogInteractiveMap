@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css'; // Ensure Leaflet CSS is imported
 import { ColorRampCollection } from "@maptiler/sdk";
 import { scaleSequential } from 'd3-scale';
-import { interpolateViridis, interpolateYlOrRd, interpolateSpectral, interpolateWarm, interpolatePlasma, interpolateInferno } from 'd3-scale-chromatic';
+import { interpolateViridis, interpolateYlOrRd, interpolateSpectral, interpolateWarm, interpolatePlasma, interpolateInferno, interpolateTurbo} from 'd3-scale-chromatic';
 import '../../styles/MapStyles.css';
 
 let coloredCounties = []; // Maintain a list of colored counties
@@ -515,7 +515,7 @@ function getContrastColor(rgbColor) {
   return yiq >= 140 ? '#000000' : '#ffffff';
 }
 
-const colorScale = scaleSequential(interpolateInferno)
+const colorScale = scaleSequential(interpolateTurbo)
   .domain([2, -0.1]);
 
 // Function to get color for a given distance

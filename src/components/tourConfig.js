@@ -1,13 +1,9 @@
 import introJs from 'intro.js';
 import 'intro.js/introjs.css'; // Default intro.js styles
 import '../App.css'; // Import your custom CSS file
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export const startTour = () => {
-
-  // Check if the user has opted out of the tutorial
-  if (localStorage.getItem('dontShowTutorial') === 'true') {
-    return; // Don't start the tutorial if the user opted out
-  }
 
   const intro = introJs();
   intro.setOptions({
@@ -16,10 +12,11 @@ export const startTour = () => {
         element: '.body',
         intro: `
           <div style="text-align: center;">
-            <h2>How has the Climate in Wisconsin Changed Over Time?</h2>
-            <p>This site is designed to help you explore and understand climate analogs. A climate analog is a location with a climate that is similar to a target location's climate at a specific point in time.</p>
-            
-            <p>With this interactive map, you can gain insights into climate patterns and see how your chosen location's climate stacks up against others. Explore our features and discover the climate analogs that match your county's weather!</p>
+            <h2>Welcome to the Climate Analogs Explorer!</h2>
+            <p>This tool helps you explore how Wisconsin's climate has changed over time by finding locations with similar historical climate patterns. These similar locations are referred to as climate analogs.</p>
+            <p>A climate analog is a region that has a 'typical climate' that closely resembles the of climate of your selected location during the chosen time period. The typical climate is based on average conditions from 1991 to 2020. By examining these analogs, you can gain valuable insights into how historical climate conditions at your chosen location compare to those in other areas of the county.</p>
+            <p>Let’s take a brief tour to learn how the map!</p>
+
           </div>
         `,
         position: 'center',
@@ -30,7 +27,8 @@ export const startTour = () => {
         element: '.body',
         intro: `
           <div style="text-align: center;">
-            <h3>Let's begin with a walkthrough of the tool and features.</h3>
+            <h3>Ready to get started?</h3>
+            <p>We'll walk through each feature step by step, starting with the basics.</p>
           </div>
         `,
         position: 'center',
@@ -41,7 +39,8 @@ export const startTour = () => {
         element: '.sidebar',
         intro: `
           <div style="text-align: center;">
-            <p>On the left, there is a menu where you can select different data options to display.</p>
+            <p>This is the main menu where you can select different data and settings to display on the map.</p>
+            <p>You can customize your view by choosing the location, time period, and climate variables you'd like to explore.</p>
           </div>
         `,
         position: 'right',
@@ -51,7 +50,7 @@ export const startTour = () => {
         element: '#menuToggle',
         intro: `
           <div style="text-align: center;">
-            <p>The arrow button allows you to show and hide the menu.</p>
+            <p>The arrow button here lets you show or hide the menu.</p>
           </div>
         `,
         position: 'right',
@@ -61,173 +60,244 @@ export const startTour = () => {
         element: '#target-county-selector',
         intro: `
           <div style="text-align: center;">
-            <p>The target counties include all counties in Wisconsin.</p>
-            <p>Click the drop-down to select the target county to analyze.</p>
+            <p>This dropdown allows you to select the target county in Wisconsin that you'd like to analyze.</p>
+            <p>Before you continue, <i class="fa-solid fa-arrow-pointer"></i> click here to choose the Wisconsin county you want to explore.</p>
           </div>
         `,
         position: 'right',
-        disableInteraction: false, // Allow interaction with this element
+        disableInteraction: false,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
       {
         element: '#TimeFrameMenuSection',
         intro: `
           <div style="text-align: center;">
-            <p>Next, you can select the time period you want to investigate for the target county.</p>
-            <p>The options allow you to analyze the climate conditions for your chosen target county for yearly averages, seasonal averages, and monthly averages. You are the able to pick the specific year, season and year, or month and year to look at.</p>
+            <p>Next, you can analyze the target county climate data for a specific year, season, or month.</p>
+            <p>For now, we'll use the default setting of analyzing data for a specific year.</p>
           </div>
         `,
         position: 'right',
-        disableInteraction: true, // Allow interaction with this element
+        disableInteraction: true,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
       {
         element: '#yearSelect',
         intro: `
           <div style="text-align: center;">
-            <p>For now, we will stick with the default of data by year. The years start at 1895 and end at the current year.</p>
-            <p> Click the drop down to select a year you would like to analyze.</p>
+            <p><i class="fa-solid fa-arrow-pointer"></i> Click the dropdown to select a specific year from 1895 to the present.</p>
           </div>
         `,
         position: 'right',
-        disableInteraction: false, // Allow interaction with this element
+        disableInteraction: false,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
       {
         element: '#climateVariablesMenuSection',
         intro: `
           <div style="text-align: center;">
-            <p>The climate variables included in this tool include precipitation and temperature. You have the option to view combined or individual climate variables.</p>
-            <p>For now, we will stick with the default of combined precipitation and temperature data.</p>
+            <p>Here, you can choose which climate variables to display: precipitation, temperature, or a combination of both.</p>
+            <p>We'll keep the default setting of displaying combined data for now.</p>
           </div>
         `,
         position: 'right',
-        disableInteraction: true, // Allow interaction with this element
+        disableInteraction: true,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
       {
         element: '.map-container',
         intro: `
           <div style="text-align: center;">
-            <p>On the right is the map window.</p>
-            <p>The data is populated based on the options selected in the menu.</p>
+            <p>This is the map view where the selected data will be displayed.</p>
+            <p>The map will update based on your selections in the menu.</p>
           </div>
         `,
         position: 'left',
-        disableInteraction: true, // Allow interaction with this element
+        disableInteraction: true,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
       {
         element: '.map-container',
         intro: `
           <div style="text-align: center;">
-            <p>A map pin is added indicating the target county.</p>
-            <p>Click the map pin to view details about the select target county and time frame.</p>
+            <p>The map pin <i class="fa-solid fa-location-dot"></i> indicates the location of your selected target county.</p>
+            <p><i class="fa-solid fa-arrow-pointer"></i> Click the map pin to view detailed information about the climate of selected county and time frame.</p>
           </div>
         `,
         position: 'left',
-        disableInteraction: false, // Allow interaction with this element
+        disableInteraction: false,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
       {
         element: '.map-container',
         intro: `
           <div style="text-align: center;">
-            <p>The target county's climate variables for the chosen time period are compared to the typical climates of every other county in the contiguous U.S. and Alaska. The typical climate is defined as the average for a specific climate variable from 1991-2020.</p>
-            <p>The top 50 counties with typical climates that best match the target county are highlighted on the map. A crown icon is added to the #1 match out of all the counties.</p>
-            <p>Scroll or use the plus and minus controls to zoom out on the map. Click different highlighted counties or the crown icon to learn more.</p>
+            <p>The tool compares the climate of the selected target county with every other county in the contiguous U.S. and Alaska for the chosen time period.</p>
+            <p>The top 50 counties with climates that most closely match the target county are highlighted on the map, with a crown icon <i class="fa-solid fa-crown"></i> marking the best match.</p>
+            <p><i class="fa-solid fa-arrow-pointer"></i> Use the zoom controls or scroll to explore the map. Click on different highlighted counties to learn more.</p>
           </div>
         `,
         position: 'left',
-        disableInteraction: false, // Allow interaction with this element
+        disableInteraction: false,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
       {
         element: '#yearSelect',
         intro: `
           <div style="text-align: center;">
-            <p>To continue the tour, click the year drop down and selext the first option "Top analogs from each year".</p>
-            <p>Instead of displaying the best analogs for a specific year, this will display the #1 analogs for every year in the dataset.</p>
+            <p>To continue, let's explore the "Top analogs from each year" feature.</p>
+            <p><i class="fa-solid fa-arrow-pointer"></i> Click the year dropdown and select the first option to see the top analogs for each year.</p>
           </div>
         `,
         position: 'left',
-        disableInteraction: false, // Allow interaction with this element
+        disableInteraction: false,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
       {
         element: '.map-container',
         intro: `
           <div style="text-align: center;">
-            <p>Here you will see markers for every county that has been a top analog. The markers without number correspond to analogs that have only been a top analog for a single year and markers with numbers indicate that county has been a top analog for that many years.</p>
-            <p>There is a color ramp applied to the markers with lighter colors corresponding to earlier years and darker colors corresponding to more recent years. If a county was the top analog for multple years, an average of the colors for each year is applied.</p>
-            <p>Zoom in or out to see all of the markers and click on a few of the markers to learn more.</p>
+            <p>You will now see markers for each county that has been a top analog over the years.</p>
+            <p>Markers without numbers indicate a county that was a top analog for a single year, while markers with numbers show how many years that county was a top analog.</p>
+            <p>The colors of the markers represent different years, with lighter colors for earlier years and darker colors for more recent ones. If a county was a top analog for multiple years, an average color is applied.</p>
+            <p><i class="fa-solid fa-arrow-pointer"></i> Zoom in or out to view all markers, and click on them to learn more.</p>
           </div>
         `,
         position: 'left',
-        disableInteraction: false, // Allow interaction with this element
+        disableInteraction: false,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
       {
         element: '.map-container',
         intro: `
           <div style="text-align: center;">
-            <p>This slider is also available at the bottom when viewing the top analogs from each year.</p>
-            <p>You can click and drag the slider control to select a specific year. When a year is selected, that marker will be highlighed with a black outline.</p>
-            <p>The play button allows you to start an animation that sequences through each of the markers by year. You can click the 1x button beside the play/pause button to change the speed of the animation.</p>
+            <p>This slider at the bottom allows you to select a specific year and see the top analog for that year.</p>
+            <p>You can click and drag the slider control to choose a year. When a year is selected, its corresponding marker will be highlighted.</p>
+            <p>The play button lets you animate the sequence of top analogs year by year. Click the 1x button beside the play/pause button to change the animation speed.</p>
           </div>
         `,
         position: 'left',
-        disableInteraction: false, // Allow interaction with this element
+        disableInteraction: false,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
       {
         element: '.chart-toggle',
         intro: `
           <div style="text-align: center;">
-            <p>When viewing the top analogs from each year data, you have the option to show a graph of the climate variables. This plots the average of the current cliamte variables selected over the selected time frame for each year for the target county.</p>
-            <p>Click the button to show or hide the chart.</p>
+            <p>When viewing the top analogs from each year, you can also display a graph of the selected climate variables over time for the target county.</p>
+            <p><i class="fa-solid fa-arrow-pointer"></i> Click this button to show or hide the graph.</p>
           </div>
         `,
         position: 'right',
-        disableInteraction: false, // Allow interaction with this element
+        disableInteraction: false,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
+        scrollTo: 'tooltip',
       },
+      {
+        element: '#climateVariablesMenuSection',
+        intro: `
+          <div style="text-align: center;">
+            <p>Next, choose either "Temperature Only" or "Precipitation Only" to see the top analogs for each year based on the selected climate variable.</p>
+            <p>By selecting one of these options, you can view how each variable influences the top analogs and gain insights into the specific climate patterns.</p>
+          </div>
+        `,
+        position: 'right',
+        disableInteraction: false,
+        highlightClass: 'size-wide',
+        scrollTo: 'tooltip',
+      },
+      {
+        element: '.map-container',
+        intro: `
+          <div style="text-align: center;">
+            <p>The map will refresh to display markers representing the top analogs according to the climate variable you've chosen.</p>
+            <p><i class="fa-solid fa-arrow-pointer"></i> Zoom in or out to explore all the markers, and click on them for more details about each location.</p>
+          </div>
+        `,
+        position: 'left',
+        disableInteraction: false,
+        highlightClass: 'size-wide',
+        scrollTo: 'tooltip',
+      },
+      {
+        element: '.time-scale-button-group',
+        intro: `
+          <div style="text-align: center;">
+            <p>Let's now refine your analysis by adjusting the time frame. <i class="fa-solid fa-arrow-pointer"></i> Select "By Season" or "By Month" to focus on specific periods.</p>
+          </div>
+        `,
+        position: 'right',
+        disableInteraction: false,
+        highlightClass: 'size-wide',
+        scrollTo: 'tooltip',
+      },
+      {
+        element: '#TimeFrameMenuSection',
+        intro: `
+          <div style="text-align: center;">
+            <p><i class="fa-solid fa-arrow-pointer"></i> Choose a season or month, and then select a year or opt to view top analogs from each year.</p>
+          </div>
+        `,
+        position: 'right',
+        disableInteraction: false,
+        highlightClass: 'size-wide',
+        scrollTo: 'tooltip',
+      },
+      {
+        element: '.map-container',
+        intro: `
+          <div style="text-align: center;">
+            <p>The markers on the map will update based on your selected time frame and climate variables.</p>
+            <p><i class="fa-solid fa-arrow-pointer"></i> Adjust the zoom level to see all markers and click on them to get detailed information about each top analog.</p>
+          </div>
+        `,
+        position: 'left',
+        disableInteraction: false,
+        highlightClass: 'size-wide',
+        scrollTo: 'tooltip',
+      },      
       {
         element: '.buttonGroup',
         intro: `
           <div style="text-align: center;">
-            <p>Clicking the tabs at the top of the menu allow you to switch between the map setting and methodology views.</p>
+            <p>Finally, the tabs at the top of the menu allow you to switch between the map settings and methodology views.</p>
+            <p><i class="fa-solid fa-arrow-pointer"></i> Click the tabs to explore these different views.</p>
           </div>
         `,
         position: 'right',
-        disableInteraction: false, // Allow interaction with this element
+        disableInteraction: false,
         highlightClass: 'size-wide',
-        scrollTo: 'tooltip', // Scroll the page to the tooltip if needed
-        
+        scrollTo: 'tooltip',
       },
-      
-      // Other steps...
+      {
+        element: '.body',
+        intro: `
+          <div style="text-align: center;">
+            <h3>That concludes our tour!</h3>
+            <p>Now you're ready to explore climate analogs for Wisconsin. Feel free to adjust the settings to your preferences, and enjoy discovering how the climate has changed over the years.</p>
+            <p>If you need any help, you can restart the tour by clicking the help button <i class="fa-solid fa-circle-question"></i> in the upper right corner of the page.</p>
+            <h4>Happy exploring!</h4>
+          </div>
+        `,
+        position: 'center',
+        disableInteraction: true,
+        highlightClass: 'size-wide',
+      },
     ],
-    // Optional: Adjust tour configuration to prevent tooltips from blocking interactions
-    tooltipClass: 'custom-intro-tooltip',
-    nextLabel: 'Next',
-    prevLabel: 'Back',
-    doneLabel: 'Finish',
-    exitOnOverlayClick: false,
-    dontShowAgain: true,
-    dontShowAgainLabel: "Don't show tutorial again",
+    showStepNumbers: false,
+    disableInteraction: true,
+    scrollToElement: true,
+    exitOnEsc: true,
+    exitOnOverlayClick: true,
   });
-
   intro.start();
 };
