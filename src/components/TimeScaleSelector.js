@@ -106,7 +106,7 @@ const TimeScaleSelector = ({
       </div>
       <div className="time-scale-options">
         {timeScale === 'by_year' && (
-          <select value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
+          <select id='yearSelect' value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
             <option className="selectPrompt" value="">
               -Select a year-
             </option>

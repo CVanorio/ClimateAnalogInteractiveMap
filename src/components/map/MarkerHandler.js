@@ -380,7 +380,7 @@ const MarkerHandler = {
 
           // Add a marker with the custom icon to the specified latitude and longitude
           const icon = L.divIcon({
-            html: '<i class="fa-solid fa-location-dot"></i>',
+            html: '<i class="fa-solid fa-location-dot" id="targetCountyPin"></i>',
             className: 'target-icon',
             iconAnchor: [8, 24], // Center horizontally and bottom vertically
             popupAnchor: [0, -20] // Adjust this value to position the popup above the icon

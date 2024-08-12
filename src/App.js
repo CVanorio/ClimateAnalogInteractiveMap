@@ -1,11 +1,11 @@
-// App.js
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import MapComponent from './components/map/MapComponent';
 import Sidebar from './components/Sidebar';
-import SidebarOverlay from './components/SidebarOverlay'; // Import the SidebarOverlay component
+import SidebarOverlay from './components/SidebarOverlay';
 import { fetchData } from './services/api';
 import Graph from './components/Graph';
+import { startTour } from './components/tourConfig'; // Import the tour configuration
 
 const App = () => {
   const [selectedCounty, setSelectedCounty] = useState('');
@@ -20,6 +20,11 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState([]);
   const [showChart, setShowChart] = useState(false);
+
+  useEffect(() => {
+    // Always start the tour
+    startTour();
+  }, []);
 
   const handleCountySelect = (county) => setSelectedCounty(county);
   const handleTimeScaleToggle = (scale) => setTimeScale(scale);
@@ -66,11 +71,11 @@ const App = () => {
 
   return (
     <div className="app-container">
-      <i className={`${menuVisible ? 'fas fa-angle-left' : 'fas fa-angle-right'}`} onClick={toggleMenu} title="Toggle Menu"></i>
+      <i id='menuToggle' className={`${menuVisible ? 'fas fa-angle-left' : 'fas fa-angle-right'}`} onClick={toggleMenu} title="Toggle Menu"></i>
       <aside className={`sidebar ${menuVisible ? 'visible' : ''}`}>
         <Sidebar
           selectedCounty={selectedCounty}
-          onSelectCounty={handleCountySelect} // Pass handleCountySelect to update selectedCounty
+          onSelectCounty={handleCountySelect}
           timeScale={timeScale}
           onToggleTimeScale={handleTimeScaleToggle}
           scaleValue={scaleValue}
@@ -81,11 +86,11 @@ const App = () => {
           onSelectTargetYear={handleTargetYearSelect}
           showChart={showChart}
           toggleChart={toggleChart}
-          mapData={mapData} // Pass mapData to Sidebar
+          mapData={mapData}
           error={error}
           menuVisible={menuVisible}
         />
-        <SidebarOverlay loading={loading} /> {/* Add the SidebarOverlay component */}
+        <SidebarOverlay loading={loading} />
       </aside>
       <section className="map-container">
         <MapComponent
@@ -99,7 +104,7 @@ const App = () => {
           years={years}
           showChart={showChart}
           menuVisible={menuVisible}
-          handleCountyClick={handleCountySelect} // Pass handleCountySelect as handleCountyClick
+          handleCountyClick={handleCountySelect}
         />
       </section>
       {mapData && (

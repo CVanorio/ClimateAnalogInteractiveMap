@@ -16,8 +16,8 @@ const counties = [
 
 const TargetCountySelector = ({ selectedCounty, onSelectCounty }) => {
   return (
-    <div className="time-scale-options">
-      <select value={selectedCounty} onChange={(e) => onSelectCounty(e.target.value)}>
+    <div className="target-county-options">
+      <select id="target-county-selector" value={selectedCounty} onChange={(e) => onSelectCounty(e.target.value)}>
         <option className='selectPrompt' value="">-Select a county-</option>
         {counties.map((county) => {
           const countyName = county.replace(" County", "");

@@ -1,7 +1,35 @@
 /* src/App.css */
-.App {
-height: 100vh;
+.app-container {
+  height: 100vh;
+  width: 100vw;
 }
+
+/* Adjust the width of the intro.js tooltip container */
+.introjs-tooltip {
+  width: 325px !important; /* Set your desired width here */
+  max-width: none !important; /* Remove any maximum width if present */
+}
+
+/* Set a fixed height for the tooltip and enable scrolling */
+.introjs-tooltip .introjs-tooltiptext {
+  max-height: 325px; /* Set your desired height here */
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds the height */
+}
+
+/* Optional: Adjust the tooltip arrow position */
+.introjs-tooltip .introjs-tooltiparrow {
+  width: 15px; /* Adjust the arrow width */
+  height: 15px; /* Adjust the arrow height */
+}
+
+.introjs-overlay {
+   pointer-events: none; 
+} 
+
+.introjs-helperLayer { 
+  pointer-events: none; 
+} 
+
 
 .sidebar {
 background-color: white;

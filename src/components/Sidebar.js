@@ -57,7 +57,7 @@ const Sidebar = ({
                 />
               </div>
             </div>
-            <div className='menuSection'>
+            <div className='menuSection' id='TimeFrameMenuSection'>
               <p>Time Frame</p>
               <div className='menuOption'>
                 <TimeScaleSelector
@@ -70,7 +70,7 @@ const Sidebar = ({
                 />
               </div>
             </div>
-            <div className='menuSection'>
+            <div className='menuSection' id='climateVariablesMenuSection'>
               <p>Climate Variables</p>
               <div className='menuOption'>
                 <DataTypeSelector
