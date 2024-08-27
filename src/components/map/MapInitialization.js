@@ -1,9 +1,8 @@
 import L from 'leaflet';
 import '../../styles/MapStyles.css';
 
-
-
 const MapInitialization = {
+  // Initialize the map with given parameters and base layer
   initializeMap: (id, countyData) => {
     const map = L.map(id, {
       center: [44.5, -89.5],
@@ -13,6 +12,7 @@ const MapInitialization = {
       minZoom: 3,
     });
 
+    // Add base tile layer to the map
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
     }).addTo(map);
@@ -20,6 +20,7 @@ const MapInitialization = {
     return map;
   },
 
+  // Setup base layers for the map
   setupBaseLayers: (map, stateData) => {
     L.geoJSON(stateData, {
       style: {
@@ -32,6 +33,7 @@ const MapInitialization = {
     }).addTo(map);
   },
 
+  // Add custom control to toggle focus
   setupCustomControl: (map, toggleFocus) => {
     const focusControl = L.control({ position: 'topright' });
     focusControl.onAdd = function () {
@@ -43,90 +45,89 @@ const MapInitialization = {
     focusControl.addTo(map);
   },
 
- addCountyLayer: (map, countyData, handleCountyClick) => {
-  const countyLayer = L.geoJSON(countyData, {
-    style: (feature) => {
-      // Differentiate style for WI counties
-      if (feature.properties.STATEABBR === 'WI') {
-        return {
-          weight: 0.7,
-          color: 'grey',
-          fillColor: 'transparent',
-          fillOpacity: 0.15,
-          zIndex: 1,
-        };
-      } else {
-        return {
-          weight: 0.7,
-          color: 'grey',
-          fillColor: 'transparent',
-          fillOpacity: 0,
-          zIndex: 1,
-        };
-      }
-    },
-    onEachFeature: (feature, layer) => {
-      let tooltip;
-      let originalColor; // Variable to store the original color
-      let originalOpacity;
-    
-      if (feature.properties.STATEABBR === 'WI') {
-        // Mouseover event to show tooltip and change fill color
-        layer.on('mouseover', function (e) {
-          // Get the current style
-          originalColor = layer.options.fillColor;
-          originalOpacity = layer.options.fillOpacity;
-    
-          tooltip = L.tooltip({
-            permanent: true,
-            direction: 'right',
-            className: 'leaflet-tooltip'
-          }).setContent(`${feature.properties.COUNTYNAME}, ${feature.properties.STATEABBR}`);
-    
-          this.bindTooltip(tooltip).openTooltip();
-    
-          if (feature.properties.STATEABBR === 'WI') {
+  // Add and style the county layer on the map
+  addCountyLayer: (map, countyData, handleCountyClick) => {
+    const countyLayer = L.geoJSON(countyData, {
+      style: (feature) => {
+        // Differentiate style for Wisconsin (WI) counties
+        if (feature.properties.STATEABBR === 'WI') {
+          return {
+            weight: 0.7,
+            color: 'grey',
+            fillColor: 'transparent',
+            fillOpacity: 0.15,
+            zIndex: 1,
+          };
+        } else {
+          return {
+            weight: 0.7,
+            color: 'grey',
+            fillColor: 'transparent',
+            fillOpacity: 0,
+            zIndex: 1,
+          };
+        }
+      },
+      onEachFeature: (feature, layer) => {
+        let tooltip;
+        let originalColor; // Variable to store the original color
+        let originalOpacity;
+
+        if (feature.properties.STATEABBR === 'WI') {
+          // Mouseover event to show tooltip and change fill color
+          layer.on('mouseover', function (e) {
+            // Store current style
+            originalColor = layer.options.fillColor;
+            originalOpacity = layer.options.fillOpacity;
+
+            tooltip = L.tooltip({
+              permanent: true,
+              direction: 'right',
+              className: 'leaflet-tooltip'
+            }).setContent(`${feature.properties.COUNTYNAME}, ${feature.properties.STATEABBR}`);
+
+            this.bindTooltip(tooltip).openTooltip();
+
+            // Highlight WI counties on mouseover
             layer.setStyle({
               fillColor: 'blue',
               fillOpacity: 0.25
             });
-          }
-        });
-    
-        // Mouseout event to hide tooltip and reset fill color
-        layer.on('mouseout', function (e) {
-          if (tooltip) {
-            this.unbindTooltip();
-            tooltip = null;
-          }
-    
-          if (feature.properties.STATEABBR === 'WI') {
+          });
+
+          // Mouseout event to hide tooltip and reset fill color
+          layer.on('mouseout', function (e) {
+            if (tooltip) {
+              this.unbindTooltip();
+              tooltip = null;
+            }
+
+            // Reset style for WI counties
             layer.setStyle({
-              fillColor: originalColor, // Reset to the original color
+              fillColor: originalColor,
               fillOpacity: originalOpacity
             });
+          });
+
+          // Click event for WI counties only
+          if (feature.properties.STATEABBR === 'WI') {
+            layer.on('click', function (e) {
+              handleCountyClick(feature.properties.COUNTYNAME); // Trigger callback on click
+            });
           }
-        });
-    
-        // Enable click only for WI counties
-        if (feature.properties.STATEABBR === 'WI') {
-          layer.on('click', function (e) {
-            handleCountyClick(feature.properties.COUNTYNAME); // Call the handleCountyClick function
+
+          // Prevent default behavior on mousedown to disable selection box
+          layer.on('mousedown', function (e) {
+            L.DomEvent.stopPropagation(e); // Stop event propagation
           });
         }
-    
-        // Prevent default behavior on mousedown to disable selection box
-        layer.on('mousedown', function (e) {
-          L.DomEvent.stopPropagation(e); // Prevent default Leaflet behavior
-        });
       }
-    }
-  }).addTo(map);
+    }).addTo(map);
 
-  return countyLayer;
-},
+    return countyLayer;
+  },
 
-
+  // Default style for counties
   getCountyStyle: () => {
     return {
       weight: 0.7,
@@ -137,6 +138,7 @@ const MapInitialization = {
     };
   },
 
+  // Set maximum bounds for the map
   setMaxBounds: (map, bounds) => {
     map.setMaxBounds(bounds);
   }

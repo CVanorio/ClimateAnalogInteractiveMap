@@ -24,9 +24,7 @@ const TimeScaleSelector = ({
           </option>
         );
       }
-    }
-    // Otherwise, do not include the current year
-    else {
+    } else {
       for (let i = currentYear - 1; i >= 1895; i--) {
         const displayYear = `${i - 1}-${i}`;
         years.push(
@@ -39,7 +37,7 @@ const TimeScaleSelector = ({
     return years;
   };
 
-  // Generate years from 1895 to current year
+  // Generate years from 1895 to the current year
   const getYearOptionsFrom1895 = () => {
     return Array.from({ length: currentYear - 1894 }, (_, i) => {
       const year = currentYear - i;
@@ -51,7 +49,7 @@ const TimeScaleSelector = ({
     });
   };
 
-  // Generate years from 1895 to current year - 1
+  // Generate years from 1895 to the current year - 1
   const getYearOptionsFrom1895ToCurrentYearMinusOne = () => {
     return Array.from({ length: currentYear - 1895 }, (_, i) => {
       const year = currentYear - 1 - i;
@@ -63,7 +61,7 @@ const TimeScaleSelector = ({
     });
   };
 
-  // Determine if the current season has ended
+  // Determine if the current season has ended based on the scale value
   const hasSeasonEnded = () => {
     switch (scaleValue) {
       case 'Winter':
@@ -106,7 +104,7 @@ const TimeScaleSelector = ({
       </div>
       <div className="time-scale-options">
         {timeScale === 'by_year' && (
-          <select id='yearSelect' value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
+          <select id='yearSelect' className='yearSelector' value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
             <option className="selectPrompt" value="">
               -Select a year-
             </option>
@@ -129,7 +127,7 @@ const TimeScaleSelector = ({
             </select>
             <br />
             <label>For:</label>
-            <select value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
+            <select className='yearSelector' value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
               <option className="selectPrompt" value="">
                 -Select a year-
               </option>
@@ -157,7 +155,7 @@ const TimeScaleSelector = ({
             </select>
             <br />
             <label>For: </label>
-            <select value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
+            <select className='yearSelector' value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
               <option className="selectPrompt" value="">
                 -Select a year-
               </option>

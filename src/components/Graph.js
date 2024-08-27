@@ -3,6 +3,7 @@ import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
 import '../styles/Graph.css';
 
+// Register Chart.js components
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
 const Graph = ({ graphData, years, menuVisible }) => {
@@ -10,13 +11,13 @@ const Graph = ({ graphData, years, menuVisible }) => {
   const precipitationValues = graphData.map(item => Number(item.TargetPrecipValue));
   const temperatureValues = graphData.map(item => Number(item.TargetTempValue));
 
-  // State to track the active point index
+  // State to track the index of the active point for highlighting
   const [activeIndex, setActiveIndex] = useState(null);
 
-  // Ref for chart instance
+  // Ref for accessing the chart instance
   const chartRef = useRef(null);
 
-  // Determine the county name for the title
+  // Determine the county name for the chart title
   const targetCountyName = graphData[0].TargetCountyName;
 
   // Check if precipitation and temperature data exist
@@ -51,7 +52,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
         borderWidth: 1,
         pointRadius: 2 // Adjust point radius for graph
       }
-    ].filter(Boolean) // Filter out false values
+    ].filter(Boolean) // Filter out undefined datasets
   };
 
   // Options for the chart
@@ -61,14 +62,14 @@ const Graph = ({ graphData, years, menuVisible }) => {
     plugins: {
       legend: {
         display: true,
-        position: 'top', // Adjust position as needed
-        align: 'center', // Center align the legend items
+        position: 'top', // Position the legend at the top
+        align: 'center', // Center-align the legend items
         labels: {
-          usePointStyle: true, // Use line with circle for legend
-          pointStyle: 'circle', // Use circle as point style
-          fontSize: 10, // Adjust legend font size
-          boxWidth: 5, // Width of legend marker
-          boxHeight: 5 // Height of legend marker
+          usePointStyle: true, // Use point style for legend
+          pointStyle: 'circle', // Circle style for legend points
+          fontSize: 10, // Legend font size
+          boxWidth: 5, // Width of legend box
+          boxHeight: 5 // Height of legend box
         }
       },
       tooltip: {
@@ -89,18 +90,18 @@ const Graph = ({ graphData, years, menuVisible }) => {
             return `${years[index]} - ${targetCountyName}, WI`;
           }
         },
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        titleColor: 'black',
-        bodyColor: 'black',
-        displayColors: true,
-        caretPadding: 80
+        backgroundColor: 'rgba(255, 255, 255, 0.9)', // Tooltip background color
+        titleColor: 'black', // Tooltip title color
+        bodyColor: 'black', // Tooltip body color
+        displayColors: true, // Show color boxes in tooltip
+        caretPadding: 80 // Padding for tooltip caret
       }
     },
     scales: {
       x: {
         title: {
           display: true,
-          text: 'Year'
+          text: 'Year' // X-axis label
         }
       },
       'y-axis-precipitation': {
@@ -108,12 +109,12 @@ const Graph = ({ graphData, years, menuVisible }) => {
         position: 'left',
         title: {
           display: true,
-          text: 'Precipitation (in)'
+          text: 'Precipitation (in)' // Y-axis label for precipitation
         },
         min: hasPrecipitationData ? Math.min(...precipitationValues) - 3 : undefined,
         max: hasPrecipitationData ? Math.max(...precipitationValues) + 3 : undefined,
         grid: {
-          drawOnChartArea: false // To avoid grid lines overlapping
+          drawOnChartArea: false // Disable grid lines on chart area
         }
       },
       'y-axis-temperature': {
@@ -121,12 +122,12 @@ const Graph = ({ graphData, years, menuVisible }) => {
         position: 'right',
         title: {
           display: true,
-          text: 'Temperature (°F)'
+          text: 'Temperature (°F)' // Y-axis label for temperature
         },
         min: hasTemperatureData ? Math.min(...temperatureValues) - 1 : undefined,
         max: hasTemperatureData ? Math.max(...temperatureValues) + 1 : undefined,
         grid: {
-          drawOnChartArea: false // To avoid grid lines overlapping
+          drawOnChartArea: false // Disable grid lines on chart area
         }
       }
     },
@@ -136,7 +137,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
     }
   };
 
-  // Custom hover event handler
+  // Custom hover event handler to synchronize highlight
   const handleHover = (event, chart) => {
     const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
     if (points.length > 0) {
@@ -145,24 +146,25 @@ const Graph = ({ graphData, years, menuVisible }) => {
     }
   };
 
-  // Update chart reference on component mount
+  // Update chart reference and add event listener on component mount
   useEffect(() => {
     if (chartRef && chartRef.current && chartRef.current.chartInstance) {
       const chartInstance = chartRef.current.chartInstance;
 
-      // Add event listener for hover
-      chartInstance.options.plugins.tooltip.enabled = false; // Disable default tooltip for synchronization
+      // Disable default tooltip and add custom hover event listener
+      chartInstance.options.plugins.tooltip.enabled = false; // Disable default tooltip
       chartInstance.chart.canvas.addEventListener('mousemove', event => handleHover(event, chartInstance));
 
       return () => {
-        // Clean up event listener
+        // Clean up event listener on component unmount
         chartInstance.chart.canvas.removeEventListener('mousemove', handleHover);
       };
     }
   }, []);
 
   return (
-    <div className="graph-container" style = {{width: menuVisible ? 'calc(100vw - 365px)' : '98vw'}}>
+    <div className="graph-container" style={{ width: menuVisible ? 'calc(100vw - 365px)' : '98vw' }}>
+      {/* Render Line chart */}
       <Line ref={chartRef} data={chartData} options={options} />
     </div>
   );

@@ -246,14 +246,14 @@ const MarkerHandler = {
         let differenceScoreText = `a <strong>Climate Difference Score</strong> of <strong>${Number(item.Distance)}</strong>`;
 
         // Update the rankText variable
-        let rankText = `the <strong>${getOrdinal(Number(item.RowNumber))}</strong> best analog match`;
+        let rankText = `the <strong>${getOrdinal(Number(item.AnalogRank))}</strong> best analog match`;
 
         // Combine the text parts
         const popupContent = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. </br>When compared to ${item.TargetCountyName}, WI ${timeFrameString} <strong>${targetYear}</strong> it has ${differenceScoreText} and is ${rankText}.`;
         // Update the existing county layer's style and popup
         map.eachLayer((layer) => {
           if (layer.feature && layer.feature.properties && layer.feature.properties.COUNTYNAME === countyKey && layer.feature.properties.STATEABBR === stateKey) {
-            if (Number(item.RowNumber) === 1) {
+            if (Number(item.AnalogRank) === 1) {
               // Extract latitude and longitude from feature properties
               const latitude = layer.feature.properties.LAT;
               const longitude = layer.feature.properties.LONG;

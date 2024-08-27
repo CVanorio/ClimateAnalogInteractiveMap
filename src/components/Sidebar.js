@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TargetCountySelector from './TargetCountySelector';
 import TimeScaleSelector from './TimeScaleSelector';
 import DataTypeSelector from './DataTypeSelector';
 import { Tooltip } from 'react-tooltip';
 import WSCO_Logo from '../assets/WSCO_Logo.png';
 import '../styles/Sidebar.css';
-import MethodologyComponent from './MethodologyComponent'; // Import the MethodologyComponent
+import MethodologyComponent from './MethodologyComponent';
 
 const Sidebar = ({
   selectedCounty,
@@ -21,10 +21,31 @@ const Sidebar = ({
   showChart,
   toggleChart,
   mapData,
-  error,
   menuVisible
 }) => {
   const [activeButton, setActiveButton] = useState('mapOptions');
+  const [countyError, setCountyError] = useState('');
+  const [timeFrameError, setTimeFrameError] = useState('');
+  const [dataTypeError, setDataTypeError] = useState('');
+
+  useEffect(() => {
+    if (!selectedCounty) {
+      setCountyError('Please select a county.');
+    } else {
+      setCountyError('');
+    }
+
+    if (timeScale === 'by_year' && !targetYear) {
+      setTimeFrameError('Please select a year.');
+    } else if ((timeScale === 'by_season') && (!targetYear || !scaleValue)) {
+      setTimeFrameError('Please select a season and year.');
+    } else if ((timeScale === 'by_month') && (!targetYear || !scaleValue)) {
+      setTimeFrameError('Please select a month and year.');
+    } else {
+      setTimeFrameError('')
+    }
+
+  }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType]);
 
   return (
     <div>
@@ -55,6 +76,7 @@ const Sidebar = ({
                   selectedCounty={selectedCounty}
                   onSelectCounty={onSelectCounty}
                 />
+                {countyError && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{countyError}</div>}
               </div>
             </div>
             <div className='menuSection' id='TimeFrameMenuSection'>
@@ -68,6 +90,7 @@ const Sidebar = ({
                   targetYear={targetYear}
                   onSelectTargetYear={onSelectTargetYear}
                 />
+                {timeFrameError && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{timeFrameError}</div>}
               </div>
             </div>
             <div className='menuSection' id='climateVariablesMenuSection'>
@@ -77,6 +100,7 @@ const Sidebar = ({
                   selectedDataType={selectedDataType}
                   onDataTypeChange={onDataTypeChange}
                 />
+                
               </div>
             </div>
             <div className='menuSection'>
@@ -93,20 +117,19 @@ const Sidebar = ({
               <Tooltip place="top" type="dark" effect="solid" />
             </div>
 
-            {error && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{error}</div>}
           </div>
 
         ) : (
-          <MethodologyComponent /> // Use MethodologyComponent here
+          <MethodologyComponent />
         )}
 
       </div>
       {menuVisible && (
         <div className="logoContainer">
           <img src={WSCO_Logo} alt="WSCO Logo" className="responsive-image" />
-        </div>)}
+        </div>
+      )}
     </div>
-
   );
 };
 

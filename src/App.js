@@ -5,24 +5,21 @@ import Sidebar from './components/Sidebar';
 import SidebarOverlay from './components/SidebarOverlay';
 import { fetchData } from './services/api';
 import Graph from './components/Graph';
-import { startTour } from './components/tourConfig'; // Import the tour configuration
+import { startTour } from './components/tourConfig';
 
 const App = () => {
   const [selectedCounty, setSelectedCounty] = useState('');
   const [timeScale, setTimeScale] = useState('by_year');
   const [scaleValue, setScaleValue] = useState('');
   const [targetYear, setTargetYear] = useState('');
-  const [highlightedYear, setHighlightedYear] = useState(null);
   const [selectedDataType, setSelectedDataType] = useState('both');
   const [menuVisible, setMenuVisible] = useState(true);
   const [mapData, setMapData] = useState(null);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState([]);
   const [showChart, setShowChart] = useState(false);
 
   useEffect(() => {
-    // Always start the tour
     startTour();
   }, []);
 
@@ -35,22 +32,6 @@ const App = () => {
   const toggleChart = () => setShowChart(!showChart);
 
   const fetchDataFromApi = async () => {
-    if (!selectedCounty) {
-      setError('Please select a county.');
-      return;
-    }
-
-    if (timeScale === 'by_year' && !targetYear) {
-      setError('Please select a year.');
-      return;
-    }
-
-    if ((timeScale === 'by_season' || timeScale === 'by_month') && (!targetYear || !scaleValue)) {
-      setError('Please select a year and a season or month.');
-      return;
-    }
-
-    setError('');
     setLoading(true);
 
     try {
@@ -59,7 +40,7 @@ const App = () => {
       setYears(dataYears);
       setMapData(res.data[0][0][0]);
     } catch (error) {
-      setError('Failed to fetch data.');
+      console.error('Failed to fetch data:', error);
     }
 
     setLoading(false);
@@ -87,8 +68,8 @@ const App = () => {
           showChart={showChart}
           toggleChart={toggleChart}
           mapData={mapData}
-          error={error}
           menuVisible={menuVisible}
+          // Pass any additional props if needed
         />
         <SidebarOverlay loading={loading} />
       </aside>

@@ -10,7 +10,7 @@ import MapInitialization from './MapInitialization';
 import MarkerHandler from './MarkerHandler';
 import LoadingOverlay from './LoadingOverlay';
 import Slider from './Slider';
-import Legend from './Legend'; // Import the Legend component
+import Legend from './Legend'; // Import the Legend component for the map's legend display
 import '../../styles/MapStyles.css';
 
 const MapComponent = ({
@@ -32,16 +32,19 @@ const MapComponent = ({
   const [highlightedYear, setHighlightedYear] = useState(years[0] || null); // Initialize with the first year or null
   const [initialBoundsSet, setInitialBoundsSet] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [yearColors, setYearColors] = useState({}); // State to store year colors
+  const [yearColors, setYearColors] = useState({}); // State to store year colors for the map
 
+  // Toggle between play and pause for the slider
   const togglePlayPause = () => {
     setIsPlaying(prevIsPlaying => !prevIsPlaying);
   };
 
+  // Toggle focus on markers
   const toggleFocus = () => {
     setFocusToMarkers(prevFocusToMarkers => !prevFocusToMarkers);
   };
 
+  // Handle click on county to select it
   const handleCountyClick = (countyName) => {
     // Implement logic to set selectedCounty here
   };
@@ -56,6 +59,7 @@ const MapComponent = ({
     MapInitialization.setupBaseLayers(mapRef.current, stateData);
     countyLayerRef.current = MapInitialization.addCountyLayer(mapRef.current, countyData, handleCountyClick);
 
+    // Clean up map instance on component unmount
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
@@ -65,10 +69,11 @@ const MapComponent = ({
 
   useEffect(() => {
     if (years && years.length > 0) {
-      const minYear = Math.min(...years);
-      const maxYear = Math.max(...years);
+      const minYear = 1895/*Math.min(...years)*/;
+      const maxYear = new Date().getFullYear()-1/*Math.max(...years)*/;
       let colorScale;
 
+      // Determine color scale based on selected data type
       if (selectedDataType === 'both') {
         colorScale = scaleSequential(interpolatePurples).domain([minYear, maxYear]);
       } else if (selectedDataType === 'precipitation') {
@@ -77,6 +82,7 @@ const MapComponent = ({
         colorScale = scaleSequential(interpolateReds).domain([minYear, maxYear]);
       }
 
+      // Create a color mapping for each year
       const colors = {};
       years.forEach(year => {
         colors[year] = colorScale(year);
@@ -84,20 +90,22 @@ const MapComponent = ({
 
       setYearColors(colors);
     }
-  }, [years, selectedDataType]);
+  }, [years, selectedDataType]); // Recalculate colors when `years` or `selectedDataType` changes
 
   useEffect(() => {
     if (mapData && yearColors && Object.keys(yearColors).length > 0) {
+      // Update markers based on new data and selected year
       MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear, timeScale, scaleValue);
       setInitialBoundsSet(true);
     }
-  }, [mapData, selectedDataType, highlightedYear, yearColors, targetYear, timeScale, scaleValue]);
+  }, [mapData, selectedDataType, highlightedYear, yearColors, targetYear, timeScale, scaleValue]); // Re-render markers when relevant data changes
 
   useEffect(() => {
     if (countyLayerRef.current) {
+      // Highlight selected county on the map
       MarkerHandler.highlightCounty(countyLayerRef.current, selectedCounty, countyData, mapData, timeScale, scaleValue, targetYear, selectedDataType);
     }
-  }, [selectedCounty, mapData]);
+  }, [selectedCounty, mapData]); // Update highlighted county when `selectedCounty` or `mapData` changes
 
   return (
     <div style={{ position: 'relative' }}>
@@ -112,12 +120,12 @@ const MapComponent = ({
             isPlaying={isPlaying}
             togglePlayPause={togglePlayPause}
             selectedDataType={selectedDataType}
-            yearColors={yearColors} // Pass yearColors to the Slider component
+            yearColors={yearColors} // Pass yearColors to the Slider component for color updates
           />
         </div>
       )}
       {targetYear && targetYear !== 'top_analogs' && (
-        <Legend />
+        <Legend /> // Show Legend component when not viewing top analogs
       )}
     </div>
   );

@@ -15,7 +15,6 @@ export const startTour = () => {
             <h2>Welcome to the Climate Analogs Explorer!</h2>
             <p>This tool helps you explore how Wisconsin's climate has changed over time by finding locations with similar historical climate patterns. These similar locations are referred to as climate analogs.</p>
             <p>A climate analog is a region that has a 'typical climate' that closely resembles the of climate of your selected location during the chosen time period. The typical climate is based on average conditions from 1991 to 2020. By examining these analogs, you can gain valuable insights into how historical climate conditions at your chosen location compare to those in other areas of the county.</p>
-            <p>Let’s take a brief tour to learn how the map!</p>
 
           </div>
         `,
@@ -28,7 +27,7 @@ export const startTour = () => {
         intro: `
           <div style="text-align: center;">
             <h3>Ready to get started?</h3>
-            <p>We'll walk through each feature step by step, starting with the basics.</p>
+            <p>Let's take a tour of all the features, starting with the basics.</p>
           </div>
         `,
         position: 'center',
@@ -241,7 +240,7 @@ export const startTour = () => {
         scrollTo: 'tooltip',
       },
       {
-        element: '#TimeFrameMenuSection',
+        element: '.time-scale-options',
         intro: `
           <div style="text-align: center;">
             <p><i class="fa-solid fa-arrow-pointer"></i> Choose a season or month, and then select a year or opt to view top analogs from each year.</p>
