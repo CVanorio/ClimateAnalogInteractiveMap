@@ -6,6 +6,7 @@ import SidebarOverlay from './components/SidebarOverlay';
 import { fetchData } from './services/api';
 import Graph from './components/Graph';
 import { startTour } from './components/tourConfig';
+import { startIntro } from './components/BackgroundIntro';
 
 const App = () => {
   const [selectedCounty, setSelectedCounty] = useState('');
@@ -20,7 +21,8 @@ const App = () => {
   const [showChart, setShowChart] = useState(false);
 
   useEffect(() => {
-    startTour();
+    startIntro();
+   // startTour();
   }, []);
 
   const handleCountySelect = (county) => setSelectedCounty(county);
@@ -39,6 +41,8 @@ const App = () => {
       const dataYears = res.data[0][0][0].map(item => Number(item.Year));
       setYears(dataYears);
       setMapData(res.data[0][0][0]);
+      console.log(res.data)
+      console.log(res.data[0][0][0])
     } catch (error) {
       console.error('Failed to fetch data:', error);
     }

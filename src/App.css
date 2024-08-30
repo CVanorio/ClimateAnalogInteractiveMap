@@ -4,10 +4,11 @@
   width: 100vw;
 }
 
-/* Adjust the width of the intro.js tooltip container */
+/* Make the tooltip take the width of the parent container */
 .introjs-tooltip {
-  width: 325px !important; /* Set your desired width here */
+  width: 75vw !important; /* Set width to 100% to match the parent's width */
   max-width: none !important; /* Remove any maximum width if present */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 /* Set a fixed height for the tooltip and enable scrolling */
@@ -28,7 +29,7 @@
 
 .introjs-helperLayer { 
   pointer-events: none; 
-} 
+}
 
 .fa-arrow-pointer {
   color: black;
