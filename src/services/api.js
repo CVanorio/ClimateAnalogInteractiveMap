@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://wwwtest.climatology.nelson.wisc.edu/climate-change-app/';
 
 // Function to fetch data from the server based on user selections
 export const fetchData = async (selectedCounty, timeScale, targetYear, scaleValue, selectedDataType) => {
@@ -15,6 +15,8 @@ export const fetchData = async (selectedCounty, timeScale, targetYear, scaleValu
         dataType: selectedDataType,
       },
     });
+
+    console.log(selectedCounty)
     
     // Return the data received from the server
     return response.data;
