@@ -137,7 +137,7 @@ export const startTour = () => {
         intro: `
           <div style="text-align: center;">
             <p>The tool compares the climate of the selected target county with every other county in the contiguous U.S. and Alaska for the chosen time period.</p>
-            <p>The top 50 counties with climates that most closely match the target county are highlighted on the map, with a crown icon <i class="fa-solid fa-crown"></i> marking the best match.</p>
+            <p>The top 50 counties with climates that most closely match the target county are highlighted on the map, with a star icon <i class="fa-solid fa-star"></i> marking the best match.</p>
             <p><i class="fa-solid fa-arrow-pointer"></i> Use the zoom controls or scroll to explore the map. Click on different highlighted counties to learn more.</p>
           </div>
         `,

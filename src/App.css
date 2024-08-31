@@ -48,14 +48,14 @@
   
 }
 
-.fa-crown {
+.fa-star {
   font-size: 20px;
   color: black;
   text-shadow: 
-  1.5px 1.5px 0px white, 
-  -1.5px -1.5px 0px white, 
-  1.5px -1.5px 0px white, 
-  -1.5px 1.5px 0px white;
+  1px 1px 0px white, 
+  -1px -1px 0px white, 
+  1px -1px 0px white, 
+  -1px 1px 0px white;
 }
 
 .sidebar {

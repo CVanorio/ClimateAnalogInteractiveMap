@@ -82,7 +82,7 @@ const MarkerHandler = {
         let precipitationText = selectedDataType === 'precipitation' || selectedDataType === 'both'
           ? `a <strong>total precipitation</strong> of <i class="fas fa-cloud-rain"></i> <strong>${Number(item.AnalogPrecipNormal)} in</strong>`
           : '';
-        let differenceScoreText = `a <strong>Climate Difference Score</strong> of <strong>${Number(item.Distance)}</strong>`;
+        //let differenceScoreText = `a <strong>Climate Difference Score</strong> of <strong>${Number(item.Distance)}</strong>`;
 
         let targetTempText = selectedDataType === 'temperature' || selectedDataType === 'both'
           ? `an <strong>average temperature</strong> of <i class="fas fa-thermometer-half"></i> <strong>${Number(item.TargetTempValue)} °F</strong>`
@@ -91,7 +91,7 @@ const MarkerHandler = {
           ? `a <strong>total precipitation</strong> of <i class="fas fa-cloud-rain"></i> <strong>${Number(item.TargetPrecipValue)} in</strong>`
           : '';
 
-        const sentence = `The climate in <strong>${item.TargetCountyName}, WI</strong> ${timeFrameString} <strong>${item.Year}</strong> had ${targetTempText}${targetTempText && targetPrecipText ? ' and ' : ''}${targetPrecipText}. When compared to ${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr} it has ${differenceScoreText}.`;
+        const sentence = `The climate in <strong>${item.TargetCountyName}, WI</strong> ${timeFrameString} <strong>${item.Year}</strong> had ${targetTempText}${targetTempText && targetPrecipText ? ' and ' : ''}${targetPrecipText}.`; /*When compared to ${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr} it has ${differenceScoreText}.`;*/
 
         const existingMarkerData = markerMap.get(latlng.toString());
         const newYear = Number(item.Year);
@@ -243,13 +243,13 @@ const MarkerHandler = {
         let precipitationText = selectedDataType === 'precipitation' || selectedDataType === 'both'
           ? `a <strong>total precipitation</strong> of <i class="fas fa-cloud-rain"></i> <strong>${Number(item.AnalogPrecipNormal)} in</strong>`
           : '';
-        let differenceScoreText = `a <strong>Climate Difference Score</strong> of <strong>${Number(item.Distance)}</strong>`;
+        //let differenceScoreText = `a <strong>Climate Difference Score</strong> of <strong>${Number(item.Distance)}</strong>`;
 
         // Update the rankText variable
         let rankText = `the <strong>${getOrdinal(Number(item.AnalogRank))}</strong> best analog match`;
 
         // Combine the text parts
-        const popupContent = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. </br>When compared to ${item.TargetCountyName}, WI ${timeFrameString} <strong>${targetYear}</strong> it has ${differenceScoreText} and is ${rankText}.`;
+        const popupContent = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`; /*</br>When compared to ${item.TargetCountyName}, WI ${timeFrameString} <strong>${targetYear}</strong> it has ${differenceScoreText} and is ${rankText}.`;*/
         // Update the existing county layer's style and popup
         map.eachLayer((layer) => {
           if (layer.feature && layer.feature.properties && layer.feature.properties.COUNTYNAME === countyKey && layer.feature.properties.STATEABBR === stateKey) {
@@ -260,7 +260,7 @@ const MarkerHandler = {
 
               // Create a custom icon for the top analog marker
               const topAnalogIcon = L.divIcon({
-                html: '<i class="fa-solid fa-crown"></i>',
+                html: '<i class="fa-solid fa-star"></i>',
                 className: 'topAnalogMarker',
                 iconAnchor: [12, 10], // Center horizontally and bottom vertically
                 popupAnchor: [0, -10] // Adjust this value to position the popup above the icon

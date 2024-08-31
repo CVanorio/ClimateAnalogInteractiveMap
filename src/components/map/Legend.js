@@ -12,7 +12,7 @@ const Legend = () => {
   return (
     <div className="legend-container">
       <div className="legend-title">Climate Similarity</div>
-      <div className="legend-best"><i className="fa-solid fa-crown"></i> Best</div>
+      <div className="legend-best"><i class="fa-solid fa-star"></i> Best</div>
       <div className="legend-rectangle-container">
         <div className="legend-labels">
           <div className="legend-high">High</div>
