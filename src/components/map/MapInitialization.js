@@ -1,5 +1,6 @@
 import L from 'leaflet';
 import '../../styles/MapStyles.css';
+import 'leaflet-easyprint';
 
 const MapInitialization = {
   // Initialize the map with given parameters and base layer
@@ -17,6 +18,14 @@ const MapInitialization = {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
     }).addTo(map);
 
+    // Add EasyPrint control to the map
+    L.easyPrint({
+      title: 'My awesome print button',
+      position: 'topleft',
+      sizeModes: ['A4Portrait', 'A4Landscape'],
+      exportOnly: true,
+    }).addTo(map);
+
     return map;
   },
 
@@ -31,6 +40,7 @@ const MapInitialization = {
         zIndex: 1,
       },
     }).addTo(map);
+
   },
 
   // Add custom control to toggle focus
@@ -44,6 +54,8 @@ const MapInitialization = {
     };
     focusControl.addTo(map);
   },
+
+
 
   // Add and style the county layer on the map
   addCountyLayer: (map, countyData, handleCountyClick) => {

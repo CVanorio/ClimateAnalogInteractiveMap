@@ -148,6 +148,9 @@ const MapComponent = ({
           <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analog from Each Year 1895-${new Date().getFullYear()-1} for ${timeFrameString} in ${selectedCounty}, WI` : `${dataTypeString} Climate Analogs for ${selectedCounty}, WI in ${timeFrameString} ${targetYearString}`}</h3>
         </div>
         )}
+        {targetYear && targetYear !== 'top_analogs' && (
+          <Legend className="legend"/> // Show Legend component when not viewing top analogs
+        )}
       </div>
       {mapData && targetYear === 'top_analogs' && (
         <div className="sliderDiv" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 1000 }}>
@@ -161,9 +164,6 @@ const MapComponent = ({
             yearColors={yearColors} // Pass yearColors to the Slider component for color updates
           />
         </div>
-      )}
-      {targetYear && targetYear !== 'top_analogs' && (
-        <Legend /> // Show Legend component when not viewing top analogs
       )}
     </div>
   );
