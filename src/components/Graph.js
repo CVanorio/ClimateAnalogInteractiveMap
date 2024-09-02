@@ -1,6 +1,15 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
 import '../styles/Graph.css';
 
 // Register Chart.js components
@@ -112,8 +121,11 @@ const Graph = ({ graphData, years, menuVisible }) => {
           display: true,
           text: 'Precipitation (in)' // Y-axis label for precipitation
         },
-        min: hasPrecipitationData ? Math.min(...precipitationValues) - 3 : undefined,
-        max: hasPrecipitationData ? Math.max(...precipitationValues) + 3 : undefined,
+        min: hasPrecipitationData ? Math.floor(Math.min(...precipitationValues) - 3) : undefined,
+        max: hasPrecipitationData ? Math.ceil(Math.max(...precipitationValues) + 3) : undefined,
+        ticks: {
+          stepSize: 3 // Define the tick interval size for precipitation
+        },
         grid: {
           drawOnChartArea: false // Disable grid lines on chart area
         }
@@ -126,8 +138,11 @@ const Graph = ({ graphData, years, menuVisible }) => {
           display: true,
           text: 'Temperature (°F)' // Y-axis label for temperature
         },
-        min: hasTemperatureData ? Math.min(...temperatureValues) - 1 : undefined,
-        max: hasTemperatureData ? Math.max(...temperatureValues) + 1 : undefined,
+        min: hasTemperatureData ? Math.floor(Math.min(...temperatureValues) - 1) : undefined,
+        max: hasTemperatureData ? Math.ceil(Math.max(...temperatureValues) + 1) : undefined,
+        ticks: {
+          stepSize: 3 // Define the tick interval size for temperature
+        },
         grid: {
           drawOnChartArea: false // Disable grid lines on chart area
         }
@@ -165,8 +180,8 @@ const Graph = ({ graphData, years, menuVisible }) => {
   }, []);
 
   // Conditionally set padding based on data availability
-  const paddingLeft = hasPrecipitationData ? '0' : '40px'; // Adjust padding to account for axis labels
-  const paddingRight = hasTemperatureData ? '0' : '40px'; // Adjust padding to account for axis labels
+  const paddingLeft = hasPrecipitationData ? '0' : '60px'; // Adjust padding to account for axis labels
+  const paddingRight = hasTemperatureData ? '0' : '60px'; // Adjust padding to account for axis labels
 
   return (
     <div className="graph-container" style={{ width: menuVisible ? 'calc(100vw - 365px)' : '98vw', paddingLeft, paddingRight }}>

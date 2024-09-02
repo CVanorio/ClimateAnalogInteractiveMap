@@ -145,7 +145,7 @@ const MapComponent = ({
       <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}>
       {mapData && targetYear != '' && (
         <div className="map-title-overlay">
-          <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analog from Each Year 1895-${new Date().getFullYear()-1} for ${timeFrameString} in ${selectedCounty}, WI` : `${dataTypeString} Climate Analogs for ${selectedCounty}, WI in ${timeFrameString} ${targetYearString}`}</h3>
+          <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analogs for 1895 ${highlightedYear === 1895 ? '' : `- ${highlightedYear}`} for ${timeFrameString} in ${selectedCounty}, WI` : `${dataTypeString} Climate Analogs for ${selectedCounty}, WI in ${timeFrameString} ${targetYearString}`}</h3>
         </div>
         )}
         {targetYear && targetYear !== 'top_analogs' && (
