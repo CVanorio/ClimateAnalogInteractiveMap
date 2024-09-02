@@ -36,25 +36,46 @@
 /* Optional: Customize other visual elements */
 .fa-location-dot {
   font-size: 20px;
-  color: white;
-  text-shadow: 
-  1px 1px 0px black, 
-  -1px -1px 0px black, 
-  1px -1px 0px black, 
-  -1px 1px 0px black;
-  
-  
-}
-
-.fa-star {
-  font-size: 20px;
   color: black;
   text-shadow: 
   1px 1px 0px white, 
   -1px -1px 0px white, 
   1px -1px 0px white, 
   -1px 1px 0px white;
+  
+  
 }
+
+.fa-star {
+  font-size: 20px;
+  color: white;
+  text-shadow: 
+  1px 1px 0px black, 
+  -1px -1px 0px black, 
+  1px -1px 0px black, 
+  -1px 1px 0px black;
+}
+
+/* MapTitleStyles.css */
+
+.map-title-overlay {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  z-index: 1000;
+  width: 80%; /* Adjust the width as needed */
+}
+
+
+.map-title-text {
+  margin: 0;
+  text-align: center;
+}
+
 
 .popup-table-container {
   max-width: 300px; /* Adjust the maximum width as per your design */

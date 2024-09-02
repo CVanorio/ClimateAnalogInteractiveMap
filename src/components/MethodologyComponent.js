@@ -64,6 +64,9 @@ const MethodologyComponent = () => {
 
                 <strong>Selection:</strong> The top 50 analog counties are selected for Temperature and Precipitation comparisons, while the top 100 are chosen for Temperature Only and Precipitation Only. For annual comparisons, the best analog match from each year is displayed.
             </details>
+            <div>
+                <p><a href="https://forms.gle/4fmWqfaXX9tvDdBu6" target="_blank" rel="noopener noreferrer">Click here to tell us what you think!</a></p>
+            </div>
             </div>
 
     );

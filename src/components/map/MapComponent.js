@@ -11,7 +11,7 @@ import MarkerHandler from './MarkerHandler';
 import LoadingOverlay from './LoadingOverlay';
 import Slider from './Slider';
 import Legend from './Legend'; // Import the Legend component for the map's legend display
-import '../../styles/MapStyles.css';
+import '../../styles/MapStyles.css'; // Import CSS file for map styles
 
 const MapComponent = ({
   selectedCounty,
@@ -69,8 +69,8 @@ const MapComponent = ({
 
   useEffect(() => {
     if (years && years.length > 0) {
-      const minYear = 1895/*Math.min(...years)*/;
-      const maxYear = new Date().getFullYear()-1/*Math.max(...years)*/;
+      const minYear = 1895; //Math.min(...years);
+      const maxYear = new Date().getFullYear() - 1; //Math.max(...years);
       let colorScale;
 
       // Determine color scale based on selected data type
@@ -107,10 +107,48 @@ const MapComponent = ({
     }
   }, [selectedCounty, mapData]); // Update highlighted county when `selectedCounty` or `mapData` changes
 
+  // Convert month number to month name
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const monthName = timeScale === 'by_month' && !isNaN(scaleValue)
+    ? monthNames[parseInt(scaleValue, 10) - 1] // Convert "01" to "January", "02" to "February", etc.
+    : scaleValue;
+
+    let timeFrameString = '';
+
+  if (timeScale === 'by_season') {
+    timeFrameString = scaleValue && ['Winter', 'Spring', 'Summer', 'Fall'].includes(scaleValue) ? `${scaleValue}` : '';
+  } else if (timeScale === 'by_month') {
+    timeFrameString = scaleValue ? `${monthName}` : '';
+  } else if (timeScale === 'by_year') {
+    timeFrameString = ``
+  }
+
+  let dataTypeString = ''
+
+  if (selectedDataType === 'both') {
+    dataTypeString = `Temperature and Precipitation`;
+  } else if (selectedDataType === 'temperature') {
+    dataTypeString = 'Temperature';
+  } else if (selectedDataType === 'precipitation') {
+    dataTypeString = 'Precipitation';
+  }
+
+  const targetYearString = timeScale === 'by_season' && scaleValue === 'Winter' ? `${targetYear-1}-${targetYear}` : targetYear;
+
   return (
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />
-      <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}></div>
+      <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}>
+      {mapData && targetYear != '' && (
+        <div className="map-title-overlay">
+          <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analog from Each Year 1895-${new Date().getFullYear()-1} for ${timeFrameString} in ${selectedCounty}, WI` : `${dataTypeString} Climate Analogs for ${selectedCounty}, WI in ${timeFrameString} ${targetYearString}`}</h3>
+        </div>
+        )}
+      </div>
       {mapData && targetYear === 'top_analogs' && (
         <div className="sliderDiv" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 1000 }}>
           <Slider
