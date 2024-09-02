@@ -18,7 +18,8 @@ const App = () => {
   const [mapData, setMapData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState([]);
-  const [showChart, setShowChart] = useState(false);
+  const [showChart, setShowChart] = useState(targetYear === 'top_analogs');
+
 
   useEffect(() => {
     startIntro();
@@ -53,6 +54,10 @@ const App = () => {
   useEffect(() => {
     fetchDataFromApi();
   }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType]);
+
+  useEffect(() => {
+    setShowChart(targetYear === 'top_analogs');
+  }, [targetYear]); 
 
   return (
     <div className="app-container">

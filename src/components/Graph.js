@@ -107,6 +107,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
       'y-axis-precipitation': {
         type: 'linear',
         position: 'left',
+        display: hasPrecipitationData, // Conditionally display based on data availability
         title: {
           display: true,
           text: 'Precipitation (in)' // Y-axis label for precipitation
@@ -120,6 +121,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
       'y-axis-temperature': {
         type: 'linear',
         position: 'right',
+        display: hasTemperatureData, // Conditionally display based on data availability
         title: {
           display: true,
           text: 'Temperature (°F)' // Y-axis label for temperature
@@ -162,8 +164,12 @@ const Graph = ({ graphData, years, menuVisible }) => {
     }
   }, []);
 
+  // Conditionally set padding based on data availability
+  const paddingLeft = hasPrecipitationData ? '0' : '40px'; // Adjust padding to account for axis labels
+  const paddingRight = hasTemperatureData ? '0' : '40px'; // Adjust padding to account for axis labels
+
   return (
-    <div className="graph-container" style={{ width: menuVisible ? 'calc(100vw - 365px)' : '98vw' }}>
+    <div className="graph-container" style={{ width: menuVisible ? 'calc(100vw - 365px)' : '98vw', paddingLeft, paddingRight }}>
       {/* Render Line chart */}
       <Line ref={chartRef} data={chartData} options={options} />
     </div>
