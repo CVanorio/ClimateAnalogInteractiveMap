@@ -160,7 +160,10 @@ const TimeScaleSelector = ({
                 -Select a year-
               </option>
               <option value="top_analogs">Top analog from each year</option>
-              {getYearOptionsFrom1895()}
+              {parseInt(scaleValue, 10) <= currentMonth - 1 
+                ? getYearOptionsFrom1895() 
+                : getYearOptionsFrom1895ToCurrentYearMinusOne()
+              }
             </select>
           </>
         )}

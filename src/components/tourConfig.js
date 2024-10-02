@@ -5,6 +5,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export const startTour = () => {
 
+  introJs().setOption("tooltipPosition", "top");
+
   const intro = introJs();
   intro.setOptions({
     steps: [
