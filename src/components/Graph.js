@@ -26,12 +26,14 @@ const Graph = ({ graphData, years, menuVisible }) => {
   // Ref for accessing the chart instance
   const chartRef = useRef(null);
 
-  // Determine the county name for the chart title
-  const targetCountyName = graphData[0].TargetCountyName;
+  // Determine the county name for the chart title, ensuring graphData is not empty
+  const targetCountyName = graphData.length > 0 && graphData[0]?.TargetCountyName ? graphData[0].TargetCountyName : 'Unknown County';
 
   // Check if precipitation and temperature data exist
   const hasPrecipitationData = precipitationValues.some(value => !isNaN(value));
   const hasTemperatureData = temperatureValues.some(value => !isNaN(value));
+
+  console.log(years);
 
   // Create the chart data object
   const chartData = {
@@ -121,10 +123,10 @@ const Graph = ({ graphData, years, menuVisible }) => {
           display: true,
           text: 'Precipitation (in)' // Y-axis label for precipitation
         },
-        min: hasPrecipitationData ? Math.floor(Math.min(...precipitationValues) - 3) : undefined,
-        max: hasPrecipitationData ? Math.ceil(Math.max(...precipitationValues) + 3) : undefined,
+        min: hasPrecipitationData ? Math.floor(Math.min(...precipitationValues) - 0.5) : undefined,
+        max: hasPrecipitationData ? Math.ceil(Math.max(...precipitationValues) + 0.5) : undefined, // Reduced buffer
         ticks: {
-          stepSize: 3 // Define the tick interval size for precipitation
+          stepSize: 1 // Define the tick interval size for precipitation
         },
         grid: {
           drawOnChartArea: false // Disable grid lines on chart area
@@ -138,10 +140,10 @@ const Graph = ({ graphData, years, menuVisible }) => {
           display: true,
           text: 'Temperature (°F)' // Y-axis label for temperature
         },
-        min: hasTemperatureData ? Math.floor(Math.min(...temperatureValues) - 1) : undefined,
-        max: hasTemperatureData ? Math.ceil(Math.max(...temperatureValues) + 1) : undefined,
+        min: hasTemperatureData ? Math.floor(Math.min(...temperatureValues) - 0.5) : undefined,
+        max: hasTemperatureData ? Math.ceil(Math.max(...temperatureValues) + 0.5) : undefined, // Reduced buffer
         ticks: {
-          stepSize: 3 // Define the tick interval size for temperature
+          stepSize: 1 // Define the tick interval size for temperature
         },
         grid: {
           drawOnChartArea: false // Disable grid lines on chart area

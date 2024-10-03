@@ -7,6 +7,7 @@ import { fetchData } from './services/api';
 import Graph from './components/Graph';
 import { startTour } from './components/tourConfig';
 import { startIntro } from './components/BackgroundIntro';
+import { getYearOptions } from './utils/yearUtils.js';
 
 const App = () => {
   const [selectedCounty, setSelectedCounty] = useState('');
@@ -39,7 +40,8 @@ const App = () => {
 
     try {
       const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType);
-      const dataYears = res.data[0][0][0].map(item => Number(item.Year));
+      // Get years based on time scale
+      const dataYears = getYearOptions(timeScale, scaleValue);
       setYears(dataYears);
       setMapData(res.data[0][0][0]);
       console.log(res.data)
