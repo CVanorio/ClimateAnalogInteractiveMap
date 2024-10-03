@@ -103,7 +103,8 @@ const Sidebar = ({
                 
               </div>
             </div>
-            <div className='menuSection'>
+            {targetYear === 'top_analogs' && (
+              <div className='menuSection'>
               <button
                 className={`chart-toggle ${showChart ? 'active' : ''}`}
                 onClick={toggleChart}
@@ -116,6 +117,8 @@ const Sidebar = ({
 
               <Tooltip place="top" type="dark" effect="solid" />
             </div>
+            )}
+            
 
           </div>
 
