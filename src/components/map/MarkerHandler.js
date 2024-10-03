@@ -9,6 +9,18 @@ let coloredCounties = []; // Maintain a list of colored counties
 let currentTargetLayer = null; // Global variable to keep track of the current target county layer
 let currentMarker = null; // Global variable to keep track of the current marker
 
+// Get current date details
+const currentYear = new Date().getFullYear();
+const currentMonth = new Date().getMonth() + 1; // Months are 0-based, so add 1
+
+// Define completed seasons based on the current month
+const completedSeasons = {
+  Winter: currentMonth > 2, // Winter is considered complete after February
+  Spring: currentMonth > 5, // Spring is complete after May
+  Summer: currentMonth > 8, // Summer is complete after August
+  Fall: currentMonth > 11, // Fall is complete after November
+};
+
 const MarkerHandler = {
   handleMarkers: (map, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear, timeScale, scaleValue) => {
     if (!mapData || !Array.isArray(mapData)) {
@@ -41,174 +53,155 @@ const MarkerHandler = {
 
     if (targetYear === 'top_analogs') {
       const latLngs = [];
-      const markerMap = new Map();
-
+      const averagedMarkers = [];
+    
       mapData.forEach((item) => {
         const lat = Number(item.AnalogCountyLatitude);
         const lng = Number(item.AnalogCountyLongitude);
-
-        if (isNaN(lat) || isNaN(lng)) {
-          console.error("Invalid coordinates:", item.AnalogCountyLatitude, item.AnalogCountyLongitude);
+        const itemYear = Number(item.Year);
+        const isCurrentYear = itemYear === currentYear;
+    
+        // Skip invalid markers based on the time scale and current date
+        if (timeScale === 'by_year' && isCurrentYear) {
+          return;
+        } else if (timeScale === 'by_month' && isCurrentYear && Number(scaleValue) > currentMonth - 1) {
+          return;
+        } else if (timeScale === 'by_season' && isCurrentYear && !completedSeasons[scaleValue]) {
           return;
         }
-
+    
+        // Determine opacity based on whether the year is <= or > the highlighted year
+        const opacity = itemYear > highlightedYear ? 0 : 1;
+    
+        // Proceed with the rest of the marker creation logic
         const latlng = new L.LatLng(lat, lng);
         latLngs.push(latlng);
-
-        // Convert month number to month name
+    
         const monthNames = [
           "January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"
         ];
-
+    
         const monthName = timeScale === 'by_month' && !isNaN(scaleValue)
-          ? monthNames[parseInt(scaleValue, 10) - 1] // Convert "01" to "January", "02" to "February", etc.
+          ? monthNames[parseInt(scaleValue, 10) - 1]
           : scaleValue;
-
+    
         let timeFrameString = '';
-
         if (timeScale === 'by_season') {
           timeFrameString = `in the <strong>${scaleValue}</strong>`;
         } else if (timeScale === 'by_month') {
           timeFrameString = `in <strong>${monthName}</strong>`;
         } else if (timeScale === 'by_year') {
-          timeFrameString = `for the year`
+          timeFrameString = `for the year`;
         }
-
-        // Construct popup content based on selectedDataType
+    
         let temperatureText = selectedDataType === 'temperature' || selectedDataType === 'both'
           ? `an <strong>average temperature</strong> of <i class="fas fa-thermometer-half"></i> <strong>${Number(item.AnalogTempNormal)} °F</strong>`
           : '';
         let precipitationText = selectedDataType === 'precipitation' || selectedDataType === 'both'
           ? `a <strong>total precipitation</strong> of <i class="fas fa-cloud-rain"></i> <strong>${Number(item.AnalogPrecipNormal)} in</strong>`
           : '';
-        //let differenceScoreText = `a <strong>Climate Difference Score</strong> of <strong>${Number(item.Distance)}</strong>`;
-
-        let targetTempText = selectedDataType === 'temperature' || selectedDataType === 'both'
-          ? `an <strong>average temperature</strong> of <i class="fas fa-thermometer-half"></i> <strong>${Number(item.TargetTempValue)} °F</strong>`
-          : '';
-        let targetPrecipText = selectedDataType === 'precipitation' || selectedDataType === 'both'
-          ? `a <strong>total precipitation</strong> of <i class="fas fa-cloud-rain"></i> <strong>${Number(item.TargetPrecipValue)} in</strong>`
-          : '';
-
-        const sentence = `The climate in <strong>${item.TargetCountyName}, WI</strong> ${timeFrameString} <strong>${item.Year}</strong> had ${targetTempText}${targetTempText && targetPrecipText ? ' and ' : ''}${targetPrecipText}.`; /*When compared to ${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr} it has ${differenceScoreText}.`;*/
-
-        const existingMarkerData = markerMap.get(latlng.toString());
-        const newYear = Number(item.Year);
-
-        let yearsArray;
-        let popupHeader;
-        let yearsForPopupHeader;
-        let expandableContent = '';
-
-        if (existingMarkerData) {
-          // Update years array to include the new year
-          yearsArray = [...new Set([...existingMarkerData.years, newYear])];
-
-          // Create new popup header based on updated years
-          yearsForPopupHeader = yearsArray.length === 1
-            ? `<strong>${yearsArray[0]}</strong>`
-            : yearsArray.length === 2
-              ? `<strong>${yearsArray[0]}</strong> and <strong>${yearsArray[1]}</strong>`
-              : `<strong>${yearsArray.slice(0, -1).join(', ')}</strong>, and <strong>${yearsArray[yearsArray.length - 1]}</strong>`;
-
-          popupHeader = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
-
-          // Add new sentence to existingMarkerData.yearsAndDistances
-          existingMarkerData.yearsAndDistances.push(sentence);
-
-          // Construct expandable content for each year if there are multiple years
-          expandableContent = yearsArray.map((year, index) => {
-            const yearDetails = existingMarkerData.yearsAndDistances[index];
-            return `<details><summary class="expanded-summary"><strong>${year}</strong></summary><p>${yearDetails}</p></details>`;
-          }).join('');
-
-          markerMap.set(latlng.toString(), {
-            count: existingMarkerData.count + 1,
-            popupContent: `${popupHeader}${expandableContent}`,
-            yearsAndDistances: existingMarkerData.yearsAndDistances,
-            years: yearsArray
-          });
-        } else {
-          // Create header and content for new marker
-          yearsArray = [newYear];
-
-          popupHeader = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> in <strong>${item.Year}</strong>.<br><br>`;
-
-          // Construct expandable content for the new year
-          expandableContent = yearsArray.length > 1
-            ? `<details><summary><strong>${item.Year}</strong></summary>${sentence}</details>`
-            : sentence;
-
-          markerMap.set(latlng.toString(), {
-            count: 1,
-            popupContent: `${popupHeader}${expandableContent}`,
-            yearsAndDistances: [sentence],
-            years: yearsArray
-          });
-        }
-      });
-
-
-
-      // Prepare markers with averaged colors
-      const averagedMarkers = [];
-      markerMap.forEach((data, latlngString) => {
-        if (latlngString && typeof latlngString === 'string' && latlngString.includes(',')) {
-          const latLngArray = latlngString.slice(7, -1).split(',').map(Number);
-          if (latLngArray.length === 2 && !isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
-            let markerColor = '#000000';
-            if (data.years.length > 1) {
-              const medianYear = getMedianYear(data.years);
-              markerColor = yearColors[medianYear];
-            } else {
-              markerColor = yearColors[data.years];
-            }
-
-            const className = data.years.includes(highlightedYear) ? 'circular-marker highlighted' : 'circular-marker';
-
-            // Calculate contrast color for text based on averagedColor
-            let fontColor = ''
-            if (yearColors){
-              fontColor = getContrastColor(markerColor); // Adjust contrast color if needed
-            }
-           
-
-            const marker = L.marker(latLngArray, {
-              icon: L.divIcon({
-                html: `<div class="${className}" style="background-color: ${markerColor}; color: ${fontColor};">${data.count > 1 ? data.count : ''}</div>`,
-                className: '', // Leave className empty to avoid default styling
-                iconSize: [16, 16], // Set size to avoid default size
-                popupAnchor: [0, -8] // Adjust popup position if necessary
-              }),
-              interactive: true // Ensuring marker is interactive
-            }).bindPopup(data.popupContent, {
-              className: 'analog-county-popup', // Add this line
-              closeButton: false // Disable close button but keep popup open
-            })
-
-            averagedMarkers.push(marker);
+    
+        const yearsToCreateMarkers = [itemYear]; // Create an array with the current item's year
+    
+        // Loop through each year to create a marker
+        yearsToCreateMarkers.forEach(newYear => {
+          const sentence = `The climate in <strong>${item.TargetCountyName}, WI</strong> ${timeFrameString} <strong>${newYear}</strong> had ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`;
+    
+          const existingMarkerData = markerMap.get(latlng.toString());
+    
+          let yearsArray;
+          let popupHeader;
+          let yearsForPopupHeader;
+          let expandableContent = '';
+    
+          if (existingMarkerData) {
+            // Create a new entry for the additional year without modifying the existing content
+            yearsArray = [...new Set([...existingMarkerData.years, newYear])];
+    
+            // Prepare the popup header
+            yearsForPopupHeader = yearsArray.length === 1
+              ? `<strong>${yearsArray[0]}</strong>`
+              : yearsArray.length === 2
+                ? `<strong>${yearsArray[0]}</strong> and <strong>${yearsArray[1]}</strong>`
+                : `<strong>${yearsArray.slice(0, -1).join(', ')}</strong>, and <strong>${yearsArray[yearsArray.length - 1]}</strong>`;
+    
+            popupHeader = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
+    
+            // Push the new sentence into existing years and distances
+            existingMarkerData.yearsAndDistances.push(sentence);
+    
+            expandableContent = yearsArray.map((year, index) => {
+              const yearDetails = existingMarkerData.yearsAndDistances[index];
+              return `<details><summary class="expanded-summary"><strong>${year}</strong></summary><p>${yearDetails}</p></details>`;
+            }).join('');
+    
+            // Update the markerMap with the new data
+            markerMap.set(latlng.toString(), {
+              count: existingMarkerData.count + 1,
+              popupContent: `${popupHeader}${expandableContent}`,
+              yearsAndDistances: existingMarkerData.yearsAndDistances,
+              years: yearsArray
+            });
           } else {
-            console.error("Invalid coordinates:", latlngString);
+            // If no existing marker data, create a new entry
+            yearsArray = [newYear];
+    
+            popupHeader = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> in <strong>${newYear}</strong>.<br><br>`;
+    
+            expandableContent = yearsArray.length > 1
+              ? `<details><summary><strong>${newYear}</strong></summary>${sentence}</details>`
+              : sentence;
+    
+            markerMap.set(latlng.toString(), {
+              count: 1,
+              popupContent: `${popupHeader}${expandableContent}`,
+              yearsAndDistances: [sentence],
+              years: yearsArray
+            });
           }
-        } else {
-          console.error("Invalid latlngString format:", latlngString);
-        }
+    
+          // Prepare markers with averaged colors and dynamic opacity
+          const markerColor = yearsArray.includes(newYear) ? yearColors[newYear] : '#000000'; // Default color
+          const className = yearsArray.includes(highlightedYear) ? 'circular-marker highlighted' : 'circular-marker';
+          const fontColor = getContrastColor(markerColor);
+    
+          // Set the opacity for each marker based on the years in the data
+          const markerOpacity = yearsArray.some(year => year > highlightedYear) ? 0 : 1;
+    
+          const marker = L.marker(latlng, {
+            icon: L.divIcon({
+              html: `<div class="${className}" style="background-color: ${markerColor}; color: ${fontColor}; opacity: ${markerOpacity};">${existingMarkerData ? existingMarkerData.count + 1 : ''}</div>`,
+              className: '',
+              iconSize: [16, 16],
+              popupAnchor: [0, -8]
+            }),
+            interactive: true
+          }).bindPopup(`${popupHeader}${sentence}`, {
+            className: 'analog-county-popup',
+            closeButton: false
+          });
+    
+          averagedMarkers.push(marker);
+        });
       });
-
+    
       // Add averaged markers to map
       averagedMarkers.forEach(marker => {
         markersRef.current.push(marker);
         marker.addTo(map);
       });
-
-      // Fit map bounds with buffer once, when data is first added
+    
+      // Fit map bounds with buffer once
       if (!initialBoundsSet) {
         const bounds = L.latLngBounds(latLngs);
-        const buffer = 0.2; // Adjust the buffer as needed
+        const buffer = 0.2;
         map.fitBounds(bounds.pad(buffer));
       }
     }
+    
+    
+    
     else {
       // When targetYear is not 'top_analogs', fill counties with colors based on distance
       mapData.forEach((item) => {
