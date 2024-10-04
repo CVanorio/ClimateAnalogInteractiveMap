@@ -1,7 +1,7 @@
 /* Marker styling */
 .circular-marker {
   border-radius: 50%;
-  border: 2px solid white;
+  border: 0.5px solid black;
   /* width: 16px !important;
   height: 16px !important; */
   line-height: 14px;
