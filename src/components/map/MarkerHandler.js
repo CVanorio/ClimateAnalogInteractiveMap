@@ -161,6 +161,9 @@ const MarkerHandler = {
             });
           }
     
+          // Calculate the marker radius based on the count
+          const markerRadius = existingMarkerData ? Math.pow(existingMarkerData.count + 1, 0.5) * 15 : 15;
+    
           // Prepare markers with averaged colors and dynamic opacity
           const markerColor = yearsArray.includes(newYear) ? yearColors[newYear] : '#000000'; // Default color
           const className = yearsArray.includes(highlightedYear) ? 'circular-marker highlighted' : 'circular-marker';
@@ -171,10 +174,10 @@ const MarkerHandler = {
     
           const marker = L.marker(latlng, {
             icon: L.divIcon({
-              html: `<div class="${className}" style="background-color: ${markerColor}; color: ${fontColor}; opacity: ${markerOpacity};">${existingMarkerData ? existingMarkerData.count + 1 : ''}</div>`,
+              html: `<div class="${className}" style="background-color: ${markerColor}; color: ${fontColor}; opacity: ${markerOpacity}; width: ${markerRadius}px; height: ${markerRadius}px; border-radius: 50%;"></div>`,
               className: '',
-              iconSize: [16, 16],
-              popupAnchor: [0, -8]
+              iconSize: [markerRadius, markerRadius],
+              popupAnchor: [0, -markerRadius / 2]
             }),
             interactive: true
           }).bindPopup(`${popupHeader}${sentence}`, {
@@ -199,6 +202,7 @@ const MarkerHandler = {
         map.fitBounds(bounds.pad(buffer));
       }
     }
+    
     
     
     

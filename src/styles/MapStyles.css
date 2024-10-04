@@ -2,8 +2,8 @@
 .circular-marker {
   border-radius: 50%;
   border: 2px solid white;
-  width: 16px !important;
-  height: 16px !important;
+  /* width: 16px !important;
+  height: 16px !important; */
   line-height: 14px;
   text-align: center;
   font-size: 12px;
@@ -18,8 +18,8 @@
 .circular-marker.highlighted {
   border: 2px solid black; /* Adjust border color for highlighted marker */
   opacity: 1;
-  width: 20px !important; /* Important to ensure override */
-  height: 20px !important; /* Important to ensure override */
+  /* width: 20px !important;
+  height: 20px !important; */
   line-height: 18px;
   font-size: 16px;
   z-index: 1000; /* Higher z-index to ensure highlighted marker is above all others */
