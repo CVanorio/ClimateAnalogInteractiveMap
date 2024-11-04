@@ -56,6 +56,20 @@
   cursor: pointer;
 }
 
+p > a {
+  padding: 8px 16px;
+}
+
+p:has(> a) {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color:  white;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
 .selectPrompt {
   color: #888;
 }
@@ -316,7 +330,7 @@
   margin: 0; /* Remove margin */
   background-color: white; /* Ensure the background color is set */
   z-index: 1000; /* Ensure it's on top of other content */
-  width: 300px; /* Adjust the width to account for padding or margins on the sidebar */
+  width: 325px; /* Adjust the width to account for padding or margins on the sidebar */
   box-sizing: border-box; /* Include padding and border in width calculation */
 }
 

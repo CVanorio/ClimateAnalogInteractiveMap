@@ -23,7 +23,7 @@ const Sidebar = ({
   mapData,
   menuVisible
 }) => {
-  const [activeButton, setActiveButton] = useState('mapOptions');
+  //const [activeButton, setActiveButton] = useState('mapOptions');
   const [countyError, setCountyError] = useState('');
   const [timeFrameError, setTimeFrameError] = useState('');
   const [dataTypeError, setDataTypeError] = useState('');
@@ -50,7 +50,7 @@ const Sidebar = ({
   return (
     <div>
       <div className='sidebarContentContainter'>
-        <div className='buttonGroup'>
+        {/* <div className='buttonGroup'>
           <button
             className={`button ${activeButton === 'mapOptions' ? 'active' : ''}`}
             onClick={() => setActiveButton('mapOptions')}
@@ -65,9 +65,9 @@ const Sidebar = ({
           >
             <i className="fa-solid fa-circle-info"></i>
           </button>
-        </div>
+        </div> */}
 
-        {activeButton === 'mapOptions' ? (
+      {/* {activeButton === 'mapOptions' ? ( */}
           <div>
             <div className='menuSection'>
               <p>Target County</p>
@@ -116,15 +116,20 @@ const Sidebar = ({
               </button>
 
               <Tooltip place="top" type="dark" effect="solid" />
+              
             </div>
             )}
+
+            <div>
+                <p><a href="https://forms.gle/4fmWqfaXX9tvDdBu6" target="_blank" rel="noopener noreferrer">Click here to tell us what you think!</a></p>
+            </div>
             
 
           </div>
 
-        ) : (
+        {/* ) : (
           <MethodologyComponent />
-        )}
+        )} */}
 
       </div>
       {menuVisible && (

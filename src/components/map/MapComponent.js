@@ -120,9 +120,9 @@ const MapComponent = ({
     let timeFrameString = '';
 
   if (timeScale === 'by_season') {
-    timeFrameString = scaleValue && ['Winter', 'Spring', 'Summer', 'Fall'].includes(scaleValue) ? `${scaleValue}` : '';
+    timeFrameString = scaleValue && ['Winter', 'Spring', 'Summer', 'Fall'].includes(scaleValue) ? `for ${scaleValue}` : '';
   } else if (timeScale === 'by_month') {
-    timeFrameString = scaleValue ? `${monthName}` : '';
+    timeFrameString = scaleValue ? `for ${monthName}` : '';
   } else if (timeScale === 'by_year') {
     timeFrameString = ``
   }
@@ -143,9 +143,9 @@ const MapComponent = ({
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />
       <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}>
-      {mapData && targetYear != '' && (
+      {mapData && targetYear !== '' && (
         <div className="map-title-overlay">
-          <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analogs for 1895 ${highlightedYear === 1895 ? '' : `- ${highlightedYear}`} for ${timeFrameString} in ${selectedCounty}, WI` : `${dataTypeString} Climate Analogs for ${selectedCounty}, WI in ${timeFrameString} ${targetYearString}`}</h3>
+          <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analogs by year from 1895 ${highlightedYear === 1895 ? '' : `- ${highlightedYear}`} ${timeFrameString} for ${selectedCounty}, WI` : `${dataTypeString} Climate Analogs for ${selectedCounty}, WI ${timeFrameString} ${targetYearString}`}</h3>
         </div>
         )}
         {targetYear && targetYear !== 'top_analogs' && (
