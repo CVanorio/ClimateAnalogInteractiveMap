@@ -1,6 +1,6 @@
 .legend-container {
     position: absolute;
-    bottom: 1vh;
+    bottom: 1vh !important;
     left: 10px;
     z-index: 1000;
     background: white;

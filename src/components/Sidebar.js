@@ -102,9 +102,8 @@ const Sidebar = ({
                 />
                 
               </div>
-            </div>
-            {targetYear === 'top_analogs' && (
-              <div className='menuSection'>
+              {targetYear === 'top_analogs' && (
+              <div>
               <button
                 className={`chart-toggle ${showChart ? 'active' : ''}`}
                 onClick={toggleChart}
@@ -119,6 +118,8 @@ const Sidebar = ({
               
             </div>
             )}
+            </div>
+            
 
             <div>
                 <p><a href="https://forms.gle/4fmWqfaXX9tvDdBu6" target="_blank" rel="noopener noreferrer">Click here to tell us what you think!</a></p>

@@ -19,11 +19,11 @@ const TopAnalogsLegend = ({ yearColors }) => {
   const markerColor = yearColors[currentYear]; // Default color
 
   return (
-    <div className="legend-container">
-      <div className="legend-title">Top Analogs</div>
+    <div className="top-analogs-legend-container">
+      <div className="top-analogs-legend-title">Top Analogs</div>
 
       {/* Example for count 1 */}
-      <div className="legend-example" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '5px' }}>
+      <div className="top-analogs-legend-example" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '5px' }}>
         <div
           className="circular-marker"
           style={{
@@ -41,7 +41,7 @@ const TopAnalogsLegend = ({ yearColors }) => {
       </div>
 
       {/* Example for count 6 */}
-      <div className="legend-example" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '5px' }}>
+      <div className="top-analogs-legend-example" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '5px' }}>
         <div
           className="circular-marker"
           style={{
@@ -58,16 +58,16 @@ const TopAnalogsLegend = ({ yearColors }) => {
         <div>{`6`}</div>
       </div>
 
-      <div className="legend-rectangle-container">
+      <div className="top-analogs-legend-rectangle-container">
         <div className="legend-labels">
           {/* Display the current year dynamically */}
-          <div className="legend-high">{currentYear}</div>
+          <div className="top-analogs-legend-high">{currentYear}</div>
           {/* Apply the generated gradient as the background of the rectangle */}
           <div
-            className="legend-rectangle"
+            className="top-analogs-legend-rectangle"
             style={{ background: `linear-gradient(to top, ${gradient})` }}
           ></div>
-          <div className="legend-low">1895</div>
+          <div className="top-analogs-legend-low">1895</div>
         </div>
       </div>
     </div>
