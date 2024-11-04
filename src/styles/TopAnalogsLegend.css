@@ -1,0 +1,63 @@
+.legend-container {
+    position: absolute;
+    bottom: 10vh;
+    left: 10px;
+    z-index: 1000;
+    background: white;
+    padding: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    width: 75px; /* Adjust width as needed to make the legend narrower */
+  }
+  
+  .legend-title {
+    text-align: center;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .legend-rectangle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .legend-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    margin-right: 5px;
+  }
+  
+  .legend-high {
+    margin-bottom: 5px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .legend-rectangle {
+    height: 50px; /* Adjust height as needed */
+    width: 20px;
+    border-radius: 3px;
+    align-self: center;
+    opacity: 0.7;
+    border: 1px solid #dddddd;
+  }
+  
+  .legend-low {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .legend-best {
+    text-align: center;
+    margin-top: 10px;
+    padding: 2px;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+  

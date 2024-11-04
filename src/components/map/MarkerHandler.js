@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css'; // Ensure Leaflet CSS is imported
 import { ColorRampCollection } from "@maptiler/sdk";
 import { scaleSequential } from 'd3-scale';
-import { interpolateViridis, interpolateYlOrRd, interpolateSpectral, interpolateWarm, interpolatePlasma, interpolateInferno, interpolateTurbo} from 'd3-scale-chromatic';
+import {interpolateTurbo} from 'd3-scale-chromatic';
 import '../../styles/MapStyles.css';
 
 let coloredCounties = []; // Maintain a list of colored counties

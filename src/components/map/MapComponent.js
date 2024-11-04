@@ -11,6 +11,7 @@ import MarkerHandler from './MarkerHandler';
 import LoadingOverlay from './LoadingOverlay';
 import Slider from './Slider';
 import Legend from './Legend'; // Import the Legend component for the map's legend display
+import TopAnalogsLegend from './TopAnalogsLegend';
 import '../../styles/MapStyles.css'; // Import CSS file for map styles
 
 const MapComponent = ({
@@ -149,7 +150,13 @@ const MapComponent = ({
         </div>
         )}
         {targetYear && targetYear !== 'top_analogs' && (
-          <Legend className="legend"/> // Show Legend component when not viewing top analogs
+          <Legend className="legend"/> // Show regular Legend component when not viewing top analogs
+        )}
+        {targetYear && targetYear === 'top_analogs' && (
+          <TopAnalogsLegend className="topAnalogsLegend"
+            yearColors={yearColors}
+            years={years}
+          />
         )}
       </div>
       {mapData && targetYear === 'top_analogs' && (
