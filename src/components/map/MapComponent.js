@@ -69,9 +69,16 @@ const MapComponent = ({
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
   useEffect(() => {
+    // Recalculate map size when `menuVisible` or `showChart` changes
+    if (mapRef.current) {
+      mapRef.current.invalidateSize();
+    }
+  }, [menuVisible, showChart]);
+
+  useEffect(() => {
     if (years && years.length > 0) {
-      const minYear = 1895; //Math.min(...years);
-      const maxYear = new Date().getFullYear() - 1; //Math.max(...years);
+      const minYear = 1895;
+      const maxYear = new Date().getFullYear() - 1;
       let colorScale;
 
       // Determine color scale based on selected data type
@@ -118,17 +125,15 @@ const MapComponent = ({
     ? monthNames[parseInt(scaleValue, 10) - 1] // Convert "01" to "January", "02" to "February", etc.
     : scaleValue;
 
-    let timeFrameString = '';
+  let timeFrameString = '';
 
   if (timeScale === 'by_season') {
     timeFrameString = scaleValue && ['Winter', 'Spring', 'Summer', 'Fall'].includes(scaleValue) ? `for ${scaleValue}` : '';
   } else if (timeScale === 'by_month') {
     timeFrameString = scaleValue ? `for ${monthName}` : '';
-  } else if (timeScale === 'by_year') {
-    timeFrameString = ``
   }
 
-  let dataTypeString = ''
+  let dataTypeString = '';
 
   if (selectedDataType === 'both') {
     dataTypeString = `Temperature and Precipitation`;
@@ -138,7 +143,7 @@ const MapComponent = ({
     dataTypeString = 'Precipitation';
   }
 
-  const targetYearString = timeScale === 'by_season' && scaleValue === 'Winter' ? `${targetYear-1}-${targetYear}` : targetYear;
+  const targetYearString = timeScale === 'by_season' && scaleValue === 'Winter' ? `${targetYear - 1}-${targetYear}` : targetYear;
 
   return (
     <div style={{ position: 'relative' }}>
@@ -150,7 +155,7 @@ const MapComponent = ({
         </div>
         )}
         {targetYear && targetYear !== 'top_analogs' && (
-          <Legend className="legend"/> // Show regular Legend component when not viewing top analogs
+          <Legend className="legend" /> // Show regular Legend component when not viewing top analogs
         )}
         {targetYear && targetYear === 'top_analogs' && (
           <TopAnalogsLegend className="topAnalogsLegend"
