@@ -54,7 +54,7 @@ const MarkerHandler = {
     if (targetYear === 'top_analogs') {
       const latLngs = [];
       const averagedMarkers = [];
-    
+      
       mapData.forEach((item) => {
         const lat = Number(item.AnalogCountyLatitude);
         const lng = Number(item.AnalogCountyLongitude);
@@ -73,7 +73,6 @@ const MarkerHandler = {
         // Determine opacity based on whether the year is <= or > the highlighted year
         const opacity = itemYear > highlightedYear ? 0 : 1;
     
-        // Proceed with the rest of the marker creation logic
         const latlng = new L.LatLng(lat, lng);
         latLngs.push(latlng);
     
@@ -81,7 +80,6 @@ const MarkerHandler = {
           "January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"
         ];
-    
         const monthName = timeScale === 'by_month' && !isNaN(scaleValue)
           ? monthNames[parseInt(scaleValue, 10) - 1]
           : scaleValue;
@@ -102,106 +100,93 @@ const MarkerHandler = {
           ? `a <strong>total precipitation</strong> of <i class="fas fa-cloud-rain"></i> <strong>${Number(item.AnalogPrecipNormal)} in</strong>`
           : '';
     
-        const yearsToCreateMarkers = [itemYear]; // Create an array with the current item's year
+        const sentence = `The climate in <strong>${item.TargetCountyName}, WI</strong> ${timeFrameString} <strong>${itemYear}</strong> had ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`;
     
-        // Loop through each year to create a marker
-        yearsToCreateMarkers.forEach(newYear => {
-          const sentence = `The climate in <strong>${item.TargetCountyName}, WI</strong> ${timeFrameString} <strong>${newYear}</strong> had ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`;
+        const existingMarkerData = markerMap.get(latlng.toString());
     
-          const existingMarkerData = markerMap.get(latlng.toString());
+        let yearsArray;
+        let popupHeader;
+        let expandableContent = '';
     
-          let yearsArray;
-          let popupHeader;
-          let yearsForPopupHeader;
-          let expandableContent = '';
+        if (existingMarkerData) {
+          // Update years array to include the new year
+          yearsArray = [...new Set([...existingMarkerData.years, itemYear])];
     
-          if (existingMarkerData) {
-            // Create a new entry for the additional year without modifying the existing content
-            yearsArray = [...new Set([...existingMarkerData.years, newYear])];
+          const yearsForPopupHeader = yearsArray.length === 1
+            ? `<strong>${yearsArray[0]}</strong>`
+            : yearsArray.length === 2
+              ? `<strong>${yearsArray[0]}</strong> and <strong>${yearsArray[1]}</strong>`
+              : `<strong>${yearsArray.slice(0, -1).join(', ')}</strong>, and <strong>${yearsArray[yearsArray.length - 1]}</strong>`;
     
-            // Prepare the popup header
-            yearsForPopupHeader = yearsArray.length === 1
-              ? `<strong>${yearsArray[0]}</strong>`
-              : yearsArray.length === 2
-                ? `<strong>${yearsArray[0]}</strong> and <strong>${yearsArray[1]}</strong>`
-                : `<strong>${yearsArray.slice(0, -1).join(', ')}</strong>, and <strong>${yearsArray[yearsArray.length - 1]}</strong>`;
+          popupHeader = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
     
-            popupHeader = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
+          // Add new sentence to existingMarkerData.yearsAndDistances
+          existingMarkerData.yearsAndDistances.push(sentence);
     
-            // Push the new sentence into existing years and distances
-            existingMarkerData.yearsAndDistances.push(sentence);
+          // Construct expandable content for each year if there are multiple years
+          expandableContent = yearsArray.map((year, index) => {
+            const yearDetails = existingMarkerData.yearsAndDistances[index];
+            return `<details><summary class="expanded-summary"><strong>${year}</strong></summary><p>${yearDetails}</p></details>`;
+          }).join('');
     
-            expandableContent = yearsArray.map((year, index) => {
-              const yearDetails = existingMarkerData.yearsAndDistances[index];
-              return `<details><summary class="expanded-summary"><strong>${year}</strong></summary><p>${yearDetails}</p></details>`;
-            }).join('');
-    
-            // Update the markerMap with the new data
-            markerMap.set(latlng.toString(), {
-              count: existingMarkerData.count + 1,
-              popupContent: `${popupHeader}${expandableContent}`,
-              yearsAndDistances: existingMarkerData.yearsAndDistances,
-              years: yearsArray
-            });
-          } else {
-            // If no existing marker data, create a new entry
-            yearsArray = [newYear];
-    
-            popupHeader = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> in <strong>${newYear}</strong>.<br><br>`;
-    
-            expandableContent = yearsArray.length > 1
-              ? `<details><summary><strong>${newYear}</strong></summary>${sentence}</details>`
-              : sentence;
-    
-            markerMap.set(latlng.toString(), {
-              count: 1,
-              popupContent: `${popupHeader}${expandableContent}`,
-              yearsAndDistances: [sentence],
-              years: yearsArray
-            });
-          }
-    
-          // Calculate the marker radius based on the count
-          const markerRadius = existingMarkerData ? Math.pow(existingMarkerData.count + 1, 0.5) * 15 : 15;
-    
-          // Prepare markers with averaged colors and dynamic opacity
-          const markerColor = yearsArray.includes(newYear) ? yearColors[newYear] : '#000000'; // Default color
-          const className = yearsArray.includes(highlightedYear) ? 'circular-marker highlighted' : 'circular-marker';
-          const fontColor = getContrastColor(markerColor);
-    
-          // Set the opacity for each marker based on the years in the data
-          const markerOpacity = yearsArray.some(year => year > highlightedYear) ? 0 : 1;
-    
-          const marker = L.marker(latlng, {
-            icon: L.divIcon({
-              html: `<div class="${className}" style="background-color: ${markerColor}; color: ${fontColor}; opacity: ${markerOpacity}; width: ${markerRadius}px; height: ${markerRadius}px; border-radius: 50%;"></div>`,
-              className: '',
-              iconSize: [markerRadius, markerRadius],
-              popupAnchor: [0, -markerRadius / 2]
-            }),
-            interactive: true
-          }).bindPopup(`${popupHeader}${sentence}`, {
-            className: 'analog-county-popup',
-            closeButton: false
+          // Update marker data
+          markerMap.set(latlng.toString(), {
+            count: existingMarkerData.count + 1,
+            popupContent: `${popupHeader}${expandableContent}`,
+            yearsAndDistances: existingMarkerData.yearsAndDistances,
+            years: yearsArray
           });
+        } else {
+          // Create new entry for markers without existing data
+          yearsArray = [itemYear];
     
-          averagedMarkers.push(marker);
+          popupHeader = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> in <strong>${itemYear}</strong>.<br><br>`;
+    
+          expandableContent = sentence;
+    
+          markerMap.set(latlng.toString(), {
+            count: 1,
+            popupContent: `${popupHeader}${expandableContent}`,
+            yearsAndDistances: [sentence],
+            years: yearsArray
+          });
+        }
+    
+        const markerRadius = existingMarkerData ? Math.pow(existingMarkerData.count + 1, 0.5) * 15 : 15;
+        const markerColor = yearsArray.includes(itemYear) ? yearColors[itemYear] : '#000000';
+        const className = yearsArray.includes(highlightedYear) ? 'circular-marker highlighted' : 'circular-marker';
+        const fontColor = getContrastColor(markerColor);
+        const markerOpacity = yearsArray.some(year => year > highlightedYear) ? 0 : 1;
+    
+        const marker = L.marker(latlng, {
+          icon: L.divIcon({
+            html: `<div class="${className}" style="background-color: ${markerColor}; color: ${fontColor}; opacity: ${markerOpacity}; width: ${markerRadius}px; height: ${markerRadius}px; border-radius: 50%;"></div>`,
+            className: '',
+            iconSize: [markerRadius, markerRadius],
+            popupAnchor: [0, -markerRadius / 2]
+          }),
+          interactive: true
+        }).bindPopup(`${popupHeader}${expandableContent}`, {
+          className: 'analog-county-popup',
+          closeButton: false
         });
+    
+        averagedMarkers.push(marker);
       });
     
-      // Add averaged markers to map
       averagedMarkers.forEach(marker => {
         markersRef.current.push(marker);
         marker.addTo(map);
       });
     
-      // Fit map bounds with buffer once
       if (!initialBoundsSet) {
         const bounds = L.latLngBounds(latLngs);
         const buffer = 0.2;
         map.fitBounds(bounds.pad(buffer));
       }
     }
+    
+    
     
     
     

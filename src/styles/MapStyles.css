@@ -116,12 +116,16 @@
 
 
 summary {
-  font-size: 16px; /* Adjust the size as needed */
+  font-size: 14px; /* Adjust the size as needed */
   font-weight: bold; /* Optional: Make the text bold */
 }
 
 details > p {
-  margin-bottom: 5px;
+  margin-bottom: 5px !important;
   margin-top: 0px !important;
+}
+
+details {
+  margin-bottom: 5px
 }
 

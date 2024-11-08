@@ -351,15 +351,11 @@ p:has(> a) {
   position: relative; /* Ensure it is positioned correctly in the layout */
 }
 
-details {
-  margin-bottom: 1em;
-}
-
 summary {
   cursor: pointer;
   font-weight: bold;
   background-color: #f0f0f0;
-  padding: 0.5em;
+  padding: 0.3em;
   border-radius: 5px;
 }
 
