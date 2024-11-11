@@ -11,16 +11,23 @@
 
 /* Make the tooltip take the width of the parent container */
 .introjs-tooltip {
-  width: 75vw !important; /* Set width to 100% to match the parent's width */
-  max-width: none !important; /* Remove any maximum width if present */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  width: 70vw !important;  /* Sets the width to 70% of the viewport width */
+  max-width: 100vw !important; /* Ensures it won't exceed viewport width */
+  height: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 55vh;
 }
 
-/* Set a fixed height for the tooltip and enable scrolling */
+/* Set a fixed height for the tooltip text and enable scrolling */
 .introjs-tooltip .introjs-tooltiptext {
-  max-height: 400px; /* Set your desired height here */
-  overflow-y: auto; /* Enable vertical scrolling if content exceeds the height */
+  max-height: 50vh; /* Restricts height to 65% of the viewport height */
+  overflow-y: auto; /* Enables vertical scrolling for overflow */
+  padding: 0 10vw; /* Left and right padding */
 }
+
 
 /* Optional: Adjust the tooltip arrow position */
 .introjs-tooltip .introjs-tooltiparrow {

@@ -58,7 +58,7 @@
   cursor: pointer;
 }
 
-p > a {
+.surveyLink {
   padding: 8px 16px;
 }
 
