@@ -413,23 +413,26 @@ const MarkerHandler = {
             }
           }
 
-          // Add marker with popup
+           // Remove the existing marker if it exists
+          if (currentMarker) {
+            map.removeLayer(currentMarker);
+          }
+
           currentMarker = L.marker([latitude, longitude], { icon })
             .addTo(map);
-            currentMarker.closePopup(); //automatically close the popup
 
-          // Open the popup manually
+          // Open the popup if it has content
           if (mapData.length > 0) {
-            L.marker([latitude, longitude], { icon })
+            // Add a new marker with the popup
+            currentMarker = L.marker([latitude, longitude], { icon })
             .bindPopup(popupContent, {
               className: 'target-county-popup', // Add this line
-              closeButton: false // Disable close button but keep popup open
+              closeButton: false, // Disable close button but keep popup open
             })
             .addTo(map);
 
-            currentMarker.openPopup(); // open the popup if it has content
+            currentMarker.openPopup();
           }
-
           // Add event listener to manage custom popup visibility
           map.on('popupopen', function (e) {
             if (e.popup !== currentMarker.getPopup()) {
