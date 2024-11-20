@@ -116,9 +116,15 @@ const Slider = ({
 
   // Toggle play/pause state
   const togglePlay = () => {
+    const currentIndex = years.findIndex((year) => year === highlightedYear);
+
+    // Reset to the first year if at the last year
+    if (currentIndex === years.length - 1) {
+      onChange(years[0]);
+    }
+
     togglePlayPause();
   };
-
   // Show or hide speed options dropdown
   const toggleSpeedOptions = () => {
     setShowSpeedOptions(!showSpeedOptions);
