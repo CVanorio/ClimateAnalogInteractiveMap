@@ -73,7 +73,7 @@ const MarkerHandler = {
         // Determine opacity based on whether the year is <= or > the highlighted year
         const opacity = itemYear > highlightedYear ? 0 : 1;
         let latlng = null;
-        if (lat != null && lng != null){
+        if (lat !== null && lng !== null){
           latlng = new L.LatLng(lat, lng);
           latLngs.push(latlng);
         }
@@ -198,14 +198,14 @@ const MarkerHandler = {
       // When targetYear is not 'top_analogs', fill counties with colors based on distance
       let latlngs = [];
       mapData.forEach((item) => {
-        if (item.AnalogCountyName != null){
+        if (item.AnalogCountyName !== null){
           const countyKey = `${item.AnalogCountyName}`;
         const stateKey = `${item.AnalogCountyStateAbbr}`;
         const fillColor = getColorForDistance(Number(item.Distance));
         const lat = Number(item.AnalogCountyLatitude);
         const lng = Number(item.AnalogCountyLongitude);
         let latlng = null;
-        if (lat != null && lng != null) {
+        if (lat !== null && lng !== null) {
           latlng = new L.LatLng(lat, lng);
           latLngs.push(latlng);
         }

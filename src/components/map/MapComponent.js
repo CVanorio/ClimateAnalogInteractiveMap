@@ -9,6 +9,7 @@ import countyData from '../../data/us-counties.json';
 import MapInitialization from './MapInitialization';
 import MarkerHandler from './MarkerHandler';
 import LoadingOverlay from './LoadingOverlay';
+import NoDataOverlay from './NoDataOverlay';
 import Slider from './Slider';
 import Legend from './Legend'; // Import the Legend component for the map's legend display
 import TopAnalogsLegend from './TopAnalogsLegend';
@@ -148,6 +149,9 @@ const MapComponent = ({
   return (
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />
+      {mapData.length == 0 && targetYear !== '' && timeScale !== '' && (timeScale !== 'by_year' && scaleValue !== '') && (
+        <NoDataOverlay />
+      )}
       <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}>
       {mapData && targetYear !== '' && (
         <div className="map-title-overlay">

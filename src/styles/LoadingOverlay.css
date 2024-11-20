@@ -31,9 +31,14 @@
   .spinner {
     margin-bottom: 20px; /* Space between text and spinner */
   }
+
+  .noData {
+    font-size: 80px;
+    margin-bottom: 10px;
+    color: #ffbc11;
+  }
   
   .subtext {
     color: black;
     font-size: 18px; /* Increased font size */
   }
-  
