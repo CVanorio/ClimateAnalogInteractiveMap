@@ -74,23 +74,32 @@ const Slider = ({
     }
   };
 
-  // Update interval based on selected speed
   const updateInterval = (selectedSpeed) => {
-    let interval = 1000;
+    let interval = 1000; // Default to 1x speed
     if (selectedSpeed === 2) {
-      interval = 500;
+      interval = 500; // 2x speed
     } else if (selectedSpeed === 3) {
-      interval = 300;
+      interval = 300; // 3x speed
     }
-
+  
     clearInterval(intervalRef.current);
+  
     intervalRef.current = setInterval(() => {
       const currentIndex = years.findIndex((year) => year === highlightedYear);
-      const nextIndex = (currentIndex + 1) % years.length;
+  
+      // If at the last year, stop the interval
+      if (currentIndex === years.length - 1) {
+        clearInterval(intervalRef.current);
+        togglePlayPause(false); // Ensure the play button updates
+        return;
+      }
+  
+      const nextIndex = currentIndex + 1;
       onChange(years[nextIndex]);
       updateThumbPosition(sliderRef.current);
     }, interval);
   };
+  
 
   // Update the thumb position based on the slider's value
   const updateThumbPosition = (slider) => {
