@@ -413,14 +413,12 @@ const MarkerHandler = {
             }
           }
 
-           // Remove the existing marker if it exists
-          if (currentMarker) {
-            map.removeLayer(currentMarker);
-          }
-
-          currentMarker = L.marker([latitude, longitude], { icon })
+          if (mapData.length == 0)
+          {
+            currentMarker = L.marker([latitude, longitude], { icon })
             .addTo(map);
-
+          }
+          
           // Open the popup if it has content
           if (mapData.length > 0) {
             // Add a new marker with the popup
@@ -431,7 +429,7 @@ const MarkerHandler = {
             })
             .addTo(map);
 
-            currentMarker.openPopup();
+            //currentMarker.openPopup();
           }
           // Add event listener to manage custom popup visibility
           map.on('popupopen', function (e) {
