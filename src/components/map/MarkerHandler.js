@@ -118,7 +118,7 @@ const MarkerHandler = {
               ? `<strong>${yearsArray[0]}</strong> and <strong>${yearsArray[1]}</strong>`
               : `<strong>${yearsArray.slice(0, -1).join(', ')}</strong>, and <strong>${yearsArray[yearsArray.length - 1]}</strong>`;
     
-          popupHeader = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
+          popupHeader = `The climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
     
           // Add new sentence to existingMarkerData.yearsAndDistances
           existingMarkerData.yearsAndDistances.push(sentence);
@@ -140,7 +140,7 @@ const MarkerHandler = {
           // Create new entry for markers without existing data
           yearsArray = [itemYear];
     
-          popupHeader = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> in <strong>${itemYear}</strong>.<br><br>`;
+          popupHeader = `The climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> in <strong>${itemYear}</strong>.<br><br>`;
     
           expandableContent = sentence;
     
@@ -231,7 +231,7 @@ const MarkerHandler = {
         let rankText = `the <strong>${getOrdinal(Number(item.AnalogRank))}</strong> best analog match`;
 
         // Combine the text parts
-        const popupContent = `The typical climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`; /*</br>When compared to ${item.TargetCountyName}, WI ${timeFrameString} <strong>${targetYear}</strong> it has ${differenceScoreText} and is ${rankText}.`;*/
+        const popupContent = `The climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`; /*</br>When compared to ${item.TargetCountyName}, WI ${timeFrameString} <strong>${targetYear}</strong> it has ${differenceScoreText} and is ${rankText}.`;*/
         // Update the existing county layer's style and popup
         map.eachLayer((layer) => {
           if (layer.feature && layer.feature.properties && layer.feature.properties.COUNTYNAME === countyKey && layer.feature.properties.STATEABBR === stateKey) {
@@ -370,7 +370,7 @@ const MarkerHandler = {
 
           // Create the popup content based on mapData
           let popupContent = '';
-          if (mapData) {
+          if (mapData.length > 0) {
             const data = mapData.find(item => `${item.TargetCountyName}` === targetCounty);
 
             if (data) {
@@ -415,15 +415,19 @@ const MarkerHandler = {
 
           // Add marker with popup
           currentMarker = L.marker([latitude, longitude], { icon })
+            .addTo(map);
+            currentMarker.closePopup(); //automatically close the popup
+
+          // Open the popup manually
+          if (mapData.length > 0) {
+            L.marker([latitude, longitude], { icon })
             .bindPopup(popupContent, {
               className: 'target-county-popup', // Add this line
               closeButton: false // Disable close button but keep popup open
             })
             .addTo(map);
 
-          // Open the popup manually
-          if (mapData) {
-            currentMarker.openPopup(); // Ensure the popup is visible immediately
+            currentMarker.openPopup(); // open the popup if it has content
           }
 
           // Add event listener to manage custom popup visibility
