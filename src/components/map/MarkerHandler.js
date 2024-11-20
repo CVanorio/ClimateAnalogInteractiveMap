@@ -179,11 +179,11 @@ const MarkerHandler = {
         marker.addTo(map);
       });
     
-      if (!initialBoundsSet) {
+     // if (!initialBoundsSet) {
         const bounds = L.latLngBounds(latLngs);
         const buffer = 0.2;
         map.fitBounds(bounds.pad(buffer));
-      }
+     // }
     }
     
     
@@ -193,10 +193,15 @@ const MarkerHandler = {
     
     else {
       // When targetYear is not 'top_analogs', fill counties with colors based on distance
+      let latlngs = [];
       mapData.forEach((item) => {
         const countyKey = `${item.AnalogCountyName}`;
         const stateKey = `${item.AnalogCountyStateAbbr}`;
         const fillColor = getColorForDistance(Number(item.Distance));
+        const lat = Number(item.AnalogCountyLatitude);
+        const lng = Number(item.AnalogCountyLongitude);
+        const latlng = new L.LatLng(lat, lng);
+        latLngs.push(latlng);
 
         // Convert month number to month name
         const monthNames = [
@@ -284,6 +289,9 @@ const MarkerHandler = {
           }
         });
       });
+      const bounds = L.latLngBounds(latLngs);
+      const buffer = 0.2;
+      map.fitBounds(bounds.pad(buffer));
     }
 
   },
