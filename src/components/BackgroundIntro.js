@@ -58,14 +58,14 @@ export const startIntro = async () => {
                 element: '.body', // Ensure this class exists in your HTML
                 intro: `
                     <div style="text-align: left;">
-                        <h2 style="text-align: center;">How Does Wisconsin’s Historical Climate Compare to the Rest of the United States?</h2>
+                        <h2 style="text-align: center;">How Does Wisconsin’s Historical Climate Compare to the Present Climate across the United States?</h2>
 
                         <p>
-                            Climate change is affecting our world, and understanding how Wisconsin’s climate has changed over time helps us predict what might happen in the future.
+                            Climate change is affecting our world, and understanding how Wisconsin’s climate has changed over time helps us put future climate change into perspective.
                         </p>
 
                         <p>
-                            Imagine being able to experience what Wisconsin’s climate was like in the past. While we can’t travel back in time, our tool uses “climate analogs”—places that had similar weather in different time periods—to show how Wisconsin’s climate compares to other locations today. This helps us see long-term changes and patterns in the climate.
+                            Imagine being able to experience what Wisconsin’s climate was like in the past. While we can’t travel back in time, our tool uses “climate analogs”—places whose present climate resembles past conditions in Wisconsin—to show how Wisconsin’s climate in a previous month, season, or year compares to the average present-day climate of other locations. This helps us visualize long-term changes and short term variability in the climate.
                         </p>
 
                         <p style="text-align: center;">
@@ -83,7 +83,7 @@ export const startIntro = async () => {
             <div>
                 <h3 style="text-align: center;">Why It Matters</h3>
                 <p>
-                    Understanding these climate comparisons is important for seeing how climate changes have impacted different areas over time. It helps us make informed decisions about how to deal with current and future climate challenges. By looking at the past, we can learn more about climate change and find ways to address the challenges ahead.
+                    These climate comparisons are important for interpreting how changes in our climate. They help us make informed decisions about how to address current and future climate challenges. By examining at the past, we can learn more about climate change and find ways to navigate the challenges ahead.
                 </p>
                 <p>
                     This tool supports the Wisconsin State Climatology Office’s goal of providing useful climate information for everyone in Wisconsin. It makes it easier to explore and understand Wisconsin’s climate history.
@@ -99,12 +99,12 @@ export const startIntro = async () => {
                 intro: `
         <div>
             <h3 style="text-align: center;">How It Works</h3>
-            <p>Our tool compares Wisconsin’s past climate to current climates in other U.S. locations. For example:</p>
+            <p>Our tool compares variations in Wisconsin’s past climate, based on temperature and precipitation, to the 1991-2020 averages of other locations across the U.S. For example:</p>
             <ul>
-                <li>In January 1904, Dane County, Wisconsin was colder and drier. The closest match today is central North Dakota, showing how the climate has changed.</li>
-                <li>In September 2019, Dane County was warmer and wetter. Western North Carolina today matches Dane County’s conditions at that time.</li>
+                <li>In January 1904, Dane County, Wisconsin was colder and drier than most Januaries nowadays. The current climate of central North Dakota is the clostest atch to Dane County's January 1904 climate.</li>
+                <li>In September 2019, Dane County was warmer and wetter than usual. The current climate of western North Carolina is the closest match to Dane County's climate in September 2019.</li>
             </ul>
-            <p>This approach reveals how Wisconsin’s climate has shifted over time, providing insight into historical climate trends and variability.</p>
+            <p>This approach reveals how Wisconsin’s climate compares to other regions in the United States and has varied and trended over time. You can use your own experiences with the current climate to better interpret the past data.</p>
             <p style="text-align: center;">
                 Click <strong>"Next"</strong> to learn how to use the map.
             </p>
