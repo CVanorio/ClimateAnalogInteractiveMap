@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/LoadingOverlay.css'; // Import the CSS file for styling
 
-const NoDataOverlay = ({}) => {
+const NoDataOverlay = () => {
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
