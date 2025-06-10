@@ -84,7 +84,7 @@ const App = () => {
         />
         <SidebarOverlay loading={loading} />
       </aside>
-      <section className="map-container">
+      <section id='map-container' className="map-container">
         <MapComponent
           selectedCounty={selectedCounty}
           timeScale={timeScale}

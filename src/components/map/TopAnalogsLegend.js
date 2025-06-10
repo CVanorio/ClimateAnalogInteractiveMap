@@ -27,17 +27,17 @@ const TopAnalogsLegend = ({ yearColors }) => {
         <div
           className="circular-marker"
           style={{
-            backgroundColor: markerColor,
+            backgroundColor: 'white',
             color: '#000000',
             width: `${getMarkerRadius(markerCount1)}px`,
             height: `${getMarkerRadius(markerCount1)}px`,
             borderRadius: '50%',
-            display: 'inline-block',
+            display: 'block',
             opacity: 1, // Set opacity to 1 to make the marker visible
             marginRight: '5px' // Add some spacing between marker and label
           }}
         ></div>
-        <div>{`1`}</div>
+        <div>{`fewer`}</div>
       </div>
 
       {/* Example for count 6 */}
@@ -45,17 +45,17 @@ const TopAnalogsLegend = ({ yearColors }) => {
         <div
           className="circular-marker"
           style={{
-            backgroundColor: markerColor,
+            backgroundColor: 'white',
             color: '#000000',
             width: `${getMarkerRadius(markerCount6)}px`,
             height: `${getMarkerRadius(markerCount6)}px`,
             borderRadius: '50%',
-            display: 'inline-block',
+            display: 'block',
             opacity: 1, // Set opacity to 1 to make the marker visible
             marginRight: '5px' // Add some spacing between marker and label
           }}
         ></div>
-        <div>{`6`}</div>
+        <div>{`more`}</div>
       </div>
 
       <div className="top-analogs-legend-rectangle-container">

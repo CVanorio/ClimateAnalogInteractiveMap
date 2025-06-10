@@ -144,14 +144,21 @@ const MapComponent = ({
     dataTypeString = 'Precipitation';
   }
 
+  
+  // console.log(targetYear)
+  // console.log(timeScale)
+  // console.log(scaleValue)
+
   const targetYearString = timeScale === 'by_season' && scaleValue === 'Winter' ? `${targetYear - 1}-${targetYear}` : targetYear;
 
   return (
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />
-      {mapData.length == 0 && targetYear !== '' && timeScale !== '' && (timeScale !== 'by_year' && scaleValue !== '') && (
-        <NoDataOverlay />
-      )}
+      {/* {mapData && mapData.length === 0 && targetYear !== '' && timeScale !== '' && (timeScale !== 'by_year' && scaleValue !== '') && (
+        <NoDataOverlay 
+        loading={loading}
+         />
+      )} */}
       <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}>
       {mapData && targetYear !== '' && (
         <div className="map-title-overlay">

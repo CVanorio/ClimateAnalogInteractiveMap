@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/LoadingOverlay.css'; // Import the CSS file for styling
 
-const NoDataOverlay = () => {
+const NoDataOverlay = ({ loading }) => {
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
-    setShowOverlay(true);
-    
-  }, []); // Effect runs when `loading` state changes
+    let timer;
+
+    if (!loading) {
+      // Show overlay only when loading is false, with a delay to prevent flicker
+      timer = setTimeout(() => {
+        setShowOverlay(true);
+      }, 500); // Delay for better user experience
+    } else {
+      // Hide the overlay immediately when loading starts
+      setShowOverlay(false);
+    }
+
+    // Cleanup the timer
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   return (
     showOverlay && (

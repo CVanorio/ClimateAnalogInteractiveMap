@@ -89,11 +89,11 @@ const MarkerHandler = {
     
         let timeFrameString = '';
         if (timeScale === 'by_season') {
-          timeFrameString = `in the <strong>${scaleValue}</strong>`;
+          timeFrameString = `<strong>${scaleValue}</strong>`;
         } else if (timeScale === 'by_month') {
-          timeFrameString = `in <strong>${monthName}</strong>`;
+          timeFrameString = `<strong>${monthName}</strong>`;
         } else if (timeScale === 'by_year') {
-          timeFrameString = `for the year`;
+          timeFrameString = `<strong>annual</strong>`;
         }
     
         let temperatureText = selectedDataType === 'temperature' || selectedDataType === 'both'
@@ -103,7 +103,7 @@ const MarkerHandler = {
           ? `a <strong>total precipitation</strong> of <i class="fas fa-cloud-rain"></i> <strong>${Number(item.AnalogPrecipNormal)} in</strong>`
           : '';
     
-        const sentence = `The climate in <strong>${item.TargetCountyName}, WI</strong> ${timeFrameString} <strong>${itemYear}</strong> had ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`;
+        const sentence = `The ${timeFrameString} <strong>${itemYear}</strong> climate in <strong>${item.TargetCountyName}, WI</strong> had ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`;
     
         const existingMarkerData = markerMap.get(latlng.toString());
     
@@ -121,7 +121,7 @@ const MarkerHandler = {
               ? `<strong>${yearsArray[0]}</strong> and <strong>${yearsArray[1]}</strong>`
               : `<strong>${yearsArray.slice(0, -1).join(', ')}</strong>, and <strong>${yearsArray[yearsArray.length - 1]}</strong>`;
     
-          popupHeader = `The climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
+          popupHeader = `The ${timeFrameString} climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
     
           // Add new sentence to existingMarkerData.yearsAndDistances
           existingMarkerData.yearsAndDistances.push(sentence);
@@ -171,7 +171,7 @@ const MarkerHandler = {
           interactive: true
         }).bindPopup(`${popupHeader}${expandableContent}`, {
           className: 'analog-county-popup',
-          closeButton: false
+          closeButton: true
         });
     
         averagedMarkers.push(marker);
@@ -205,7 +205,7 @@ const MarkerHandler = {
         const lat = Number(item.AnalogCountyLatitude);
         const lng = Number(item.AnalogCountyLongitude);
         let latlng = null;
-        if (lat !== null && lng !== null) {
+        if (lat !== null && !isNaN(lat) && lng !== null && !isNaN(lng)) {
           latlng = new L.LatLng(lat, lng);
           latLngs.push(latlng);
         }
@@ -224,11 +224,11 @@ const MarkerHandler = {
         let timeFrameString = '';
 
         if (timeScale === 'by_season') {
-          timeFrameString = `in the <strong>${scaleValue}</strong>`;
+          timeFrameString = `<strong>${scaleValue}</strong>`;
         } else if (timeScale === 'by_month') {
-          timeFrameString = `in <strong>${monthName}</strong>`;
+          timeFrameString = `<strong>${monthName}</strong>`;
         } else if (timeScale === 'by_year') {
-          timeFrameString = `for the year`
+          timeFrameString = `<strong>annual</strong>`
         }
 
         // Construct popup content based on selectedDataType
@@ -241,10 +241,10 @@ const MarkerHandler = {
         //let differenceScoreText = `a <strong>Climate Difference Score</strong> of <strong>${Number(item.Distance)}</strong>`;
 
         // Update the rankText variable
-        let rankText = `the <strong>${getOrdinal(Number(item.AnalogRank))}</strong> best analog match`;
+        //let rankText = `the <strong>${getOrdinal(Number(item.AnalogRank))}</strong> best analog match`;
 
         // Combine the text parts
-        const popupContent = `The climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`; /*</br>When compared to ${item.TargetCountyName}, WI ${timeFrameString} <strong>${targetYear}</strong> it has ${differenceScoreText} and is ${rankText}.`;*/
+        const popupContent = `The ${timeFrameString} climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`; /*</br>When compared to ${item.TargetCountyName}, WI ${timeFrameString} <strong>${targetYear}</strong> it has ${differenceScoreText} and is ${rankText}.`;*/
         // Update the existing county layer's style and popup
         map.eachLayer((layer) => {
           if (layer.feature && layer.feature.properties && layer.feature.properties.COUNTYNAME === countyKey && layer.feature.properties.STATEABBR === stateKey) {
@@ -265,7 +265,7 @@ const MarkerHandler = {
               const topAnalogMarker = L.marker([latitude, longitude], { icon: topAnalogIcon })
                 .bindPopup(popupContent, {
                   className: 'analog-county-popup', // Add this line
-                  closeButton: false // Disable close button but keep popup open
+                  closeButton: true // Disable close button but keep popup open
                 })
                 .addTo(map)
                 .openPopup(); // Automatically open the popup
@@ -434,7 +434,7 @@ const MarkerHandler = {
             }
           }
 
-          if (mapData.length == 0)
+          if (mapData.length === 0)
           {
             currentMarker = L.marker([latitude, longitude], { icon })
             .addTo(map);
@@ -446,7 +446,7 @@ const MarkerHandler = {
             currentMarker = L.marker([latitude, longitude], { icon })
             .bindPopup(popupContent, {
               className: 'target-county-popup', // Add this line
-              closeButton: false, // Disable close button but keep popup open
+              closeButton: true, // Disable close button but keep popup open
             })
             .addTo(map);
 

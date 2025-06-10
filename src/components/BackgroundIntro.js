@@ -65,7 +65,7 @@ export const startIntro = async () => {
                         </p>
 
                         <p>
-                            Imagine being able to experience what Wisconsin’s climate was like in the past. While we can’t travel back in time, our tool uses “climate analogs”—places whose present climate resembles past conditions in Wisconsin—to show how Wisconsin’s climate in a previous month, season, or year compares to the average present-day climate of other locations. This helps us visualize long-term changes and short term variability in the climate.
+                            Imagine being able to experience what Wisconsin’s climate was like in the past. While we can’t travel back in time, our tool uses “climate analogs”—places whose present climate resembles past conditions in Wisconsin—to show how Wisconsin’s climate in a previous month, season, or year compares to the average present-day climate of other locations. The present day climate is an average from 1991-2020. The past climate is an average of any individual month, season, or year between 1895 to the current year. This helps us visualize long-term changes and short term variability in the climate.
                         </p>
 
                         <p style="text-align: center;">
@@ -101,10 +101,10 @@ export const startIntro = async () => {
             <h3 style="text-align: center;">How It Works</h3>
             <p>Our tool compares variations in Wisconsin’s past climate, based on temperature and precipitation, to the 1991-2020 averages of other locations across the U.S. For example:</p>
             <ul>
-                <li>In January 1904, Dane County, Wisconsin was colder and drier than most Januaries nowadays. The current climate of central North Dakota is the clostest atch to Dane County's January 1904 climate.</li>
+                <li>In January 1904, Dane County, Wisconsin was colder and drier than most Januaries nowadays. The current climate of central North Dakota is the closest match to Dane County's January 1904 climate.</li>
                 <li>In September 2019, Dane County was warmer and wetter than usual. The current climate of western North Carolina is the closest match to Dane County's climate in September 2019.</li>
             </ul>
-            <p>This approach reveals how Wisconsin’s climate compares to other regions in the United States and has varied and trended over time. You can use your own experiences with the current climate to better interpret the past data.</p>
+            <p>This approach reveals how Wisconsin’s climate compares to other regions in the United States and has varied and trended over time. You can use your own experiences with the current climate to interpret the past data.</p>
             <p style="text-align: center;">
                 Click <strong>"Next"</strong> to learn how to use the map.
             </p>
@@ -150,7 +150,7 @@ export const startIntro = async () => {
         <div>
             <h3 style="text-align: center;">Viewing Climate Analogs</h3>
             <img src="${filledCounties}" alt="Climate analogs map" style="width: 75%; height: auto; margin: 20px auto; display: block; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);" />
-            <p>The map displays the top 150 climate analogs for your chosen county and time frame. Counties with deeper red colors are the closest matches, while shades closer to blue indicate less similar climates. The top match is highlighted with a star icon <i class="fa-solid fa-star"></i>.</p>
+            <p>The map displays the top climate analogs for your chosen county and time frame. Counties with deeper red colors are the closest matches, while shades closer to blue indicate less similar climates. The top match is highlighted with a star icon <i class="fa-solid fa-star"></i>.</p>
 
         </div>
     `,
@@ -177,7 +177,7 @@ export const startIntro = async () => {
                 <div>
                     <h3 style="text-align: center;">Selecting a Climate Variable</h3>
                     <img src="${climateVariables}" alt="Select a climate variable" style="width: 50%; height: auto; margin: 20px auto; display: block; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);" />
-                    <p>Choose between temperature and precipitation combined, temperature only, or precipitation only to refine the climate analog results.</p>
+                    <p>The standard climate analog uses a combination of temperature and precipitation. You can dig deeper by exploring temperature or precipitation only.</p>
                 </div>
             `,
                 position: 'top',
@@ -193,7 +193,7 @@ export const startIntro = async () => {
                     </a>
                     <div style="padding-left: 3vw;">
                         <h3 style="text-align: left;">Interpreting Analog Locations</h3>
-                        <p>Use climate patterns to understand climate similarities: drier analogs are found close to the Great Plains, wetter ones near coasts, hotter analogs in the South, and colder in the North.</p>
+                        <p>Use climate patterns to understand climate similarities: hotter analogs are found in the South, colder analogs in the North. Drier analogs are found close to the Great Plains, wetter analogs near coasts.</p>
                     </div>
                 </div>
 
@@ -210,9 +210,9 @@ export const startIntro = async () => {
                 <div>
                     <h3 style="text-align: center;">Using the Top Analogs by Year Feature</h3>
                     <img src="${topAnalogsOption}" alt="Top Analogs By Year Option" style="width: 50%; height: auto; margin: 20px auto; display: block; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);" />
-                    <p>For yearly, seasonal, or monthly data, explore how your county’s climate has shifted over time by selecting the <strong>Top analogs from each year</strong> option in the year drop down.</p>
+                    <p>For yearly, seasonal, or monthly data, explore how your county’s climate has shifted over time by selecting the <strong>"Top analog from each year"</strong> option in the drop down menu.</p>
                     <img src="${topAnalogsSlider}" alt="Top analogs slider and legend" style="width: 85%; height: auto; margin: 20px auto; display: block; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);" />
-                    <p>Each marker represents the top climate match for a specific year. Use the slider to navigate through all years. Larger circles represent counties that were top matches for multiple years, while darker colors indicate more recent years.</p>
+                    <p>Each marker represents the top climate match for a specific year. Use the slider to navigate through all years. Larger circles represent counties that were top matches for multiple years. Lighter colors indicate earlier years and darker colors indicate more recent years.</p>
                 </div>
             `,
                 position: 'top',
@@ -225,7 +225,7 @@ export const startIntro = async () => {
                 <div>
                     <h3 style="text-align: center;">Viewing Climate Data on the Chart</h3>
                     <img src="${chart}" alt="Climate data chart" style="width: 100%; height: auto; margin: 20px auto; display: block; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);" />
-                    <p>Additionally in the top analogs map, you will see a chart to view temperature and precipitation data by year, offering insight into historical climate trends.</p>
+                    <p>In the top analogs map, you will see a chart to view temperature and precipitation data by year, offering insight into historical climate trends. This time series can be used to identify exceptional years like the record wet year of 2018 and the record hot year of 2012.</p>
                     <img src="${chartToggle}" alt="Climate data chart toggle" style="width: 20%; height: auto; margin: 20px auto; display: block; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);" />
                     <p>You can hide or show the chart using this button in the menu.</p>
                 </div>

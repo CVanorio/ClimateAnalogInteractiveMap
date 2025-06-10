@@ -20,9 +20,9 @@ const MapInitialization = {
 
     // Add EasyPrint control to the map
     L.easyPrint({
-      title: 'My awesome print button',
+      title: 'Download Map',
       position: 'topleft',
-      sizeModes: ['A4Portrait', 'A4Landscape'],
+      sizeModes: ['map-container','A4Portrait', 'A4Landscape'],
       exportOnly: true,
     }).addTo(map);
 
