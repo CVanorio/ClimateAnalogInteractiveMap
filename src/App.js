@@ -8,6 +8,8 @@ import Graph from './components/Graph';
 import { startTour } from './components/tourConfig';
 import { startIntro } from './components/BackgroundIntro';
 import { getYearOptions } from './utils/yearUtils.js';
+import MethodologyOverlay from './components/MethodologyOverlay';
+
 
 const App = () => {
   const [selectedCounty, setSelectedCounty] = useState('');
@@ -20,6 +22,8 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState([]);
   const [showChart, setShowChart] = useState(targetYear === 'top_analogs');
+  const [showMethodology, setShowMethodology] = useState(false);
+
 
 
   useEffect(() => {
@@ -34,6 +38,7 @@ const App = () => {
   const handleDataTypeChange = (dataType) => setSelectedDataType(dataType);
   const toggleMenu = () => setMenuVisible(!menuVisible);
   const toggleChart = () => setShowChart(!showChart);
+  const toggleMethodology = () => setShowMethodology(!showMethodology);
 
   const fetchDataFromApi = async () => {
     setLoading(true);
@@ -61,6 +66,10 @@ const App = () => {
     setShowChart(targetYear === 'top_analogs');
   }, [targetYear]); 
 
+  useEffect(() => {
+    setShowMethodology(false);
+  }, []); 
+
   return (
     <div className="app-container">
       <i id='menuToggle' className={`${menuVisible ? 'fas fa-angle-left' : 'fas fa-angle-right'}`} onClick={toggleMenu} title="Toggle Menu"></i>
@@ -80,6 +89,7 @@ const App = () => {
           toggleChart={toggleChart}
           mapData={mapData}
           menuVisible={menuVisible}
+          toggleMethodology={toggleMethodology}
           // Pass any additional props if needed
         />
         <SidebarOverlay loading={loading} />
@@ -98,6 +108,10 @@ const App = () => {
           menuVisible={menuVisible}
           handleCountyClick={handleCountySelect}
         />
+        <MethodologyOverlay 
+        visible={showMethodology} 
+        onClose={() => setShowMethodology(false)} 
+      />
       </section>
       {mapData && (
         <section>
@@ -110,6 +124,7 @@ const App = () => {
           )}
         </section>
       )}
+      
     </div>
   );
 };

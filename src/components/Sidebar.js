@@ -5,7 +5,6 @@ import DataTypeSelector from './DataTypeSelector';
 import { Tooltip } from 'react-tooltip';
 import WSCO_Logo from '../assets/WSCO_Logo.png';
 import '../styles/Sidebar.css';
-import MethodologyComponent from './MethodologyComponent';
 
 const Sidebar = ({
   selectedCounty,
@@ -21,7 +20,9 @@ const Sidebar = ({
   showChart,
   toggleChart,
   mapData,
-  menuVisible
+  menuVisible,
+  showMethodology,
+  toggleMethodology
 }) => {
   //const [activeButton, setActiveButton] = useState('mapOptions');
   const [countyError, setCountyError] = useState('');
@@ -122,6 +123,12 @@ const Sidebar = ({
             
 
             <div>
+                <button
+                  className={`methodology-toggle ${showMethodology ? 'active' : ''}`}
+                  onClick={toggleMethodology}
+                >
+                  <span className="methodology-label">{'View Methodology'}</span>
+                </button>
                 <p><a className='surveyLink' href="https://forms.gle/4fmWqfaXX9tvDdBu6" target="_blank" rel="noopener noreferrer">Click here to tell us what you think!</a></p>
             </div>
             

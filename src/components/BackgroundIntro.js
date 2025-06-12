@@ -65,7 +65,7 @@ export const startIntro = async () => {
                         </p>
 
                         <p>
-                            Imagine being able to experience what Wisconsin’s climate was like in the past. While we can’t travel back in time, our tool uses “climate analogs”—places whose present climate resembles past conditions in Wisconsin—to show how Wisconsin’s climate in a previous month, season, or year compares to the average present-day climate of other locations. The present day climate is an average from 1991-2020. The past climate is an average of any individual month, season, or year between 1895 to the current year. This helps us visualize long-term changes and short term variability in the climate.
+                            Imagine being able to experience what Wisconsin’s climate was like in the past. While we can’t travel back in time, our tool uses “climate analogs”—places whose present climate resembles past conditions in Wisconsin—to show how Wisconsin’s climate in a previous month, season, or year compares to the average present-day climate of other locations. The present day climate is an average from 1991-2020. The past climate is an average of any individual month, season, or year between 1895 to the current year. This helps us visualize long-term changes and short-term variability in the climate.
                         </p>
 
                         <p style="text-align: center;">
@@ -99,10 +99,10 @@ export const startIntro = async () => {
                 intro: `
         <div>
             <h3 style="text-align: center;">How It Works</h3>
-            <p>Our tool compares variations in Wisconsin’s past climate, based on temperature and precipitation, to the 1991-2020 averages of other locations across the U.S. For example:</p>
+            <p>Our tool compares variations in Wisconsin’s past climate (temperature and precipitation) to today's average climate in other places across the U.S. For example:</p>
             <ul>
-                <li>In January 1904, Dane County, Wisconsin was colder and drier than most Januaries nowadays. The current climate of central North Dakota is the closest match to Dane County's January 1904 climate.</li>
-                <li>In September 2019, Dane County was warmer and wetter than usual. The current climate of western North Carolina is the closest match to Dane County's climate in September 2019.</li>
+                <li>In January 1904, Dane County, Wisconsin, was colder and drier than most Januaries nowadays. The current climate of central North Dakota is the closest match to what Dane County's climate was like that month.</li>
+                <li>In September 2019, Dane County was warmer and wetter than usual. The current climate of western North Carolina is the closest match to what Dane County's climate was like in that month.</li>
             </ul>
             <p>This approach reveals how Wisconsin’s climate compares to other regions in the United States and has varied and trended over time. You can use your own experiences with the current climate to interpret the past data.</p>
             <p style="text-align: center;">

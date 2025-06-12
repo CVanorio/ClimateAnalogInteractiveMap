@@ -453,3 +453,19 @@ ul, ol, p {
   visibility: visible;
   opacity: 1;
 }
+
+
+.methodology-toggle {
+  margin-top: 24px;
+  margin-left: 16px;
+  margin-bottom: 8px;
+  padding: 4px 8px;
+  border: 1px solid #666;
+}
+
+.methodology-toggle:hover {
+  background-color: #002fa3; /* Darker background on hover */
+  color: white; /* Darker text color on hover */
+  transition: background-color 0.3s;
+  transition: color 0.3s;
+}
