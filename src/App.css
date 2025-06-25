@@ -9,32 +9,35 @@
   /* background-color: #f4f4f4; */
 }
 
-/* Make the tooltip take the width of the parent container */
+/* Tooltip container */
 .introjs-tooltip {
-  width: 70vw !important;  /* Sets the width to 70% of the viewport width */
-  max-width: 100vw !important; /* Ensures it won't exceed viewport width */
+  width: 70vw !important;
+  max-width: 100vw !important;
   height: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 55vh;
 }
 
-/* Set a fixed height for the tooltip text and enable scrolling */
+/* Tooltip text content fills space, extra space appears at bottom */
 .introjs-tooltip .introjs-tooltiptext {
-  max-height: 50vh; /* Restricts height to 65% of the viewport height */
-  overflow-y: auto; /* Enables vertical scrolling for overflow */
-  padding: 0 10vw; /* Left and right padding */
+  min-height: 50vh;
+  overflow-y: auto;
+  padding: 0 10vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-grow: 1;
 }
 
-
-/* Optional: Adjust the tooltip arrow position */
+/* Arrow */
 .introjs-tooltip .introjs-tooltiparrow {
-  width: 15px; /* Adjust the arrow width */
-  height: 15px; /* Adjust the arrow height */
+  width: 15px;
+  height: 15px;
 }
 
+/* Disable pointer events on overlay */
 .introjs-overlay {
    pointer-events: none; 
 } 
@@ -42,6 +45,8 @@
 .introjs-helperLayer { 
   pointer-events: none; 
 }
+
+
 
 .fa-arrow-pointer {
   color: black;

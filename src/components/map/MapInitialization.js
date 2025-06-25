@@ -22,12 +22,13 @@ const MapInitialization = {
     L.easyPrint({
       title: 'Download Map',
       position: 'topleft',
-      sizeModes: ['map-container','A4Portrait', 'A4Landscape'],
-      exportOnly: true,
+      sizeModes: ['A4Portrait', 'A4Landscape'],
+      exportOnly: false,
     }).addTo(map);
 
     return map;
   },
+  
 
   // Setup base layers for the map
   setupBaseLayers: (map, stateData) => {

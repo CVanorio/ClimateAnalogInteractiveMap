@@ -10,7 +10,6 @@ import { startIntro } from './components/BackgroundIntro';
 import { getYearOptions } from './utils/yearUtils.js';
 import MethodologyOverlay from './components/MethodologyOverlay';
 
-
 const App = () => {
   const [selectedCounty, setSelectedCounty] = useState('');
   const [timeScale, setTimeScale] = useState('by_year');
@@ -24,11 +23,8 @@ const App = () => {
   const [showChart, setShowChart] = useState(targetYear === 'top_analogs');
   const [showMethodology, setShowMethodology] = useState(false);
 
-
-
   useEffect(() => {
     startIntro();
-   // startTour();
   }, []);
 
   const handleCountySelect = (county) => setSelectedCounty(county);
@@ -40,17 +36,20 @@ const App = () => {
   const toggleChart = () => setShowChart(!showChart);
   const toggleMethodology = () => setShowMethodology(!showMethodology);
 
+  const handleIntroClick = () => {
+    startIntro();
+  };
+
   const fetchDataFromApi = async () => {
     setLoading(true);
 
     try {
       const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType);
-      // Get years based on time scale
       const dataYears = getYearOptions(timeScale, scaleValue);
       setYears(dataYears);
       setMapData(res.data[0][0][0]);
-      console.log(res.data)
-      console.log(res.data[0][0][0])
+      console.log(res.data);
+      console.log(res.data[0][0][0]);
     } catch (error) {
       console.error('Failed to fetch data:', error);
     }
@@ -64,11 +63,11 @@ const App = () => {
 
   useEffect(() => {
     setShowChart(targetYear === 'top_analogs');
-  }, [targetYear]); 
+  }, [targetYear]);
 
   useEffect(() => {
     setShowMethodology(false);
-  }, []); 
+  }, []);
 
   return (
     <div className="app-container">
@@ -90,7 +89,7 @@ const App = () => {
           mapData={mapData}
           menuVisible={menuVisible}
           toggleMethodology={toggleMethodology}
-          // Pass any additional props if needed
+          onIntroClick={handleIntroClick}
         />
         <SidebarOverlay loading={loading} />
       </aside>
@@ -109,9 +108,9 @@ const App = () => {
           handleCountyClick={handleCountySelect}
         />
         <MethodologyOverlay 
-        visible={showMethodology} 
-        onClose={() => setShowMethodology(false)} 
-      />
+          visible={showMethodology} 
+          onClose={() => setShowMethodology(false)} 
+        />
       </section>
       {mapData && (
         <section>
@@ -124,7 +123,6 @@ const App = () => {
           )}
         </section>
       )}
-      
     </div>
   );
 };
