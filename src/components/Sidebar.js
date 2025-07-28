@@ -46,6 +46,11 @@ const Sidebar = ({
     }
   }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType]);
 
+  const handleToggleTimeScale = (newTimeScale) => {
+    onToggleTimeScale(newTimeScale);
+    onSelectScaleValue(''); // Reset scaleValue when time scale changes
+  };
+
   return (
     <div>
       <div className='sidebarContentContainter'>
@@ -65,7 +70,7 @@ const Sidebar = ({
             <div className='menuOption'>
               <TimeScaleSelector
                 timeScale={timeScale}
-                onToggleTimeScale={onToggleTimeScale}
+                onToggleTimeScale={handleToggleTimeScale}
                 scaleValue={scaleValue}
                 onSelectScaleValue={onSelectScaleValue}
                 targetYear={targetYear}

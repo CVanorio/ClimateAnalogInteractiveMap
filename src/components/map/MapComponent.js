@@ -9,7 +9,6 @@ import countyData from '../../data/us-counties.json';
 import MapInitialization from './MapInitialization';
 import MarkerHandler from './MarkerHandler';
 import LoadingOverlay from './LoadingOverlay';
-// import PrintingOverlay from './PrintingOverlay';
 import NoDataOverlay from './NoDataOverlay';
 import Slider from './Slider';
 import Legend from './Legend'; // Import the Legend component for the map's legend display
@@ -26,8 +25,7 @@ const MapComponent = ({
   loading,
   years,
   showChart,
-  menuVisible,
-  printing
+  menuVisible
 }) => {
   const mapRef = useRef(null);
   const markersRef = useRef([]);
@@ -150,18 +148,17 @@ const MapComponent = ({
   // console.log(targetYear)
   // console.log(timeScale)
   // console.log(scaleValue)
+  console.log("mapData", mapData);
 
   const targetYearString = timeScale === 'by_season' && scaleValue === 'Winter' ? `${targetYear - 1}-${targetYear}` : targetYear;
 
   return (
     <div style={{ position: 'relative' }}>
-      {/* <PrintingOverlay printing={printing} /> */}
       <LoadingOverlay loading={loading} />
-      {/* {mapData && mapData.length === 0 && targetYear !== '' && timeScale !== '' && (timeScale !== 'by_year' && scaleValue !== '') && (
-        <NoDataOverlay 
-        loading={loading}
-         />
-      )} */}
+      {mapData && mapData.length === 0 && targetYear !== '' && timeScale !== '' &&
+        ((timeScale === 'by_year') || (timeScale !== 'by_year' && scaleValue !== '')) && (
+          <NoDataOverlay loading={loading} />
+        )}
       <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}>
       {mapData && targetYear !== '' && (
         <div className="map-title-overlay">

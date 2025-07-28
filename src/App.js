@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Joyride from 'react-joyride';
 import './App.css';
 import MapComponent from './components/map/MapComponent';
 import Sidebar from './components/Sidebar';
 import SidebarOverlay from './components/SidebarOverlay';
 import { fetchData } from './services/api';
 import Graph from './components/Graph';
-import { startTour } from './components/tourConfig';
-import { startIntro } from './components/BackgroundIntro';
+import { joyrideSteps } from './components/BackgroundIntro';
 import { getYearOptions } from './utils/yearUtils.js';
 import MethodologyOverlay from './components/MethodologyOverlay';
 
@@ -22,10 +22,7 @@ const App = () => {
   const [years, setYears] = useState([]);
   const [showChart, setShowChart] = useState(targetYear === 'top_analogs');
   const [showMethodology, setShowMethodology] = useState(false);
-
-  useEffect(() => {
-    startIntro();
-  }, []);
+  const [runTour, setRunTour] = useState(true); // Start tour on load
 
   const handleCountySelect = (county) => setSelectedCounty(county);
   const handleTimeScaleToggle = (scale) => setTimeScale(scale);
@@ -37,7 +34,7 @@ const App = () => {
   const toggleMethodology = () => setShowMethodology(!showMethodology);
 
   const handleIntroClick = () => {
-    startIntro();
+    setRunTour(true);
   };
 
   const fetchDataFromApi = async () => {
@@ -70,7 +67,20 @@ const App = () => {
   }, []);
 
   return (
-    <div className="app-container">
+    <div className="app-container" id='app-container'>
+      <Joyride
+        steps={joyrideSteps}
+        run={runTour}
+        continuous
+        showSkipButton
+        showProgress
+        styles={{ options: { zIndex: 10000 } }}
+        callback={data => {
+          if (data.status === 'finished' || data.status === 'skipped') {
+            setRunTour(false);
+          }
+        }}
+      />
       <i id='menuToggle' className={`${menuVisible ? 'fas fa-angle-left' : 'fas fa-angle-right'}`} onClick={toggleMenu} title="Toggle Menu"></i>
       <aside className={`sidebar ${menuVisible ? 'visible' : ''}`}>
         <Sidebar

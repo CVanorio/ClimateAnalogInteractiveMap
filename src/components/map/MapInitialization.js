@@ -13,17 +13,16 @@ const MapInitialization = {
       minZoom: 3,
     });
 
+    L.easyPrint({
+  title: 'Download Map',
+  position: 'topleft',
+  sizeModes: ['A4Landscape'],
+  exportOnly: true,
+}).addTo(map);
+
     // Add base tile layer to the map
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
-    }).addTo(map);
-
-    // Add EasyPrint control to the map
-    L.easyPrint({
-      title: 'Download Map',
-      position: 'topleft',
-      sizeModes: ['A4Portrait', 'A4Landscape'],
-      exportOnly: false,
     }).addTo(map);
 
     return map;

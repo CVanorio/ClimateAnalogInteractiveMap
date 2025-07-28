@@ -32,7 +32,8 @@ const NoDataOverlay = ({ loading }) => {
           {/* Main text to display during loading */}
           <div className='text'>Coming Soon!</div>
           {/* Subtext for additional information */}
-          <div className='subtext'>The data for this time frame has not been published yet.</div>
+          <div className='subtext'>The data for this time frame has not been added yet. 
+            <br/>Please try a different year, season, or month.</div>
         </div>
       </div>
     )
