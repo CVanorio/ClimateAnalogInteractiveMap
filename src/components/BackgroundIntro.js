@@ -93,7 +93,7 @@ export const joyrideSteps = [
       <div style={{ textAlign: 'center' }}>
         <h3>Viewing Climate Analogs</h3>
         <img src={filledCounties} alt="Climate analogs map" style={{ width: '85%', height: 'auto', margin: '20px auto', display: 'block', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.4)' }} />
-        <p>The map displays the top climate analogs for your chosen county and time frame. Counties with lighter yellow colors are the closest matches, while shades closer to purple indicate less similar climates. The top match is highlighted with a star icon <i className="fa-solid fa-star"></i>.</p>
+        <p>The map displays the top climate analogs for your chosen county and time frame. Counties with lighter yellow colors are the closest matches, while shades closer to black indicate less similar climates. The top match is highlighted with a star icon <i className="fa-solid fa-star"></i>.</p>
       </div>
     ),
     placement: 'center',
