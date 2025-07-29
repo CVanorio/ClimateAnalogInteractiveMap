@@ -24,7 +24,7 @@ export const joyrideSteps = [
       <div style={{ textAlign: 'center' }}>
         <h2>How Does Wisconsin’s Historical Climate Compare to the Present Climate across the United States?</h2>
         <p>Climate change is affecting our world, and understanding how Wisconsin’s climate has changed over time helps us put future climate change into perspective.</p>
-        <p>Imagine being able to experience what Wisconsin’s climate was like in the past. While we can’t travel back in time, our tool uses “climate analogs”—places whose present climate resembles past conditions in Wisconsin—to show how Wisconsin’s climate in a previous month, season, or year compares to the average present-day climate of other locations. The present day climate is an average from 1991-2020. The past climate is an average of any individual month, season, or year between 1895 to the current year. This helps us visualize long-term changes and short-term variability in the climate.</p>
+        <p>Imagine being able to experience what Wisconsin’s climate was like in the past. While we can’t travel back in time, our tool uses “climate analogs”-places whose present climate resembles past conditions in Wisconsin-to show how Wisconsin’s climate in a previous month, season, or year compares to the average present-day climate of other locations. The present day climate is an average from 1991-2020. The past climate is an average of any individual month, season, or year between 1895 to the current year. This helps us visualize long-term changes and short-term variability in the climate.</p>
         <p style={{ textAlign: 'center' }}><strong>Click "Next" to begin the tutorial.</strong></p>
       </div>
     ),
