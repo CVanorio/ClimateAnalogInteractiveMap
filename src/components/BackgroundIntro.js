@@ -9,8 +9,8 @@ import timeFrameYear from '../assets/tour/selectATimeFrame_year.jpg';
 import timeFrameSeason from '../assets/tour/selectATimeFrame_season.jpg';
 import timeFrameMonth from '../assets/tour/selectATimeFrame_month.jpg';
 import topAnalogsOption from '../assets/tour/topAnalogsOption.png';
-import filledCounties from '../assets/tour/filledCountiesExample.jpg';
-import countyPopups from '../assets/tour/countyPopups.jpg';
+import filledCounties from '../assets/tour/filledCountiesExample.png';
+import countyPopups from '../assets/tour/countyPopups.png';
 import NormalTempPrecip from '../assets/tour/Normals_TotalPrecipAvgTemp_Annual_1991-2020_continuous_1400x2193.png';
 import topAnalogsSlider from '../assets/tour/topAnalogSlider.jpg';
 import chart from '../assets/tour/chart.jpg';
@@ -93,7 +93,7 @@ export const joyrideSteps = [
       <div style={{ textAlign: 'center' }}>
         <h3>Viewing Climate Analogs</h3>
         <img src={filledCounties} alt="Climate analogs map" style={{ width: '85%', height: 'auto', margin: '20px auto', display: 'block', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.4)' }} />
-        <p>The map displays the top climate analogs for your chosen county and time frame. Counties with deeper red colors are the closest matches, while shades closer to blue indicate less similar climates. The top match is highlighted with a star icon <i className="fa-solid fa-star"></i>.</p>
+        <p>The map displays the top climate analogs for your chosen county and time frame. Counties with lighter yellow colors are the closest matches, while shades closer to purple indicate less similar climates. The top match is highlighted with a star icon <i className="fa-solid fa-star"></i>.</p>
       </div>
     ),
     placement: 'center',
