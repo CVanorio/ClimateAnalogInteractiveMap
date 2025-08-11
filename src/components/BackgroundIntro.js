@@ -24,7 +24,7 @@ export const joyrideSteps = [
       <div style={{ textAlign: 'center' }}>
         <h2>How Does Wisconsin’s Historical Climate Compare to the Present Climate across the United States?</h2>
         <p>Climate change is affecting our world, and understanding how Wisconsin’s climate has changed over time helps us put future climate change into perspective.</p>
-        <p>Imagine being able to experience what Wisconsin’s climate was like in the past. While we can’t travel back in time, our tool uses “climate analogs”-places whose present climate resembles past conditions in Wisconsin-to show how Wisconsin’s climate in a previous month, season, or year compares to the average present-day climate of other locations. The present day climate is an average from 1991-2020. The past climate is an average of any individual month, season, or year between 1895 to the current year. This helps us visualize long-term changes and short-term variability in the climate.</p>
+        <p>Imagine being able to experience what Wisconsin’s climate was like in the past. While we can’t travel back in time, our tool uses “climate analogs”-places whose present climate resembles past conditions in Wisconsin-to show how Wisconsin’s climate in a previous month, season, or year compares to the average present-day climate of other locations. The present day climate is defined as an average from 1991-2020. The past climate is an average of any individual month, season, or year between 1895 to the current year. This helps us visualize long-term changes and short-term variability in the climate.</p>
         <p style={{ textAlign: 'center' }}><strong>Click "Next" to begin the tutorial.</strong></p>
       </div>
     ),
@@ -37,7 +37,7 @@ export const joyrideSteps = [
       <div style={{ textAlign: 'center' }}>
         <h3>Why It Matters</h3>
         <p>These climate comparisons are important for interpreting how climate changes have impacted different areas over time.  It helps us make informed decisions about how to deal with current and future climate challenges. By looking at the past, we can learn more about climate change and find ways to address the challenges ahead.</p>
-        <p>This tool supports the Wisconsin State Climatology Office’s goal of providing useful climate information for everyone in Wisconsin. It makes it easier to explore and understand Wisconsin’s climate history.</p>
+        <p>This tool supports the Wisconsin State Climatology Office’s goal of providing useful climate information for everyone in Wisconsin by making it easier to explore and understand Wisconsin’s climate history. The tool also benefits the Wisconsin Initiative on Climate Change Impacts (WICCI) by conveying how Wisconsin’s climate has varied historically.</p>
       </div>
     ),
     placement: 'center',
@@ -93,7 +93,7 @@ export const joyrideSteps = [
       <div style={{ textAlign: 'center' }}>
         <h3>Viewing Climate Analogs</h3>
         <img src={filledCounties} alt="Climate analogs map" style={{ width: '85%', height: 'auto', margin: '20px auto', display: 'block', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.4)' }} />
-        <p>The map displays the top climate analogs for your chosen county and time frame. Counties with lighter yellow colors are the closest matches, while shades closer to black indicate less similar climates. The top match is highlighted with a star icon <i className="fa-solid fa-star"></i>.</p>
+        <p>The map displays the top climate analogs for your chosen county and time frame. Counties with lighter yellow colors are the very closest matches, while shades closer to black indicate climates that are not quite as similar. The top match is highlighted with a star icon <i className="fa-solid fa-star"></i>.</p>
       </div>
     ),
     placement: 'center',
@@ -117,7 +117,7 @@ export const joyrideSteps = [
       <div style={{ textAlign: 'center' }}>
         <h3>Selecting a Climate Variable</h3>
         <img src={climateVariables} alt="Select a climate variable" style={{ width: '50%', height: 'auto', margin: '20px auto', display: 'block', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.4)' }} />
-        <p>The standard climate analog uses a combination of temperature and precipitation. You can dig deeper by exploring temperature or precipitation only.</p>
+        <p>The standard climate analog uses an equally weighted a combination of temperature and precipitation. You can dig deeper by exploring temperature or precipitation only.</p>
       </div>
     ),
     placement: 'center',

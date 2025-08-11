@@ -15,7 +15,7 @@ const MethodologyComponent = () => {
 
             <details>
                 <summary>Data Sources</summary>
-                <p>The climate data for this project is obtained from the National Oceanic and Atmospheric Administration (NOAA). Specifically, we utilized the <strong>nclimdiv-monthly</strong> dataset, which includes detailed monthly climate records at the county level across the contiguous United States and Alaska.</p>
+                <p>The climate data for this project is obtained from the National Oceanic and Atmospheric Administration (NOAA). Specifically, we utilized the <strong>nClimDiv-monthly</strong> dataset, which includes detailed monthly climate records at the county level across the contiguous United States and Alaska.</p>
                 <p>For our analysis, we focused on the county-scale temperature and precipitation files within this dataset. These files provide comprehensive and accurate climate data, enabling us to effectively compare and rank potential analog counties based on their climate similarity to the target county.</p>
             </details>
 
