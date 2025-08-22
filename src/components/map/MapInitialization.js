@@ -13,25 +13,52 @@ const MapInitialization = {
       minZoom: 3,
     });
 
+    // Download control
     L.easyPrint({
-  title: 'Download Map',
-  position: 'topleft',
-  sizeModes: ['A4Landscape'],
-  exportOnly: true,
-}).addTo(map);
-
-    // Add base tile layer to the map
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
+      title: 'Download Map',
+      position: 'topleft',
+      sizeModes: ['A4Landscape'],
+      exportOnly: true,
     }).addTo(map);
+
+    // --- panes & stacking order ---
+    // Default Leaflet tile pane z-index ~200
+    // Polygon vectors will sit above base tiles
+    map.createPane('polygons');                // for states & counties
+    map.getPane('polygons').style.zIndex = 450;
+
+    // Labels-only tiles (transparent raster text) should sit above vectors
+    map.createPane('labels');
+    map.getPane('labels').style.zIndex = 650;  // above polygons
+    map.getPane('labels').style.pointerEvents = 'none'; // keep vectors clickable
+
+    // --- base tiles ---
+    // Shaded relief (no labels)
+    L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}',
+      {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
+      }
+    ).addTo(map);
+
+    // Labels-only overlay (cities/places)
+    L.tileLayer(
+      'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',
+      {
+        pane: 'labels',
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+      }
+    ).addTo(map);
 
     return map;
   },
-  
 
   // Setup base layers for the map
   setupBaseLayers: (map, stateData) => {
     L.geoJSON(stateData, {
+      pane: 'polygons',
       style: {
         color: 'grey',
         weight: 1.5,
@@ -40,7 +67,6 @@ const MapInitialization = {
         zIndex: 1,
       },
     }).addTo(map);
-
   },
 
   // Add custom control to toggle focus
@@ -55,11 +81,10 @@ const MapInitialization = {
     focusControl.addTo(map);
   },
 
-
-
   // Add and style the county layer on the map
   addCountyLayer: (map, countyData, handleCountyClick) => {
     const countyLayer = L.geoJSON(countyData, {
+      pane: 'polygons',
       style: (feature) => {
         // Differentiate style for Wisconsin (WI) counties
         if (feature.properties.STATEABBR === 'WI') {
@@ -82,58 +107,53 @@ const MapInitialization = {
       },
       onEachFeature: (feature, layer) => {
         let tooltip;
-        let originalColor; // Variable to store the original color
+        let originalColor; // store original color
         let originalOpacity;
 
         if (feature.properties.STATEABBR === 'WI') {
-          // Mouseover event to show tooltip and change fill color
-          layer.on('mouseover', function (e) {
-            // Store current style
+          // Mouseover: show tooltip and change fill
+          layer.on('mouseover', function () {
             originalColor = layer.options.fillColor;
             originalOpacity = layer.options.fillOpacity;
 
             tooltip = L.tooltip({
               permanent: true,
               direction: 'right',
-              className: 'leaflet-tooltip'
+              className: 'leaflet-tooltip',
             }).setContent(`${feature.properties.COUNTYNAME}, ${feature.properties.STATEABBR}`);
 
             this.bindTooltip(tooltip).openTooltip();
 
-            // Highlight WI counties on mouseover
             layer.setStyle({
               fillColor: 'blue',
-              fillOpacity: 0.25
+              fillOpacity: 0.25,
             });
           });
 
-          // Mouseout event to hide tooltip and reset fill color
-          layer.on('mouseout', function (e) {
+          // Mouseout: hide tooltip and reset style
+          layer.on('mouseout', function () {
             if (tooltip) {
               this.unbindTooltip();
               tooltip = null;
             }
 
-            // Reset style for WI counties
             layer.setStyle({
               fillColor: originalColor,
-              fillOpacity: originalOpacity
+              fillOpacity: originalOpacity,
             });
           });
 
-          // Click event for WI counties only
-          if (feature.properties.STATEABBR === 'WI') {
-            layer.on('click', function (e) {
-              handleCountyClick(feature.properties.COUNTYNAME); // Trigger callback on click
-            });
-          }
+          // Click for WI counties only
+          layer.on('click', function () {
+            handleCountyClick(feature.properties.COUNTYNAME);
+          });
 
-          // Prevent default behavior on mousedown to disable selection box
+          // Prevent drag-box selection interference
           layer.on('mousedown', function (e) {
-            L.DomEvent.stopPropagation(e); // Stop event propagation
+            L.DomEvent.stopPropagation(e);
           });
         }
-      }
+      },
     }).addTo(map);
 
     return countyLayer;
@@ -153,7 +173,7 @@ const MapInitialization = {
   // Set maximum bounds for the map
   setMaxBounds: (map, bounds) => {
     map.setMaxBounds(bounds);
-  }
+  },
 };
 
 export default MapInitialization;
