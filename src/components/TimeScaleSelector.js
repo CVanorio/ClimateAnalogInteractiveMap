@@ -109,7 +109,7 @@ const TimeScaleSelector = ({
               -Select a year-
             </option>
             <option key="top_analogs" value="top_analogs">
-              Top analog from each year
+              All Years (time series)
             </option>
             {getYearOptionsFrom1895ToCurrentYearMinusOne()}
           </select>
@@ -131,7 +131,7 @@ const TimeScaleSelector = ({
               <option className="selectPrompt" value="">
                 -Select a year-
               </option>
-              <option value="top_analogs">Top analog from each year</option>
+              <option value="top_analogs">All Years (time series)</option>
               {scaleValue === 'Winter' ? getYearOptionsForWinter() : (hasSeasonEnded() ? getYearOptionsFrom1895() : getYearOptionsFrom1895ToCurrentYearMinusOne())}
             </select>
           </>
@@ -159,7 +159,7 @@ const TimeScaleSelector = ({
               <option className="selectPrompt" value="">
                 -Select a year-
               </option>
-              <option value="top_analogs">Top analog from each year</option>
+              <option value="top_analogs">All Years (time series)</option>
               {parseInt(scaleValue, 10) <= currentMonth - 1 
                 ? getYearOptionsFrom1895() 
                 : getYearOptionsFrom1895ToCurrentYearMinusOne()

@@ -155,12 +155,12 @@ const MapComponent = ({
   return (
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />
-      {mapData && mapData.length === 0 && targetYear !== '' && timeScale !== '' &&
+      {mapData && mapData.length === 0 && selectedCounty !== '' && targetYear !== '' && timeScale !== '' &&
         ((timeScale === 'by_year') || (timeScale !== 'by_year' && scaleValue !== '')) && (
           <NoDataOverlay loading={loading} />
         )}
       <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}>
-      {mapData && targetYear !== '' && (
+      {mapData && targetYear !== '' && selectedCounty !== '' && (
         <div className="map-title-overlay">
           <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analogs by year from 1895 ${highlightedYear === 1895 ? '' : `- ${highlightedYear}`} ${timeFrameString} for ${selectedCounty}, WI` : `${dataTypeString} Climate Analogs for ${selectedCounty}, WI ${timeFrameString} ${targetYearString}`}</h3>
         </div>
@@ -168,14 +168,14 @@ const MapComponent = ({
         {targetYear && targetYear !== 'top_analogs' && (
           <Legend className="legend" /> // Show regular Legend component when not viewing top analogs
         )}
-        {targetYear && targetYear === 'top_analogs' && (
+        {targetYear && targetYear === 'top_analogs' && selectedCounty !== '' && (
           <TopAnalogsLegend className="topAnalogsLegend"
             yearColors={yearColors}
             years={years}
           />
         )}
       </div>
-      {mapData && targetYear === 'top_analogs' && (
+      {mapData && targetYear === 'top_analogs' && selectedCounty !== '' && (
         <div className="sliderDiv" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 1000 }}>
           <Slider
             highlightedYear={highlightedYear}

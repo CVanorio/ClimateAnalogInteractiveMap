@@ -96,7 +96,7 @@ const Sidebar = ({
                   data-tip={!mapData ? "Chart is available after data is displayed on the map" : (targetYear !== "top_analogs" ? "Chart is only available for top analogs by year" : "")}
                 >
                   <span className="toggle-knob"></span>
-                  <span className="toggle-label">{showChart ? 'Hide Chart' : 'Show Chart'}</span>
+                  <span className="toggle-label">{showChart ? 'Hide Graph' : 'Show Graph'}</span>
                 </button>
 
                 <Tooltip place="top" type="dark" effect="solid" />

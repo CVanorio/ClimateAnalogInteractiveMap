@@ -20,7 +20,7 @@ const App = () => {
   const [mapData, setMapData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState([]);
-  const [showChart, setShowChart] = useState(targetYear === 'top_analogs');
+  const [showChart, setShowChart] = useState(/*targetYear === 'top_analogs'*/ false);
   const [showMethodology, setShowMethodology] = useState(false);
   const [runTour, setRunTour] = useState(true); // Start tour on load
 
@@ -59,7 +59,7 @@ const App = () => {
   }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType]);
 
   useEffect(() => {
-    setShowChart(targetYear === 'top_analogs');
+    setShowChart(/*targetYear === 'top_analogs'*/ false);
   }, [targetYear]);
 
   useEffect(() => {
