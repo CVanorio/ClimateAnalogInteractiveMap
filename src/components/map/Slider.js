@@ -17,12 +17,12 @@ const Slider = ({
   const [speed, setSpeed] = useState(1); // State for playback speed
   const [showSpeedOptions, setShowSpeedOptions] = useState(false); // State for showing speed options
 
-  // Initialize the slider with the first year if no year is highlighted
-  useEffect(() => {
-    if (!highlightedYear && years.length > 0) {
-      onChange(years[0]);
-    }
-  }, [highlightedYear, years, onChange]);
+  // Initialize the slider with the last year if no year is highlighted
+useEffect(() => {
+  if (!highlightedYear && years.length > 0) {
+    onChange(years[years.length - 1]);
+  }
+}, [highlightedYear, years, onChange]);
 
   // Update thumb position when highlightedYear or years change
   useEffect(() => {
@@ -156,7 +156,7 @@ const Slider = ({
         min={years[0]}
         max={years[years.length - 1]}
         step={1}
-        value={highlightedYear || years[0]}
+        value={highlightedYear ?? years[years.length - 1]}
         onChange={handleSliderChange}
         className="slider"
         ref={sliderRef}
