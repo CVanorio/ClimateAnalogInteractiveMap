@@ -3,7 +3,6 @@ import 'leaflet/dist/leaflet.css'; // Ensure Leaflet CSS is imported
 import { ColorRampCollection } from "@maptiler/sdk";
 import { scaleSequential } from 'd3-scale';
 import {interpolateYlOrRd} from 'd3-scale-chromatic';
-import {interpolateRdYlBu} from 'd3-scale-chromatic';
 import '../../styles/MapStyles.css';
 
 let coloredCounties = []; // Maintain a list of colored counties

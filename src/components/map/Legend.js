@@ -4,10 +4,10 @@ import '../../styles/Legend.css';
 
 const Legend = () => {
   // Create a color scale using D3's sequential scale with the Turbo colormap.
-  const colorScale = d3.scaleSequential(d3.interpolateInferno).domain([0, 1]);
+  const colorScale = d3.scaleSequential(d3.interpolateYlOrRd).domain([0, 2]);
 
   // Generate a CSS gradient string by mapping values to colors using the color scale.
-  const gradient = d3.range(0, 1.01, 0.01).map(i => colorScale(i)).join(',');
+  const gradient = d3.range(0.5, 2, 0.01).map(i => colorScale(i)).join(',');
 
   return (
     <div className="legend-container">

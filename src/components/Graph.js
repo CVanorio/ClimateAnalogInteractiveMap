@@ -35,6 +35,17 @@ const Graph = ({ graphData, years, menuVisible }) => {
 
   console.log(years);
 
+  // --- NEW: helpers to build flat average lines (same length as labels) ---
+  function buildAverageLine(values, len) {
+    const valid = values.filter(v => !isNaN(v));
+    if (valid.length === 0 || !Array.isArray(len ? [] : years)) return null;
+    const avg = valid.reduce((a, b) => a + b, 0) / valid.length;
+    return Array.from({ length: len }, () => avg);
+  }
+
+  const precipAvgData = hasPrecipitationData ? buildAverageLine(precipitationValues, years.length) : null;
+  const tempAvgData   = hasTemperatureData   ? buildAverageLine(temperatureValues, years.length)   : null;
+
   // Create the chart data object
   const chartData = {
     labels: years,
@@ -62,6 +73,30 @@ const Graph = ({ graphData, years, menuVisible }) => {
         pointBackgroundColor: 'red',
         borderWidth: 1,
         pointRadius: 2 // Adjust point radius for graph
+      },
+
+      // --- NEW: Average lines (start hidden; toggle via legend) ---
+      precipAvgData && {
+        label: 'Precipitation (avg)',
+        data: precipAvgData,
+        fill: false,
+        borderColor: '#6baed6', // lighter blue
+        borderDash: [6, 6],
+        pointRadius: 0,
+        borderWidth: 2,
+        yAxisID: 'y-axis-precipitation',
+        hidden: true
+      },
+      tempAvgData && {
+        label: 'Temperature (avg)',
+        data: tempAvgData,
+        fill: false,
+        borderColor: '#fc9272', // lighter red
+        borderDash: [6, 6],
+        pointRadius: 0,
+        borderWidth: 2,
+        yAxisID: 'y-axis-temperature',
+        hidden: true
       }
     ].filter(Boolean) // Filter out undefined datasets
   };

@@ -185,27 +185,67 @@ const Sidebar = ({
             )}
           </div>
 
-          {/* --- Data Export section --- */}
-          <div className='menuSection'>
-            <p>Data</p>
-            <div className='menuOption' style={{ display: 'flex', gap: 8 }}>
-              <button
-                onClick={() => downloadJSON(buildDataFilename('json'))}
-                disabled={!Array.isArray(mapData) || mapData.length === 0}
-                title="Download current data as JSON"
-              >
-                Download JSON
-              </button>
-              <button
-                onClick={() => downloadCSV(buildDataFilename('csv'))}
-                disabled={!Array.isArray(mapData) || mapData.length === 0}
-                title="Download current data as CSV"
-              >
-                Download CSV
-              </button>
-            </div>
-          </div>
-          {/* --------------------------- */}
+         {/* --- Data Export section --- */}
+<div className='menuSection'>
+  <p>Download Data</p>
+  <div 
+    className='menuOption' 
+    style={{ display: 'flex', gap: 32, marginLeft: '10%' }} // ⬅️ shift start by ~1/3
+  >
+    <a
+      href="#"
+      onClick={(e) => {
+        e.preventDefault();
+        downloadJSON(buildDataFilename('json'));
+      }}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        textDecoration: 'none',
+        color: '#002fa3',
+        cursor: 'pointer',
+        opacity: (!Array.isArray(mapData) || mapData.length === 0) ? 0.5 : 1,
+        pointerEvents: (!Array.isArray(mapData) || mapData.length === 0) ? 'none' : 'auto',
+        paddingBottom: '10px'
+      }}
+      title="Download current map data as JSON"
+    >
+      <i className="fa-solid fa-file-arrow-down" style={{ fontSize: '1.5rem', color: '#002fa3' }}></i>
+      <span style={{ fontSize: '0.85rem' }}>JSON</span>
+    </a>
+
+    <a
+      href="#"
+      onClick={(e) => {
+        e.preventDefault();
+        downloadCSV(buildDataFilename('csv'));
+      }}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        textDecoration: 'none',
+        color: '#002fa3',
+        cursor: 'pointer',
+        opacity: (!Array.isArray(mapData) || mapData.length === 0) ? 0.5 : 1,
+        pointerEvents: (!Array.isArray(mapData) || mapData.length === 0) ? 'none' : 'auto',
+        paddingBottom: '10px'
+      }}
+      title="Download current map data as CSV"
+    >
+      <i className="fa-solid fa-file-arrow-down" style={{ fontSize: '1.5rem', color: '#002fa3' }}></i>
+      <span style={{ fontSize: '0.85rem' }}>CSV</span>
+    </a>
+  </div>
+</div>
+{/* --------------------------- */}
+
+
+
+
+
+
 
           <div>
             <button
@@ -227,7 +267,7 @@ const Sidebar = ({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Click here to tell us what you think!
+                Click here to submit your feedback
               </a>
             </p>
           </div>
