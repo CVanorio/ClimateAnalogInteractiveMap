@@ -15,8 +15,10 @@
 
 /* Make Joyride tooltip/box wider */
 .react-joyride__tooltip {
-  width: 45vw !important;
+  width: 60vw !important;
   font-size: 1.1em; /* optional: make text a bit larger */
+  max-height: 95vh;
+  overflow-y: auto; /* optional: add vertical scroll if content exceeds max height */
 }
 
 

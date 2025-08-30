@@ -151,7 +151,7 @@ const MapComponent = ({
   console.log("mapData", mapData);
 
   const targetYearString = timeScale === 'by_season' && scaleValue === 'Winter' ? `${targetYear - 1}-${targetYear}` : targetYear;
-
+  
   return (
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />

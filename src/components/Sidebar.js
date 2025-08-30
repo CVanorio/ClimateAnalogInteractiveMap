@@ -51,6 +51,85 @@ const Sidebar = ({
     onSelectScaleValue(''); // Reset scaleValue when time scale changes
   };
 
+  // ----- Filename builder (concise, underscore-separated) -----
+  const buildDataFilename = (ext = 'json') => {
+    const base = targetYear === 'top_analogs' ? 'top_analogs' : 'analogs';
+
+    const typeToken =
+      selectedDataType === 'both' ? 'temp_precip'
+      : selectedDataType === 'temperature' ? 'temp'
+      : selectedDataType === 'precipitation' ? 'precip'
+      : 'all';
+
+    const countyToken = selectedCounty
+      ? `${selectedCounty.replace(/\s+/g, '_')}_WI`
+      : 'WI';
+
+    const safe = (v) => String(v ?? '').trim().replace(/\s+/g, '_');
+
+    let tf = '';
+    if (targetYear === 'top_analogs') {
+      const endYear = new Date().getFullYear() - 1;
+      if (timeScale === 'by_season' && scaleValue) {
+        tf = `season_${safe(scaleValue)}_1895-${endYear}`;
+      } else if (timeScale === 'by_month' && scaleValue) {
+        tf = `month_${safe(scaleValue)}_1895-${endYear}`;
+      } else {
+        tf = `years_1895-${endYear}`;
+      }
+    } else {
+      if (timeScale === 'by_season' && scaleValue) {
+        tf = `season_${safe(scaleValue)}_${safe(targetYear)}`;
+      } else if (timeScale === 'by_month' && scaleValue) {
+        tf = `month_${safe(scaleValue)}_${safe(targetYear)}`;
+      } else {
+        tf = `year_${safe(targetYear)}`;
+      }
+    }
+
+    const name = [base, typeToken, countyToken, tf]
+      .filter(Boolean)
+      .join('_')
+      .replace(/[^\w\-]+/g, '_')
+      .replace(/_+/g, '_')
+      .replace(/^_+|_+$/g, '');
+
+    return `${name}.${ext}`;
+  };
+  // ------------------------------------------------------------
+
+  // ----- SIMPLE DOWNLOAD HELPERS (no reordering, no type changes) -----
+  const downloadJSON = (filename = 'mapData.json') => {
+    if (!Array.isArray(mapData) || mapData.length === 0) return;
+    const blob = new Blob([JSON.stringify(mapData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadCSV = (filename = 'mapData.csv') => {
+    if (!Array.isArray(mapData) || mapData.length === 0) return;
+    const keys = Object.keys(mapData[0]); // use first row's key order
+
+    const esc = (v) => {
+      if (v === null || v === undefined) return '';
+      const s = String(v);
+      return `"${s.replace(/"/g, '""')}"`; // quote everything
+    };
+
+    const header = keys.map(esc).join(',');
+    const rows = mapData.map(row => keys.map(k => esc(row[k])).join(',')).join('\n');
+    const csv = `${header}\n${rows}`;
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  };
+  // --------------------------------------------------------------------
+
   return (
     <div>
       <div className='sidebarContentContainter'>
@@ -65,6 +144,7 @@ const Sidebar = ({
               {countyError && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{countyError}</div>}
             </div>
           </div>
+
           <div className='menuSection' id='TimeFrameMenuSection'>
             <p>Time Frame</p>
             <div className='menuOption'>
@@ -79,6 +159,7 @@ const Sidebar = ({
               {timeFrameError && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{timeFrameError}</div>}
             </div>
           </div>
+
           <div className='menuSection' id='climateVariablesMenuSection'>
             <p>Climate Variables</p>
             <div className='menuOption'>
@@ -103,6 +184,28 @@ const Sidebar = ({
               </div>
             )}
           </div>
+
+          {/* --- Data Export section --- */}
+          <div className='menuSection'>
+            <p>Data</p>
+            <div className='menuOption' style={{ display: 'flex', gap: 8 }}>
+              <button
+                onClick={() => downloadJSON(buildDataFilename('json'))}
+                disabled={!Array.isArray(mapData) || mapData.length === 0}
+                title="Download current data as JSON"
+              >
+                Download JSON
+              </button>
+              <button
+                onClick={() => downloadCSV(buildDataFilename('csv'))}
+                disabled={!Array.isArray(mapData) || mapData.length === 0}
+                title="Download current data as CSV"
+              >
+                Download CSV
+              </button>
+            </div>
+          </div>
+          {/* --------------------------- */}
 
           <div>
             <button

@@ -14,7 +14,7 @@ const NoDataOverlay = ({ loading }) => {
       }, 500); // Delay for better user experience
     } else {
       // Hide the overlay immediately when loading starts
-      setShowOverlay(false);
+     setShowOverlay(false);
     }
 
     // Cleanup the timer
