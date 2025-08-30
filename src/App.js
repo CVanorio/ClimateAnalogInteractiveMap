@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Joyride from 'react-joyride';
+import Joyride, { STATUS } from 'react-joyride';
 import './App.css';
 import MapComponent from './components/map/MapComponent';
 import Sidebar from './components/Sidebar';
@@ -22,7 +22,7 @@ const App = () => {
   const [years, setYears] = useState([]);
   const [showChart, setShowChart] = useState(/*targetYear === 'top_analogs'*/ false);
   const [showMethodology, setShowMethodology] = useState(false);
-  const [runTour, setRunTour] = useState(true); // Start tour on load
+ const [runTour, setRunTour] = React.useState(() => !localStorage.getItem('hasSeenTour_v1')); // Start tour on load, hide after 1st visit
 
   const handleCountySelect = (county) => setSelectedCounty(county);
   const handleTimeScaleToggle = (scale) => setTimeScale(scale);
@@ -38,20 +38,23 @@ const App = () => {
   };
 
   const fetchDataFromApi = async () => {
-    setLoading(true);
+        setLoading(true);
 
-    try {
-      const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType);
-      const dataYears = getYearOptions(timeScale, scaleValue);
-      setYears(dataYears);
-      setMapData(res.data[0][0][0]);
-      console.log(res.data);
-      console.log(res.data[0][0][0]);
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
-    }
+        try {
+          const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType);
+          const dataYears = getYearOptions(timeScale, scaleValue);
+          setYears(dataYears);
+          if (res.data[0][0][0].length > 1) {
+            setMapData(res.data[0][0][0]);
+          }
+          console.log(res.data);
+          console.log(res.data[0][0][0]);
+        } catch (error) {
+          console.error('Failed to fetch data:', error);
+        }
 
-    setLoading(false);
+        setLoading(false);
+    
   };
 
   useEffect(() => {
@@ -73,10 +76,15 @@ const App = () => {
         run={runTour}
         continuous
         showSkipButton
+        hideCloseButton          // <-- this hides the "X"
+        disableCloseOnEsc
+        disableOverlayClose
         showProgress
         styles={{ options: { zIndex: 10000 } }}
-        callback={data => {
-          if (data.status === 'finished' || data.status === 'skipped') {
+        callback={({ status, type }) => {
+          const done = status === STATUS.FINISHED || status === STATUS.SKIPPED || type === 'tour:end';
+          if (done) {
+            //localStorage.setItem('hasSeenTour_v1', 'true');
             setRunTour(false);
           }
         }}

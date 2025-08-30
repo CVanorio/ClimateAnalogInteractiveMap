@@ -2,7 +2,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css'; // Ensure Leaflet CSS is imported
 import { ColorRampCollection } from "@maptiler/sdk";
 import { scaleSequential } from 'd3-scale';
-import {interpolateInferno} from 'd3-scale-chromatic';
+import {interpolateYlOrRd} from 'd3-scale-chromatic';
+import {interpolateRdYlBu} from 'd3-scale-chromatic';
 import '../../styles/MapStyles.css';
 
 let coloredCounties = []; // Maintain a list of colored counties
@@ -391,7 +392,7 @@ const MarkerHandler = {
 
           // Create the popup content based on mapData
           let popupContent = '';
-          if (mapData.length > 0) {
+          if (mapData && mapData.length > 0) {
             const data = mapData.find(item => `${item.TargetCountyName}` === targetCounty);
 
             if (data) {
@@ -434,14 +435,14 @@ const MarkerHandler = {
             }
           }
 
-          if (mapData.length === 0)
+          if (mapData && mapData.length === 0)
           {
             currentMarker = L.marker([latitude, longitude], { icon })
             .addTo(map);
           }
           
           // Open the popup if it has content
-          if (mapData.length > 0) {
+          if (mapData && mapData.length > 0) {
             // Add a new marker with the popup
             currentMarker = L.marker([latitude, longitude], { icon })
             .bindPopup(popupContent, {
@@ -523,8 +524,8 @@ function getContrastColor(rgbColor) {
   return yiq >= 140 ? '#000000' : '#ffffff';
 }
 
-const colorScale = scaleSequential(interpolateInferno)
-  .domain([2, -0.1]);
+const colorScale = scaleSequential(interpolateYlOrRd)
+  .domain([2, 0]);
 
 // Function to get color for a given distance
 const getColorForDistance = (distance) => {
