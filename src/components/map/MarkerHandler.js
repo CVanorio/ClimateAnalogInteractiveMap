@@ -122,7 +122,7 @@ const MarkerHandler = {
       ? `<strong>${yearsArray[0]}</strong> and <strong>${yearsArray[1]}</strong>`
       : `<strong>${yearsArray.slice(0, -1).join(', ')}</strong>, and <strong>${yearsArray[yearsArray.length - 1]}</strong>`;
 
-  popupHeader = `The ${timeFrameString} climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
+  popupHeader = `The ${timeFrameString} climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> for the following years:<br><br>`;
 
   // Keep tracking sentences (unchanged behavior)
   existingMarkerData.yearsAndDistances.push(sentence);
