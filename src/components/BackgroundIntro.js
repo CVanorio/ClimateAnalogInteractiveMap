@@ -22,8 +22,8 @@ export const joyrideSteps = [
             }}
           >
             <iframe
-              src="https://www.youtube.com/embed/vSXn5UU94z8?si=FR7gewc3exsLrM5K"
-              title="Climate Analogs Tutorial"
+              src="https://www.youtube.com/embed/jsALl0JmkMA?si=EHJ_hK8FSZA6OFac" 
+              title="Analog Climate Explorer Walkthrough"
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -37,10 +37,6 @@ export const joyrideSteps = [
             />
           </div>
         </div>
-
-        <p style={{ marginTop: 16 }}>
-          <strong>Click “Close” when you’re ready to start exploring.</strong>
-        </p>
       </div>
     ),
   },

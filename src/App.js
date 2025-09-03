@@ -77,7 +77,7 @@ const App = () => {
   // Remove step navigation UI
   // continuous
   // showSkipButton
-  hideCloseButton     // make sure the "X" is visible 
+  hideCloseButton={true}
   showProgress={false}
 
   // Keep your close behavior constraints
