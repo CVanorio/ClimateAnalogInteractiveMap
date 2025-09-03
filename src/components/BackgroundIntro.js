@@ -22,7 +22,7 @@ export const joyrideSteps = [
             }}
           >
             <iframe
-              src="https://www.youtube.com/embed/jsALl0JmkMA?si=EHJ_hK8FSZA6OFac" 
+              src="https://www.youtube.com/embed/iOkXCUBnN78?si=-1He9BkqandO8Nu0"
               title="Analog Climate Explorer Walkthrough"
               style={{
                 position: 'absolute',
