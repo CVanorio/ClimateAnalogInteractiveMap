@@ -170,6 +170,19 @@ const MethodologyOverlay = ({ visible, onClose }) => {
               Only. For annual comparisons, the best analog match from each year is displayed.
             </p>
           </section>
+          {/* Why It Matters */}
+          <section className="why-it-matters-section">
+            <h4>Why It Matters</h4>
+
+             <p>These climate comparisons are important for interpreting how climate changes have impacted different areas over time.  It helps us make informed decisions about how to deal with current and future climate challenges. By looking at the past, we can learn more about climate change and find ways to address the challenges ahead.</p>
+        <p>This tool supports the Wisconsin State Climatology Office’s goal of providing useful climate information for everyone in Wisconsin by making it easier to explore and understand Wisconsin’s climate history. The tool also benefits the Wisconsin Initiative on Climate Change Impacts (WICCI) by conveying how Wisconsin’s climate has varied historically.</p>
+        </section>
+        {/* Credits */}
+          <section className="credirs-section">
+            <h4>Credits</h4>
+        <p> This app was created by <b>Courtney Vanorio</b> through the <a href="https://nelson.wisc.edu/" target="_blank" rel="noopener noreferrer">Nelson Institute for Environmental Studies</a> at the <a href="https://www.wisc.edu/" target="_blank" rel="noopener noreferrer">University of Wisconsin-Madison</a> in collaboration with the <a href="https://climatology.nelson.wisc.edu/" target="_blank" rel="noopener noreferrer">Wisconsin State Climatology Office</a>.
+</p>
+</section>
         </div>
       </div>
     </div>
