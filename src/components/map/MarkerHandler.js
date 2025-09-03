@@ -108,52 +108,54 @@ const MarkerHandler = {
         const existingMarkerData = markerMap.get(latlng.toString());
     
         let yearsArray;
+        let yearsList = '';
         let popupHeader;
         let expandableContent = '';
     
-        if (existingMarkerData) {
-          // Update years array to include the new year
-          yearsArray = [...new Set([...existingMarkerData.years, itemYear])];
-    
-          const yearsForPopupHeader = yearsArray.length === 1
-            ? `<strong>${yearsArray[0]}</strong>`
-            : yearsArray.length === 2
-              ? `<strong>${yearsArray[0]}</strong> and <strong>${yearsArray[1]}</strong>`
-              : `<strong>${yearsArray.slice(0, -1).join(', ')}</strong>, and <strong>${yearsArray[yearsArray.length - 1]}</strong>`;
-    
-          popupHeader = `The ${timeFrameString} climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
-    
-          // Add new sentence to existingMarkerData.yearsAndDistances
-          existingMarkerData.yearsAndDistances.push(sentence);
-    
-          // Construct expandable content for each year if there are multiple years
-          expandableContent = yearsArray.map((year, index) => {
-            const yearDetails = existingMarkerData.yearsAndDistances[index];
-            return `<details><summary class="expanded-summary"><strong>${year}</strong></summary><p>${yearDetails}</p></details>`;
-          }).join('');
-    
-          // Update marker data
-          markerMap.set(latlng.toString(), {
-            count: existingMarkerData.count + 1,
-            popupContent: `${popupHeader}${expandableContent}`,
-            yearsAndDistances: existingMarkerData.yearsAndDistances,
-            years: yearsArray
-          });
-        } else {
-          // Create new entry for markers without existing data
-          yearsArray = [itemYear];
-    
-          popupHeader = `The climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> in <strong>${itemYear}</strong>.<br><br>`;
-    
-          expandableContent = sentence;
-    
-          markerMap.set(latlng.toString(), {
-            count: 1,
-            popupContent: `${popupHeader}${expandableContent}`,
-            yearsAndDistances: [sentence],
-            years: yearsArray
-          });
-        }
+       if (existingMarkerData) {
+  // Update years array to include the new year
+  yearsArray = [...new Set([...existingMarkerData.years, itemYear])];
+
+  const yearsForPopupHeader = yearsArray.length === 1
+    ? `<strong>${yearsArray[0]}</strong>`
+    : yearsArray.length === 2
+      ? `<strong>${yearsArray[0]}</strong> and <strong>${yearsArray[1]}</strong>`
+      : `<strong>${yearsArray.slice(0, -1).join(', ')}</strong>, and <strong>${yearsArray[yearsArray.length - 1]}</strong>`;
+
+  popupHeader = `The ${timeFrameString} climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the best analog match for ${item.TargetCountyName}, WI for the following years:<br><br>`;
+
+  // Keep tracking sentences (unchanged behavior)
+  existingMarkerData.yearsAndDistances.push(sentence);
+
+  // 🔁 Replace expandable details with a plain list of years
+  yearsList = `<ul class="analog-years-list">${yearsArray
+    .map((year) => `<li><strong>${year}</strong></li>`)
+    .join('')}</ul>`;
+
+  // Update marker data
+  markerMap.set(latlng.toString(), {
+    count: existingMarkerData.count + 1,
+    popupContent: `${popupHeader}${yearsList}`,
+    yearsAndDistances: existingMarkerData.yearsAndDistances,
+    years: yearsArray
+  });
+} else {
+  // Create new entry for markers without existing data
+  yearsArray = [itemYear];
+
+  popupHeader = `The climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> in <strong>${itemYear}</strong>.<br><br>`;
+
+  //expandableContent = sentence;
+
+  markerMap.set(latlng.toString(), {
+    count: 1,
+    popupContent: `${popupHeader}`,
+    yearsAndDistances: [sentence],
+    years: yearsArray
+  });
+}
+
+
     
         const markerRadius = existingMarkerData ? Math.pow(existingMarkerData.count + 1, 0.5) * 15 : 15;
         const markerColor = yearsArray.includes(itemYear) ? yearColors[itemYear] : '#000000';
@@ -169,7 +171,7 @@ const MarkerHandler = {
             popupAnchor: [0, -markerRadius / 2]
           }),
           interactive: true
-        }).bindPopup(`${popupHeader}${expandableContent}`, {
+        }).bindPopup(`${popupHeader}${yearsList}`, {
           className: 'analog-county-popup',
           closeButton: true
         });
