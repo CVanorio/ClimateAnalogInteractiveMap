@@ -72,23 +72,37 @@ const App = () => {
   return (
     <div className="app-container" id='app-container'>
       <Joyride
-        steps={joyrideSteps}
-        run={runTour}
-        continuous
-        showSkipButton
-        hideCloseButton          // <-- this hides the "X"
-        disableCloseOnEsc
-        disableOverlayClose
-        showProgress
-        styles={{ options: { zIndex: 10000 } }}
-        callback={({ status, type }) => {
-          const done = status === STATUS.FINISHED || status === STATUS.SKIPPED || type === 'tour:end';
-          if (done) {
-            //localStorage.setItem('hasSeenTour_v1', 'true');
-            setRunTour(false);
-          }
-        }}
-      />
+  steps={joyrideSteps}
+  run={runTour}
+  // Remove step navigation UI
+  // continuous
+  // showSkipButton
+  hideCloseButton     // make sure the "X" is visible 
+  showProgress={false}
+
+  // Keep your close behavior constraints
+  disableCloseOnEsc
+  disableOverlayClose
+
+  // Accessibility / stacking
+  styles={{ options: { zIndex: 10000 } }}
+
+  // Label for the close button (optional)
+  locale={{ close: 'Close' }}
+
+  callback={({ status, type }) => {
+    const done =
+      status === STATUS.FINISHED ||
+      status === STATUS.SKIPPED ||
+      type === 'tour:end';
+
+    if (done) {
+      localStorage.setItem('hasSeenTour_v1', 'true');
+      setRunTour(false);
+    }
+  }}
+/>
+
       <i id='menuToggle' className={`${menuVisible ? 'fas fa-angle-left' : 'fas fa-angle-right'}`} onClick={toggleMenu} title="Toggle Menu"></i>
       <aside className={`sidebar ${menuVisible ? 'visible' : ''}`}>
         <Sidebar

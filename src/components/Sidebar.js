@@ -212,7 +212,7 @@ const Sidebar = ({
       title="Download current map data as JSON"
     >
       <i className="fa-solid fa-file-arrow-down" style={{ fontSize: '1.5rem', color: '#002fa3' }}></i>
-      <span style={{ fontSize: '0.85rem' }}>JSON</span>
+      <span style={{ fontSize: '1rem' }}>JSON</span>
     </a>
 
     <a
@@ -235,8 +235,53 @@ const Sidebar = ({
       title="Download current map data as CSV"
     >
       <i className="fa-solid fa-file-arrow-down" style={{ fontSize: '1.5rem', color: '#002fa3' }}></i>
-      <span style={{ fontSize: '0.85rem' }}>CSV</span>
+      <span style={{ fontSize: '1rem' }}>CSV</span>
     </a>
+  </div>
+</div>
+{/* --------------------------- */}
+
+
+{/* --- About section --- */}
+<div className='menuSection'>
+  <p>About</p>
+  <div 
+    className='menuOption' 
+    style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center',   // ⬅️ center buttons horizontally
+      gap: '6px' 
+    }}
+  >
+    <button
+      className={`methodology-toggle ${showMethodology ? 'active' : ''}`}
+      onClick={toggleMethodology}
+      style={{ width: '80%', margin: 5 }}
+    >
+      <span className="methodology-label">View Methodology</span>
+    </button>
+
+    <button
+      className="intro-toggle"
+      onClick={onIntroClick}
+      style={{ width: '80%', margin: 5 }}
+    >
+      <span className="intro-label">View Tutorial</span>
+    </button>
+  </div>
+
+  <div className='menuOption'>
+    <p style={{ fontSize: '0.9rem', marginTop: '20px' }}>
+      <a
+        className='surveyLink'
+        href="https://forms.gle/4fmWqfaXX9tvDdBu6"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Click here to submit your feedback
+      </a>
+    </p>
   </div>
 </div>
 {/* --------------------------- */}
@@ -244,34 +289,10 @@ const Sidebar = ({
 
 
 
-
-
-
-          <div>
-            <button
-              className={`methodology-toggle ${showMethodology ? 'active' : ''}`}
-              onClick={toggleMethodology}
-            >
-              <span className="methodology-label">{'View Methodology'}</span>
-            </button>
-            <button
-              className="intro-toggle"
-              onClick={onIntroClick}
-            >
-              <span className="intro-label">{'View Tutorial'}</span>
-            </button>
-            <p>
-              <a
-                className='surveyLink'
-                href="https://forms.gle/4fmWqfaXX9tvDdBu6"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Click here to submit your feedback
-              </a>
-            </p>
-          </div>
         </div>
+         <p style={{ fontSize: '0.9rem', marginTop: '20px', opacity: 0.7, textAlign: 'center' }}>
+      {/* Created by Courtney Vanorio, 2025 */}
+    </p>
       </div>
       {menuVisible && (
         <div className="logoContainer">
