@@ -148,8 +148,8 @@ const MapComponent = ({
   // console.log(targetYear)
   // console.log(timeScale)
   // console.log(scaleValue)
-  console.log("mapData", mapData);
-  console.log("target year", targetYear);
+ // console.log("mapData", mapData);
+  //console.log("target year", targetYear);
 
   const targetYearString = timeScale === 'by_season' && scaleValue === 'Winter' ? `${targetYear - 1}-${targetYear}` : targetYear;
 
@@ -160,6 +160,7 @@ const MapComponent = ({
         selectedCounty !== '' &&
         targetYear !== '' &&
         timeScale !== '' &&
+        targetYear !== 'top_analogs' &&
         ((timeScale === 'by_year') || (timeScale !== 'by_year' && scaleValue !== '')) &&
 
         (
