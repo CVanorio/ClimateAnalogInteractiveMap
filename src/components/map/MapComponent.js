@@ -14,6 +14,8 @@ import Slider from './Slider';
 import Legend from './Legend'; // Import the Legend component for the map's legend display
 import TopAnalogsLegend from './TopAnalogsLegend';
 import '../../styles/MapStyles.css'; // Import CSS file for map styles
+import { TARGET_STATE_ABBR } from '../../utils/constants';
+
 
 const MapComponent = ({
   selectedCounty,
@@ -180,7 +182,7 @@ const MapComponent = ({
       <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}>
         {mapData && targetYear !== '' && selectedCounty !== '' && (
           <div className="map-title-overlay">
-            <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analogs by year from 1895 ${highlightedYear === 1895 ? '' : `- ${highlightedYear}`} ${timeFrameString} for ${selectedCounty}, WI` : `${dataTypeString} Climate Analogs for ${selectedCounty}, WI ${timeFrameString} ${targetYearString}`}</h3>
+            <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analogs by year from 1895 ${highlightedYear === 1895 ? '' : `- ${highlightedYear}`} ${timeFrameString} for ${selectedCounty}, ${TARGET_STATE_ABBR}` : `${dataTypeString} Climate Analogs for ${selectedCounty}, ${TARGET_STATE_ABBR} ${timeFrameString} ${targetYearString}`}</h3>
           </div>
         )}
         {targetYear && targetYear !== 'top_analogs' && (

@@ -4,6 +4,7 @@ import { ColorRampCollection } from "@maptiler/sdk";
 import { scaleSequential } from 'd3-scale';
 import {interpolateYlOrRd} from 'd3-scale-chromatic';
 import '../../styles/MapStyles.css';
+import { TARGET_STATE_ABBR } from '../../utils/constants';
 
 let coloredCounties = []; // Maintain a list of colored counties
 let currentTargetLayer = null; // Global variable to keep track of the current target county layer
@@ -103,7 +104,7 @@ const MarkerHandler = {
           ? `a <strong>total precipitation</strong> of <i class="fas fa-cloud-rain"></i> <strong>${Number(item.AnalogPrecipNormal)} in</strong>`
           : '';
     
-        const sentence = `The ${timeFrameString} <strong>${itemYear}</strong> climate in <strong>${item.TargetCountyName}, WI</strong> had ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`;
+        const sentence = `The ${timeFrameString} <strong>${itemYear}</strong> climate in <strong>${item.TargetCountyName}, ${TARGET_STATE_ABBR}</strong> had ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`;
     
         const existingMarkerData = markerMap.get(latlng.toString());
     
@@ -122,12 +123,11 @@ const MarkerHandler = {
       ? `<strong>${yearsArray[0]}</strong> and <strong>${yearsArray[1]}</strong>`
       : `<strong>${yearsArray.slice(0, -1).join(', ')}</strong>, and <strong>${yearsArray[yearsArray.length - 1]}</strong>`;
 
-  popupHeader = `The ${timeFrameString} climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> for the following years:<br><br>`;
+  popupHeader = `The ${timeFrameString} climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, ${TARGET_STATE_ABBR}</strong> for the following years:<br><br>`;
 
-  // Keep tracking sentences (unchanged behavior)
+  // Keep tracking sentences
   existingMarkerData.yearsAndDistances.push(sentence);
 
-  // 🔁 Replace expandable details with a plain list of years
   yearsList = `<ul class="analog-years-list">${yearsArray
     .map((year) => `<li><strong>${year}</strong></li>`)
     .join('')}</ul>`;
@@ -143,7 +143,7 @@ const MarkerHandler = {
   // Create new entry for markers without existing data
   yearsArray = [itemYear];
 
-  popupHeader = `The climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, WI</strong> in <strong>${itemYear}</strong>.<br><br>`;
+  popupHeader = `The climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> ${timeFrameString} has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}. It was the <strong>best analog match</strong> for <strong>${item.TargetCountyName}, ${TARGET_STATE_ABBR}</strong> in <strong>${itemYear}</strong>.<br><br>`;
 
   //expandableContent = sentence;
 
@@ -246,7 +246,7 @@ const MarkerHandler = {
         //let rankText = `the <strong>${getOrdinal(Number(item.AnalogRank))}</strong> best analog match`;
 
         // Combine the text parts
-        const popupContent = `The ${timeFrameString} climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`; /*</br>When compared to ${item.TargetCountyName}, WI ${timeFrameString} <strong>${targetYear}</strong> it has ${differenceScoreText} and is ${rankText}.`;*/
+        const popupContent = `The ${timeFrameString} climate of <strong>${item.AnalogCountyName}, ${item.AnalogCountyStateAbbr}</strong> has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`; /*</br>When compared to ${item.TargetCountyName}, ${TARGET_STATE_ABBR} ${timeFrameString} <strong>${targetYear}</strong> it has ${differenceScoreText} and is ${rankText}.`;*/
         // Update the existing county layer's style and popup
         map.eachLayer((layer) => {
           if (layer.feature && layer.feature.properties && layer.feature.properties.COUNTYNAME === countyKey && layer.feature.properties.STATEABBR === stateKey) {
@@ -330,7 +330,7 @@ const MarkerHandler = {
       if (countyData && countyData.features) {
         // Find the selected county feature from the county data
         const selectedFeature = countyData.features.find(
-          feature => feature.properties.COUNTYNAME === targetCounty && feature.properties.STATEABBR === 'WI'
+          feature => feature.properties.COUNTYNAME === targetCounty && feature.properties.STATEABBR === TARGET_STATE_ABBR
         );
 
         if (selectedFeature) {
@@ -365,10 +365,10 @@ const MarkerHandler = {
                 }
               });
 
-              // Enable click only for WI counties
-              if (feature.properties.STATEABBR === 'WI') {
+              // Enable click only for Target State counties
+              if (feature.properties.STATEABBR === TARGET_STATE_ABBR) {
                 layer.on('click', function (e) {
-                  // Handle click event for WI counties
+                  // Handle click event for Target State counties
                   // Example: map.removeLayer(this);
                 });
               }
@@ -399,7 +399,7 @@ const MarkerHandler = {
 
             if (data) {
               if (targetYear === 'top_analogs') {
-                popupContent = `<strong>${data.TargetCountyName}, WI</strong>`
+                popupContent = `<strong>${data.TargetCountyName}, ${TARGET_STATE_ABBR}</strong>`
               } else {
 
                 let timeFrameString = '';
@@ -430,7 +430,7 @@ const MarkerHandler = {
 
 
                 // Combine the text parts
-                popupContent = `<strong>${data.TargetCountyName}, WI</strong> in ${timeFrameString} <strong>${targetYear}</strong> had ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`;
+                popupContent = `<strong>${data.TargetCountyName}, ${TARGET_STATE_ABBR}</strong> in ${timeFrameString} <strong>${targetYear}</strong> had ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}.`;
               }
             } else {
               console.error('No matching data found in mapData for the selected feature.');

@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import '../../styles/MapStyles.css';
 import 'leaflet-easyprint';
+import { TARGET_STATE_ABBR } from '../../utils/constants';
 
 const MapInitialization = {
   // Initialize the map with given parameters and base layer
@@ -86,8 +87,8 @@ const MapInitialization = {
     const countyLayer = L.geoJSON(countyData, {
       pane: 'polygons',
       style: (feature) => {
-        // Differentiate style for Wisconsin (WI) counties
-        if (feature.properties.STATEABBR === 'WI') {
+        // Differentiate style for Target State counties
+        if (feature.properties.STATEABBR === TARGET_STATE_ABBR) {
           return {
             weight: 0.7,
             color: 'grey',
@@ -110,7 +111,7 @@ const MapInitialization = {
         let originalColor; // store original color
         let originalOpacity;
 
-        if (feature.properties.STATEABBR === 'WI') {
+        if (feature.properties.STATEABBR === TARGET_STATE_ABBR) {
           // Mouseover: show tooltip and change fill
           layer.on('mouseover', function () {
             originalColor = layer.options.fillColor;
@@ -143,7 +144,7 @@ const MapInitialization = {
             });
           });
 
-          // Click for WI counties only
+          // Click for Target State counties only
           layer.on('click', function () {
             handleCountyClick(feature.properties.COUNTYNAME);
           });

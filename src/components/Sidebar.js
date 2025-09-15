@@ -5,6 +5,7 @@ import DataTypeSelector from './DataTypeSelector';
 import { Tooltip } from 'react-tooltip';
 import WSCO_Logo from '../assets/WSCO_Logo.png';
 import '../styles/Sidebar.css';
+import { TARGET_STATE_ABBR } from '../utils/constants';
 
 const Sidebar = ({
   selectedCounty,
@@ -57,13 +58,13 @@ const Sidebar = ({
 
     const typeToken =
       selectedDataType === 'both' ? 'temp_precip'
-      : selectedDataType === 'temperature' ? 'temp'
-      : selectedDataType === 'precipitation' ? 'precip'
-      : 'all';
+        : selectedDataType === 'temperature' ? 'temp'
+          : selectedDataType === 'precipitation' ? 'precip'
+            : 'all';
 
     const countyToken = selectedCounty
-      ? `${selectedCounty.replace(/\s+/g, '_')}_WI`
-      : 'WI';
+      ? `${selectedCounty.replace(/\s+/g, '_')}_${TARGET_STATE_ABBR}`
+      : TARGET_STATE_ABBR;
 
     const safe = (v) => String(v ?? '').trim().replace(/\s+/g, '_');
 
@@ -185,118 +186,133 @@ const Sidebar = ({
             )}
           </div>
 
-         {/* --- Data Export section --- */}
-<div className='menuSection'>
-  <p>Download Data</p>
-  <div 
-    className='menuOption' 
-    style={{ display: 'flex', gap: 32, marginLeft: '10%' }} // ⬅️ shift start by ~1/3
-  >
-    <a
-      href="#"
-      onClick={(e) => {
-        e.preventDefault();
-        downloadJSON(buildDataFilename('json'));
-      }}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 6,
-        textDecoration: 'none',
-        color: '#002fa3',
-        cursor: 'pointer',
-        opacity: (!Array.isArray(mapData) || mapData.length === 0) ? 0.5 : 1,
-        pointerEvents: (!Array.isArray(mapData) || mapData.length === 0) ? 'none' : 'auto',
-        paddingBottom: '10px'
-      }}
-      title="Download current map data as JSON"
-    >
-      <i className="fa-solid fa-file-arrow-down" style={{ fontSize: '1.5rem', color: '#002fa3' }}></i>
-      <span style={{ fontSize: '1rem' }}>JSON</span>
-    </a>
+          {/* --- Data Export section --- */}
+          <div className='menuSection'>
+            <p>Download Data</p>
+            <div
+              className='menuOption'
+              style={{ display: 'flex', gap: 32, marginLeft: '10%' }} // ⬅️ shift start by ~1/3
+            >
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  downloadJSON(buildDataFilename('json'));
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  textDecoration: 'none',
+                  color: '#002fa3',
+                  cursor: 'pointer',
+                  opacity: (!Array.isArray(mapData) || mapData.length === 0) ? 0.5 : 1,
+                  pointerEvents: (!Array.isArray(mapData) || mapData.length === 0) ? 'none' : 'auto',
+                  paddingBottom: '10px'
+                }}
+                title="Download current map data as JSON"
+              >
+                <i className="fa-solid fa-file-arrow-down" style={{ fontSize: '1.5rem', color: '#002fa3' }}></i>
+                <span style={{ fontSize: '1rem' }}>JSON</span>
+              </a>
 
-    <a
-      href="#"
-      onClick={(e) => {
-        e.preventDefault();
-        downloadCSV(buildDataFilename('csv'));
-      }}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 6,
-        textDecoration: 'none',
-        color: '#002fa3',
-        cursor: 'pointer',
-        opacity: (!Array.isArray(mapData) || mapData.length === 0) ? 0.5 : 1,
-        pointerEvents: (!Array.isArray(mapData) || mapData.length === 0) ? 'none' : 'auto',
-        paddingBottom: '10px'
-      }}
-      title="Download current map data as CSV"
-    >
-      <i className="fa-solid fa-file-arrow-down" style={{ fontSize: '1.5rem', color: '#002fa3' }}></i>
-      <span style={{ fontSize: '1rem' }}>CSV</span>
-    </a>
-  </div>
-</div>
-{/* --------------------------- */}
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  downloadCSV(buildDataFilename('csv'));
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  textDecoration: 'none',
+                  color: '#002fa3',
+                  cursor: 'pointer',
+                  opacity: (!Array.isArray(mapData) || mapData.length === 0) ? 0.5 : 1,
+                  pointerEvents: (!Array.isArray(mapData) || mapData.length === 0) ? 'none' : 'auto',
+                  paddingBottom: '10px'
+                }}
+                title="Download current map data as CSV"
+              >
+                <i className="fa-solid fa-file-arrow-down" style={{ fontSize: '1.5rem', color: '#002fa3' }}></i>
+                <span style={{ fontSize: '1rem' }}>CSV</span>
+              </a>
+            </div>
+          </div>
+          {/* --------------------------- */}
 
 
-{/* --- About section --- */}
-<div className='menuSection'>
-  <p>About</p>
-  <div 
-    className='menuOption' 
-    style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center',   // ⬅️ center buttons horizontally
-      gap: '6px' 
-    }}
-  >
-    <button
-      className={`methodology-toggle ${showMethodology ? 'active' : ''}`}
-      onClick={toggleMethodology}
-      style={{ width: '80%', margin: 5 }}
-    >
-      <span className="methodology-label">View Methodology</span>
-    </button>
+          {/* --- About section --- */}
+          <div className='menuSection'>
+            <p>About</p>
+            <div
+              className='menuOption'
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',   // ⬅️ center buttons horizontally
+                gap: '6px'
+              }}
+            >
+              <button
+                className={`methodology-toggle ${showMethodology ? 'active' : ''}`}
+                onClick={toggleMethodology}
+                style={{ width: '80%', margin: 5 }}
+              >
+                <span className="methodology-label">View Methodology</span>
+              </button>
 
-    <button
-      className="intro-toggle"
-      onClick={onIntroClick}
-      style={{ width: '80%', margin: 5 }}
-    >
-      <span className="intro-label">View Tutorial</span>
-    </button>
-  </div>
+              <button
+                className="intro-toggle"
+                onClick={onIntroClick}
+                style={{ width: '80%', margin: 5 }}
+              >
+                <span className="intro-label">View Tutorial</span>
+              </button>
+            </div>
 
-  <div className='menuOption'>
-    <p style={{ fontSize: '0.9rem', marginTop: '20px' }}>
-      <a
-        className='surveyLink'
-        href="https://forms.gle/4fmWqfaXX9tvDdBu6"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Click here to submit your feedback
-      </a>
-    </p>
-  </div>
-</div>
-{/* --------------------------- */}
+            <div className='menuOption'>
+              <p style={{ fontSize: '0.9rem', marginTop: '20px', marginBottom: '50px' }}>
+                <a
+                  className='surveyLink'
+                  href="https://forms.gle/4fmWqfaXX9tvDdBu6"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Click here to submit your feedback
+                </a>
+              </p>
+            </div>
+          </div>
+          {/* --------------------------- */}
 
 
 
 
         </div>
-         <p style={{ fontSize: '0.9rem', marginTop: '20px', opacity: 0.7, textAlign: 'center' }}>
-      {/* Created by Courtney Vanorio, 2025 */}
-    </p>
+
       </div>
       {menuVisible && (
-        <div className="logoContainer">
-          <img src={WSCO_Logo} alt="WSCO Logo" className="responsive-image" />
+        <div>
+          <div className="logoContainer">
+            <img src={WSCO_Logo} alt="WSCO Logo" className="responsive-image" />
+            <p style={{ fontSize: '0.8rem', marginTop: '-5px', opacity: 0.7, textAlign: 'center' }}>
+              Created by{' '}
+              <a
+                href="https://courtneyvanor.io"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'inherit', textDecoration: 'underline' }}
+              >
+                Courtney Vanorio
+              </a>
+            </p>
+
+          </div>
+          <div>
+
+          </div>
         </div>
       )}
     </div>

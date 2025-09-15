@@ -1,70 +1,85 @@
-# Getting Started with Create React App
+# Climate Analog Interactive Map
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This interactive web application allows users to explore how Wisconsin’s historical climate compares to the present-day climate across the United States. By using “climate analogs,” the app helps visualize how Wisconsin’s climate in the past matches the current climate of other locations, providing insights into climate change and variability.
 
-## Available Scripts
+> **Note:** This project is designed to work with the backend repository [ClimateAnalogDBandAPI](https://github.com/CVanorio/ClimateAnalogDBandAPI), which provides the climate data and API endpoints used by the app.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- Interactive map of the U.S. with climate analogs for Wisconsin counties
+- Compare historical climate (temperature and precipitation) to present-day analogs
+- Select by county, year, season, or month
+- Visualize top analogs and explore climate data trends
+- Detailed popups and charts for climate data
+- Guided onboarding/tutorial using react-joyride
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Getting Started
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+- [Node.js](https://nodejs.org/) (v14 or higher recommended)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installation
 
-### `npm run build`
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/CVanorio/ClimateAnalogInteractiveMap.git
+   cd ClimateAnalogInteractiveMap/climate-analog-react-app
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Running the App
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Start the development server:**
+   ```sh
+   npm start
+   ```
+   This will launch the app in your default browser at [http://localhost:3000](http://localhost:3000).
 
-### `npm run eject`
+2. **Build for production:**
+   ```sh
+   npm run build
+   ```
+   The optimized production build will be in the `build/` directory.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Project Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `climate-analog-react-app/` – Main React app source code
+  - `src/` – React components, assets, styles, and utilities
+  - `public/` – Static files and HTML template
+- `index.html`, `manifest.json`, `robots.txt` – App metadata and configuration
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Customization
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Tour steps:** Edit `src/components/BackgroundIntro.js` to customize the onboarding tutorial.
+- **Map and data:** Update data files in `src/data/` or map components in `src/components/map/` as needed.
 
-## Learn More
+### Adapting for Other States
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To use this app for a different state or multiple states:
+- Update the county selector in `src/components/TargetCountySelector.js` to list counties for the new state(s). If supporting multiple states, add a state selector and update the county dropdown accordingly.
+- Update the state abbreviation constant in `src/utils/constants.js` (e.g., `TARGET_STATE_ABBR`). For multiple states, make this dynamic based on the selected state.
+- Update any hardcoded references to "Wisconsin" in UI text, intro, and documentation.
+- Update map centering and boundaries in `src/components/map/MapComponent.js` if needed.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contact
 
-### Code Splitting
+If you have questions about the data, methods, or how to set up this project, please reach out.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Wisconsin State Climatology Office (WI SCO)
+- Email: **stclim@aos.wisc.edu**
+- Website: [https://climatology.nelson.wisc.edu/](https://climatology.nelson.wisc.edu/)
 
-### Analyzing the Bundle Size
+### Project Author
+- Name: **Courtney Vanorio**
+- Email: **courtney.vanorio@gmail.com**
+- Website: [https://courtneyvanor.io](https://courtneyvanor.io)
+- Role: Project author for the Climate Analog Database & API
+- Notes: Please direct all initial questions to the WI SCO
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---

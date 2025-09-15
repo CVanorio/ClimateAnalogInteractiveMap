@@ -11,6 +11,8 @@ import {
   Legend
 } from 'chart.js';
 import '../styles/Graph.css';
+import { TARGET_STATE_ABBR } from '../utils/constants';
+
 
 // Register Chart.js components
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
@@ -135,7 +137,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
           },
           title: function (tooltipItems) {
             const index = tooltipItems[0].dataIndex;
-            return `${years[index]} - ${targetCountyName}, WI`;
+            return `${years[index]} - ${targetCountyName}, ${TARGET_STATE_ABBR}`;
           }
         },
         backgroundColor: 'rgba(255, 255, 255, 0.9)', // Tooltip background color
