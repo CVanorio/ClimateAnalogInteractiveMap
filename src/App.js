@@ -43,8 +43,9 @@ const App = () => {
         try {
           const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType);
           const dataYears = getYearOptions(timeScale, scaleValue);
+          console.log('res', res.data)
           setYears(dataYears);
-          if (res.data[0][0][0].length > 1) {
+          if (res.data[0][0][0].length > 0) {
             setMapData(res.data[0][0][0]);
           }
           console.log(res.data);

@@ -250,7 +250,8 @@ const MarkerHandler = {
         // Update the existing county layer's style and popup
         map.eachLayer((layer) => {
           if (layer.feature && layer.feature.properties && layer.feature.properties.COUNTYNAME === countyKey && layer.feature.properties.STATEABBR === stateKey) {
-            if (Number(item.AnalogRank) === 1) {
+            if (Number(item.RowNumber) === 1) {
+              
               // Extract latitude and longitude from feature properties
               const latitude = layer.feature.properties.LAT;
               const longitude = layer.feature.properties.LONG;

@@ -144,26 +144,43 @@ const MapComponent = ({
     dataTypeString = 'Precipitation';
   }
 
-  
+
   // console.log(targetYear)
   // console.log(timeScale)
   // console.log(scaleValue)
   console.log("mapData", mapData);
+  console.log("target year", targetYear);
 
   const targetYearString = timeScale === 'by_season' && scaleValue === 'Winter' ? `${targetYear - 1}-${targetYear}` : targetYear;
-  
+
   return (
     <div style={{ position: 'relative' }}>
       <LoadingOverlay loading={loading} />
-      {mapData && mapData.length === 0 && selectedCounty !== '' && targetYear !== '' && timeScale !== '' &&
-        ((timeScale === 'by_year') || (timeScale !== 'by_year' && scaleValue !== '')) && (
+      {Array.isArray(mapData) && mapData.length > 0 &&
+        selectedCounty !== '' &&
+        targetYear !== '' &&
+        timeScale !== '' &&
+        ((timeScale === 'by_year') || (timeScale !== 'by_year' && scaleValue !== '')) &&
+
+        (
+          // Year changed?
+          String(targetYear) !== String(mapData[0].Year) ||
+
+          // Month changed? (normalize to 2-digit strings)
+          (timeScale === 'by_month' &&
+            String(scaleValue).padStart(2, '0') !== String(mapData[0].Month).padStart(2, '0')) ||
+
+          // Season changed? (case-insensitive)
+          (timeScale === 'by_season' &&
+            String(scaleValue).toLowerCase() !== String(mapData[0].Season).toLowerCase())
+        ) && (
           <NoDataOverlay loading={loading} />
         )}
       <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}>
-      {mapData && targetYear !== '' && selectedCounty !== '' && (
-        <div className="map-title-overlay">
-          <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analogs by year from 1895 ${highlightedYear === 1895 ? '' : `- ${highlightedYear}`} ${timeFrameString} for ${selectedCounty}, WI` : `${dataTypeString} Climate Analogs for ${selectedCounty}, WI ${timeFrameString} ${targetYearString}`}</h3>
-        </div>
+        {mapData && targetYear !== '' && selectedCounty !== '' && (
+          <div className="map-title-overlay">
+            <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analogs by year from 1895 ${highlightedYear === 1895 ? '' : `- ${highlightedYear}`} ${timeFrameString} for ${selectedCounty}, WI` : `${dataTypeString} Climate Analogs for ${selectedCounty}, WI ${timeFrameString} ${targetYearString}`}</h3>
+          </div>
         )}
         {targetYear && targetYear !== 'top_analogs' && (
           <Legend className="legend" /> // Show regular Legend component when not viewing top analogs

@@ -39,12 +39,14 @@ const Graph = ({ graphData, years, menuVisible }) => {
   function buildAverageLine(values, len) {
     const valid = values.filter(v => !isNaN(v));
     if (valid.length === 0 || !Array.isArray(len ? [] : years)) return null;
-    const avg = valid.reduce((a, b) => a + b, 0) / valid.length;
+    const avg = parseFloat(
+      (valid.reduce((a, b) => a + b, 0) / valid.length).toFixed(2)
+    );
     return Array.from({ length: len }, () => avg);
   }
 
   const precipAvgData = hasPrecipitationData ? buildAverageLine(precipitationValues, years.length) : null;
-  const tempAvgData   = hasTemperatureData   ? buildAverageLine(temperatureValues, years.length)   : null;
+  const tempAvgData = hasTemperatureData ? buildAverageLine(temperatureValues, years.length) : null;
 
   // Create the chart data object
   const chartData = {
@@ -77,7 +79,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
 
       // --- NEW: Average lines (start hidden; toggle via legend) ---
       precipAvgData && {
-        label: 'Precipitation (avg)',
+        label: `Avg Precipitation (${years[0]} - ${years[years.length - 1]})`,
         data: precipAvgData,
         fill: false,
         borderColor: '#6baed6', // lighter blue
@@ -88,7 +90,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
         hidden: true
       },
       tempAvgData && {
-        label: 'Temperature (avg)',
+        label: `Avg Temperature (${years[0]} - ${years[years.length - 1]})`,
         data: tempAvgData,
         fill: false,
         borderColor: '#fc9272', // lighter red
@@ -120,7 +122,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
       },
       tooltip: {
         callbacks: {
-          label: function(context) {
+          label: function (context) {
             let label = '';
             const datasetLabel = context.dataset.label || '';
             if (datasetLabel) {
@@ -131,7 +133,7 @@ const Graph = ({ graphData, years, menuVisible }) => {
             }
             return label;
           },
-          title: function(tooltipItems) {
+          title: function (tooltipItems) {
             const index = tooltipItems[0].dataIndex;
             return `${years[index]} - ${targetCountyName}, WI`;
           }
