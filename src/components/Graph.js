@@ -11,7 +11,9 @@ import {
   Legend
 } from 'chart.js';
 import '../styles/Graph.css';
-import { TARGET_STATE_ABBR } from '../utils/constants';
+const {
+  TARGET_STATE_ABBR,
+} = require('../utils/constants');
 
 
 // Register Chart.js components

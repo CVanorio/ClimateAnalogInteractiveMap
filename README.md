@@ -39,20 +39,15 @@ This interactive web application allows users to explore how Wisconsin’s histo
    ```sh
    npm start
    ```
-   This will launch the app in your default browser at [http://localhost:3000](http://localhost:3000).
+   This will launch the app in your default browser at [http://localhost:5000](http://localhost:5000).
 
-2. **Build for production:**
-   ```sh
-   npm run build
-   ```
-   The optimized production build will be in the `build/` directory.
 
 ### Project Structure
 
 - `climate-analog-react-app/` – Main React app source code
   - `src/` – React components, assets, styles, and utilities
   - `public/` – Static files and HTML template
-- `index.html`, `manifest.json`, `robots.txt` – App metadata and configuration
+- `index.html`, `manifest.json` – App metadata and configuration
 
 ### Customization
 

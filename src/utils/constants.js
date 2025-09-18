@@ -1,3 +1,7 @@
 // utils/constants.js
-export const TARGET_STATE_ABBR = 'WI';
+const TARGET_STATE_ABBR = 'WI';
+
+module.exports = {
+  TARGET_STATE_ABBR,
+};
 

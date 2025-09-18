@@ -1,7 +1,9 @@
 import L from 'leaflet';
 import '../../styles/MapStyles.css';
 import 'leaflet-easyprint';
-import { TARGET_STATE_ABBR } from '../../utils/constants';
+const {
+  TARGET_STATE_ABBR,
+} = require('../../utils/constants');
 
 const MapInitialization = {
   // Initialize the map with given parameters and base layer

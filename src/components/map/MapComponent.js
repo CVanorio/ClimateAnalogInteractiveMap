@@ -14,7 +14,9 @@ import Slider from './Slider';
 import Legend from './Legend'; // Import the Legend component for the map's legend display
 import TopAnalogsLegend from './TopAnalogsLegend';
 import '../../styles/MapStyles.css'; // Import CSS file for map styles
-import { TARGET_STATE_ABBR } from '../../utils/constants';
+const {
+  TARGET_STATE_ABBR,
+} = require('../../utils/constants');
 
 
 const MapComponent = ({

@@ -5,7 +5,9 @@ import DataTypeSelector from './DataTypeSelector';
 import { Tooltip } from 'react-tooltip';
 import WSCO_Logo from '../assets/WSCO_Logo.png';
 import '../styles/Sidebar.css';
-import { TARGET_STATE_ABBR } from '../utils/constants';
+const {
+  TARGET_STATE_ABBR,
+} = require('../utils/constants');
 
 const Sidebar = ({
   selectedCounty,
@@ -297,7 +299,7 @@ const Sidebar = ({
         <div>
           <div className="logoContainer">
             <img src={WSCO_Logo} alt="WSCO Logo" className="responsive-image" />
-            <p style={{ fontSize: '0.8rem', marginTop: '-5px', opacity: 0.7, textAlign: 'center' }}>
+            <p style={{ fontSize: '0.8rem', marginTop: '-15px', opacity: 0.7, textAlign: 'center', marginBottom: '2px' }}>
               Created by{' '}
               <a
                 href="https://courtneyvanor.io"

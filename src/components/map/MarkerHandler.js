@@ -4,7 +4,10 @@ import { ColorRampCollection } from "@maptiler/sdk";
 import { scaleSequential } from 'd3-scale';
 import {interpolateYlOrRd} from 'd3-scale-chromatic';
 import '../../styles/MapStyles.css';
-import { TARGET_STATE_ABBR } from '../../utils/constants';
+
+const {
+  TARGET_STATE_ABBR,
+} = require('../../utils/constants');
 
 let coloredCounties = []; // Maintain a list of colored counties
 let currentTargetLayer = null; // Global variable to keep track of the current target county layer
@@ -394,6 +397,7 @@ const MarkerHandler = {
 
           // Create the popup content based on mapData
           let popupContent = '';
+      
           if (mapData && mapData.length > 0) {
             const data = mapData.find(item => `${item.TargetCountyName}` === targetCounty);
 
