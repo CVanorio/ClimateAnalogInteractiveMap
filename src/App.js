@@ -13,6 +13,7 @@ import MethodologyOverlay from './components/MethodologyOverlay';
 const App = () => {
   const [selectedCounty, setSelectedCounty] = useState('');
   const [selectedState, setSelectedState] = useState('47');
+  const [selectedStateName, setSelectedStateName] = useState('WI');
   const [timeScale, setTimeScale] = useState('by_year');
   const [scaleValue, setScaleValue] = useState('');
   const [targetYear, setTargetYear] = useState('');
@@ -27,6 +28,7 @@ const App = () => {
 
   const handleCountySelect = (county) => setSelectedCounty(county);
   const handleStateSelect = (state) => setSelectedState(state);
+  const handleStateSelectName = (state) => setSelectedStateName(state);
   const handleTimeScaleToggle = (scale) => setTimeScale(scale);
   const handleScaleValueSelect = (value) => setScaleValue(value);
   const handleTargetYearSelect = (year) => setTargetYear(year);
@@ -113,6 +115,8 @@ const App = () => {
           onSelectCounty={handleCountySelect}
           onSelectState={handleStateSelect}
           selectedState={selectedState}
+          selectedStateName={selectedStateName}
+          onSelectStateName={handleStateSelectName}
           timeScale={timeScale}
           onToggleTimeScale={handleTimeScaleToggle}
           scaleValue={scaleValue}
@@ -133,7 +137,8 @@ const App = () => {
       <section id='map-container' className="map-container">
         <MapComponent
           selectedCounty={selectedCounty}
-          targetState={selectedState}
+          selectedState={selectedState}
+          selectedStateName={selectedStateName}
           timeScale={timeScale}
           scaleValue={scaleValue}
           targetYear={targetYear}
