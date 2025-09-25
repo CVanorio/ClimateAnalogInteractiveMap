@@ -303,7 +303,7 @@ const Sidebar = ({
         <div>
           <div className="logoContainer">
             <img src={WSCO_Logo} alt="WSCO Logo" className="responsive-image" />
-            <p style={{ fontSize: '0.8rem', marginTop: '-15px', opacity: 0.7, textAlign: 'center', marginBottom: '2px' }}>
+            <p style={{ fontSize: '0.8rem', marginTop: '-15px', opacity: 0.7, backgroundColor: 'transparent', textAlign: 'center', marginBottom: '2px' }}>
               Created by{' '}
               <a
                 href="https://courtneyvanor.io"

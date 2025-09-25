@@ -342,6 +342,7 @@ p:has(> a) {
   height: auto; /* Maintain aspect ratio */
   display: block; /* Ensure it's a block element */
   padding: 10px 10px; /* Add padding */
+  z-index: 500;
 }
 
 /* Methodology Content */
