@@ -12,6 +12,7 @@ import MethodologyOverlay from './components/MethodologyOverlay';
 
 const App = () => {
   const [selectedCounty, setSelectedCounty] = useState('');
+  const [selectedState, setSelectedState] = useState('47');
   const [timeScale, setTimeScale] = useState('by_year');
   const [scaleValue, setScaleValue] = useState('');
   const [targetYear, setTargetYear] = useState('');
@@ -25,6 +26,7 @@ const App = () => {
  const [runTour, setRunTour] = React.useState(() => !localStorage.getItem('hasSeenTour_v1')); // Start tour on load, hide after 1st visit
 
   const handleCountySelect = (county) => setSelectedCounty(county);
+  const handleStateSelect = (state) => setSelectedState(state);
   const handleTimeScaleToggle = (scale) => setTimeScale(scale);
   const handleScaleValueSelect = (value) => setScaleValue(value);
   const handleTargetYearSelect = (year) => setTargetYear(year);
@@ -41,7 +43,7 @@ const App = () => {
         setLoading(true);
 
         try {
-          const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType);
+          const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType, selectedState);
           const dataYears = getYearOptions(timeScale, scaleValue);
           console.log('res', res.data)
           setYears(dataYears);
@@ -60,7 +62,7 @@ const App = () => {
 
   useEffect(() => {
     fetchDataFromApi();
-  }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType]);
+  }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType, selectedState]);
 
   useEffect(() => {
     setShowChart(/*targetYear === 'top_analogs'*/ false);
@@ -109,6 +111,8 @@ const App = () => {
         <Sidebar
           selectedCounty={selectedCounty}
           onSelectCounty={handleCountySelect}
+          onSelectState={handleStateSelect}
+          selectedState={selectedState}
           timeScale={timeScale}
           onToggleTimeScale={handleTimeScaleToggle}
           scaleValue={scaleValue}
@@ -129,6 +133,7 @@ const App = () => {
       <section id='map-container' className="map-container">
         <MapComponent
           selectedCounty={selectedCounty}
+          targetState={selectedState}
           timeScale={timeScale}
           scaleValue={scaleValue}
           targetYear={targetYear}

@@ -3,8 +3,16 @@ import axios from 'axios';
 const BASE_URL = 'http://localhost:3000'; 
 
 // Function to fetch data from the server based on user selections
-export const fetchData = async (selectedCounty, timeScale, targetYear, scaleValue, selectedDataType) => {
+export const fetchData = async (selectedCounty, timeScale, targetYear, scaleValue, selectedDataType, selectedState) => {
   try {
+    console.log('Fetching data with parameters:', {
+      selectedCounty,
+      timeScale,
+      targetYear,
+      scaleValue,
+      selectedDataType,
+      selectedState,
+    });
     // Make a GET request to the server with the specified parameters
     const response = await axios.get(`${BASE_URL}/getData`, {
       params: {
@@ -13,6 +21,7 @@ export const fetchData = async (selectedCounty, timeScale, targetYear, scaleValu
         timeScaleValue: scaleValue,
         year: targetYear,
         dataType: selectedDataType,
+        targetState: selectedState,
       },
     });
 

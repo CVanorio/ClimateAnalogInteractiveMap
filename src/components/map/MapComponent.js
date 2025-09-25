@@ -21,6 +21,7 @@ const {
 
 const MapComponent = ({
   selectedCounty,
+  selectedState,
   timeScale,
   scaleValue,
   targetYear,
@@ -116,9 +117,9 @@ const MapComponent = ({
   useEffect(() => {
     if (countyLayerRef.current) {
       // Highlight selected county on the map
-      MarkerHandler.highlightCounty(countyLayerRef.current, selectedCounty, countyData, mapData, timeScale, scaleValue, targetYear, selectedDataType);
+      MarkerHandler.highlightCounty(countyLayerRef.current, selectedCounty, countyData, mapData, timeScale, scaleValue, targetYear, selectedDataType, selectedState);
     }
-  }, [selectedCounty, mapData]); // Update highlighted county when `selectedCounty` or `mapData` changes
+  }, [selectedCounty, selectedState, mapData]); // Update highlighted county when `selectedCounty` or `mapData` changes
 
   // Convert month number to month name
   const monthNames = [
@@ -162,6 +163,7 @@ const MapComponent = ({
       <LoadingOverlay loading={loading} />
       {Array.isArray(mapData) && mapData.length > 0 &&
         selectedCounty !== '' &&
+        selectedState !== '' &&
         targetYear !== '' &&
         timeScale !== '' &&
         targetYear !== 'top_analogs' &&
@@ -182,22 +184,22 @@ const MapComponent = ({
           <NoDataOverlay loading={loading} />
         )}
       <div id="map" style={{ height: showChart ? '70vh' : '98vh', width: menuVisible ? 'calc(100vw - 365px)' : 'calc(100vw - 40px)' }}>
-        {mapData && targetYear !== '' && selectedCounty !== '' && (
+        {mapData && targetYear !== '' && selectedCounty !== '' && selectedState !== '' && (
           <div className="map-title-overlay">
-            <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analogs by year from 1895 ${highlightedYear === 1895 ? '' : `- ${highlightedYear}`} ${timeFrameString} for ${selectedCounty}, ${TARGET_STATE_ABBR}` : `${dataTypeString} Climate Analogs for ${selectedCounty}, ${TARGET_STATE_ABBR} ${timeFrameString} ${targetYearString}`}</h3>
+            <h3 className="map-title-text">{targetYear === 'top_analogs' ? `Top ${dataTypeString} Climate Analogs by year from 1895 ${highlightedYear === 1895 ? '' : `- ${highlightedYear}`} ${timeFrameString} for ${selectedCounty}, ${selectedState}` : `${dataTypeString} Climate Analogs for ${selectedCounty}, ${selectedState} ${timeFrameString} ${targetYearString}`}</h3>
           </div>
         )}
         {targetYear && targetYear !== 'top_analogs' && (
           <Legend className="legend" /> // Show regular Legend component when not viewing top analogs
         )}
-        {targetYear && targetYear === 'top_analogs' && selectedCounty !== '' && (
+        {targetYear && targetYear === 'top_analogs' && selectedCounty !== '' && selectedState !== '' && (
           <TopAnalogsLegend className="topAnalogsLegend"
             yearColors={yearColors}
             years={years}
           />
         )}
       </div>
-      {mapData && targetYear === 'top_analogs' && selectedCounty !== '' && (
+      {mapData && targetYear === 'top_analogs' && selectedCounty !== '' && selectedState !== ''  && (
         <div className="sliderDiv" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 1000 }}>
           <Slider
             highlightedYear={highlightedYear}

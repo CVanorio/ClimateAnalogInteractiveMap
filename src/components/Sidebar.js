@@ -12,6 +12,8 @@ const {
 const Sidebar = ({
   selectedCounty,
   onSelectCounty,
+  onSelectState,
+  selectedState,
   timeScale,
   onToggleTimeScale,
   scaleValue,
@@ -47,7 +49,7 @@ const Sidebar = ({
     } else {
       setTimeFrameError('');
     }
-  }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType]);
+  }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType, selectedState]);
 
   const handleToggleTimeScale = (newTimeScale) => {
     onToggleTimeScale(newTimeScale);
@@ -143,6 +145,8 @@ const Sidebar = ({
               <TargetCountySelector
                 selectedCounty={selectedCounty}
                 onSelectCounty={onSelectCounty}
+                selectedState={selectedState}
+                onSelectState={onSelectState}
               />
               {countyError && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{countyError}</div>}
             </div>

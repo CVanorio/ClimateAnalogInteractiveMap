@@ -14,10 +14,19 @@ const counties = [
   "Washburn County", "Washington County", "Waukesha County", "Waupaca County", "Waushara County", "Winnebago County", "Wood County"
 ];
 
-const TargetCountySelector = ({ selectedCounty, onSelectCounty }) => {
+const states = [
+  { code: 47, name: "WI" }
+];
+
+const TargetCountySelector = ({ selectedCounty, onSelectCounty, selectedState, onSelectState }) => {
   return (
     <div className="target-county-options">
-      <select id="target-county-selector" value={selectedCounty} onChange={(e) => onSelectCounty(e.target.value)}>
+      {/* County selector */}
+      <select
+        id="target-county-selector"
+        value={selectedCounty}
+        onChange={(e) => onSelectCounty(e.target.value)}
+      >
         <option className='selectPrompt' value="">-Select a county-</option>
         {counties.map((county) => {
           const countyName = county.replace(" County", "");
@@ -27,6 +36,20 @@ const TargetCountySelector = ({ selectedCounty, onSelectCounty }) => {
             </option>
           );
         })}
+      </select>
+
+      {/* State selector (hidden, defaults to WI / 47) */}
+      <select
+        id="target-state-selector"
+        value={selectedState || states[0].code}
+        onChange={(e) => onSelectState && onSelectState(e.target.value)}
+        style={{ display: "none" }} // hide from view
+      >
+        {states.map((state) => (
+          <option key={state.code} value={state.code}>
+            {state.name}
+          </option>
+        ))}
       </select>
     </div>
   );
