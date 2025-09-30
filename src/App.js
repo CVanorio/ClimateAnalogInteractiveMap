@@ -42,24 +42,37 @@ const App = () => {
   };
 
   const fetchDataFromApi = async () => {
-        setLoading(true);
-
-        try {
-          const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType, selectedState);
-          const dataYears = getYearOptions(timeScale, scaleValue);
-          console.log('res', res.data)
-          setYears(dataYears);
-          if (res.data[0][0][0].length > 0) {
-            setMapData(res.data[0][0][0]);
-          }
-          console.log(res.data);
-          console.log(res.data[0][0][0]);
-        } catch (error) {
-          console.error('Failed to fetch data:', error);
-        }
-
-        setLoading(false);
-    
+    // Only fetch if all required fields are set
+    const isTimeScaleByYear = timeScale === 'by_year';
+    const isScaleValueValid = isTimeScaleByYear || scaleValue !== '';
+    if (
+      !selectedCounty ||
+      !selectedState ||
+      !selectedStateName ||
+      !timeScale ||
+      !isScaleValueValid ||
+      !targetYear ||
+      !selectedDataType
+    ) {
+      setMapData(null); // Optionally clear map data if fields are incomplete
+      setYears([]);
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType, selectedState);
+      const dataYears = getYearOptions(timeScale, scaleValue);
+      console.log('res', res.data)
+      setYears(dataYears);
+      if (res.data[0][0][0].length > 0) {
+        setMapData(res.data[0][0][0]);
+      }
+      console.log(res.data);
+      console.log(res.data[0][0][0]);
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
