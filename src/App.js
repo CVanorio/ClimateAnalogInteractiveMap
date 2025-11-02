@@ -13,6 +13,7 @@ import MethodologyOverlay from './components/MethodologyOverlay';
 const App = () => {
   const [selectedCounty, setSelectedCounty] = useState('');
   const [selectedState, setSelectedState] = useState('47');
+  const [selectedStateName, setSelectedStateName] = useState('WI');
   const [timeScale, setTimeScale] = useState('by_year');
   const [scaleValue, setScaleValue] = useState('');
   const [targetYear, setTargetYear] = useState('');
@@ -27,6 +28,7 @@ const App = () => {
 
   const handleCountySelect = (county) => setSelectedCounty(county);
   const handleStateSelect = (state) => setSelectedState(state);
+  const handleStateSelectName = (state) => setSelectedStateName(state);
   const handleTimeScaleToggle = (scale) => setTimeScale(scale);
   const handleScaleValueSelect = (value) => setScaleValue(value);
   const handleTargetYearSelect = (year) => setTargetYear(year);
@@ -40,24 +42,37 @@ const App = () => {
   };
 
   const fetchDataFromApi = async () => {
-        setLoading(true);
-
-        try {
-          const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType, selectedState);
-          const dataYears = getYearOptions(timeScale, scaleValue);
-          console.log('res', res.data)
-          setYears(dataYears);
-          if (res.data[0][0][0].length > 0) {
-            setMapData(res.data[0][0][0]);
-          }
-          console.log(res.data);
-          console.log(res.data[0][0][0]);
-        } catch (error) {
-          console.error('Failed to fetch data:', error);
-        }
-
-        setLoading(false);
-    
+    // Only fetch if all required fields are set
+    const isTimeScaleByYear = timeScale === 'by_year';
+    const isScaleValueValid = isTimeScaleByYear || scaleValue !== '';
+    if (
+      !selectedCounty || selectedCounty === '' ||
+      !selectedState ||
+      !selectedStateName ||
+      !timeScale ||
+      !isScaleValueValid ||
+      !targetYear ||
+      !selectedDataType
+    ) {
+      setMapData(null); // Optionally clear map data if fields are incomplete
+      setYears([]);
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetchData(selectedCounty, timeScale, targetYear, scaleValue, selectedDataType, selectedState);
+      const dataYears = getYearOptions(timeScale, scaleValue);
+      console.log('res', res.data)
+      setYears(dataYears);
+      if (res.data[0][0][0].length > 0) {
+        setMapData(res.data[0][0][0]);
+      }
+      console.log(res.data);
+      console.log(res.data[0][0][0]);
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -113,6 +128,8 @@ const App = () => {
           onSelectCounty={handleCountySelect}
           onSelectState={handleStateSelect}
           selectedState={selectedState}
+          selectedStateName={selectedStateName}
+          onSelectStateName={handleStateSelectName}
           timeScale={timeScale}
           onToggleTimeScale={handleTimeScaleToggle}
           scaleValue={scaleValue}
@@ -133,7 +150,8 @@ const App = () => {
       <section id='map-container' className="map-container">
         <MapComponent
           selectedCounty={selectedCounty}
-          targetState={selectedState}
+          selectedState={selectedState}
+          selectedStateName={selectedStateName}
           timeScale={timeScale}
           scaleValue={scaleValue}
           targetYear={targetYear}

@@ -18,7 +18,15 @@ const states = [
   { code: 47, name: "WI" }
 ];
 
-const TargetCountySelector = ({ selectedCounty, onSelectCounty, selectedState, onSelectState }) => {
+const TargetCountySelector = ({ selectedCounty, onSelectCounty, selectedState, onSelectState, selectedStateName, onSelectStateName }) => {
+  // Helper to handle state change and set both code and name
+  const handleStateChange = (e) => {
+    const code = e.target.value;
+    const stateObj = states.find(s => String(s.code) === String(code));
+    if (onSelectState) onSelectState(code);
+    if (onSelectStateName && stateObj) onSelectStateName(stateObj.name);
+  };
+
   return (
     <div className="target-county-options">
       {/* County selector */}
@@ -42,7 +50,7 @@ const TargetCountySelector = ({ selectedCounty, onSelectCounty, selectedState, o
       <select
         id="target-state-selector"
         value={selectedState || states[0].code}
-        onChange={(e) => onSelectState && onSelectState(e.target.value)}
+        onChange={handleStateChange}
         style={{ display: "none" }} // hide from view
       >
         {states.map((state) => (
