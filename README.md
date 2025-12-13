@@ -1,5 +1,7 @@
 # Climate Analog Interactive Map
 
+## **View the tool [here!](https://apps.nelson.wisc.edu/)**
+
 This interactive web application allows users to explore how Wisconsin’s historical climate compares to the present-day climate across the United States. By using “climate analogs,” the app helps visualize how Wisconsin’s climate in the past matches the current climate of other locations, providing insights into climate change and variability.
 
 > **Note:** This project is designed to work with the backend repository [ClimateAnalogDBandAPI](https://github.com/CVanorio/ClimateAnalogDBandAPI), which provides the climate data and API endpoints used by the app.
@@ -74,7 +76,7 @@ If you have questions about the data, methods, or how to set up this project, pl
 - Name: **Courtney Vanorio**
 - Email: **courtney.vanorio@gmail.com**
 - Website: [https://courtneyvanor.io](https://courtneyvanor.io)
-- Role: Project author for the Climate Analog Database & API
+- Role: Project author for the Climate Analog Interactive Map
 - Notes: Please direct all initial questions to the WI SCO
 
 ---
