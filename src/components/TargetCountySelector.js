@@ -32,10 +32,11 @@ const TargetCountySelector = ({ selectedCounty, onSelectCounty, selectedState, o
       {/* County selector */}
       <select
         id="target-county-selector"
+        className="sidebar-select"
         value={selectedCounty}
         onChange={(e) => onSelectCounty(e.target.value)}
       >
-        <option className='selectPrompt' value="">-Select a county-</option>
+        <option className='selectPrompt' value="">Select a Wisconsin county</option>
         {counties.map((county) => {
           const countyName = county.replace(" County", "");
           return (

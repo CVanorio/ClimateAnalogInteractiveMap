@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TargetCountySelector from './TargetCountySelector';
 import TimeScaleSelector from './TimeScaleSelector';
+import YearSelector from './YearSelector';
 import DataTypeSelector from './DataTypeSelector';
 import { Tooltip } from 'react-tooltip';
 import WSCO_Logo from '../assets/WSCO_Logo.png';
@@ -30,28 +31,11 @@ const Sidebar = ({
   menuVisible,
   showMethodology,
   toggleMethodology,
-  onIntroClick
+  onIntroClick,
+  graphMode,
+  onGraphModeChange
 }) => {
-  const [countyError, setCountyError] = useState('');
-  const [timeFrameError, setTimeFrameError] = useState('');
-
-  useEffect(() => {
-    if (!selectedCounty) {
-      setCountyError('Please select a county.');
-    } else {
-      setCountyError('');
-    }
-
-    if (timeScale === 'by_year' && !targetYear) {
-      setTimeFrameError('Please select a year.');
-    } else if ((timeScale === 'by_season') && (!targetYear || !scaleValue)) {
-      setTimeFrameError('Please select a season and year.');
-    } else if ((timeScale === 'by_month') && (!targetYear || !scaleValue)) {
-      setTimeFrameError('Please select a month and year.');
-    } else {
-      setTimeFrameError('');
-    }
-  }, [selectedCounty, timeScale, scaleValue, targetYear, selectedDataType, selectedState, selectedStateName]);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   const handleToggleTimeScale = (newTimeScale) => {
     onToggleTimeScale(newTimeScale);
@@ -137,12 +121,18 @@ const Sidebar = ({
   };
   // --------------------------------------------------------------------
 
+  // Progressive disclosure: later steps unlock as earlier ones are completed.
+  const countyDone = !!selectedCounty;
+  const periodDone = countyDone && (timeScale === 'by_year' || !!scaleValue);
+  const yearDone = periodDone && !!targetYear;
+
   return (
     <div>
       <div className='sidebarContentContainter'>
         <div>
           <div className='menuSection'>
-            <p>Target County</p>
+            <p><span className='step-badge'>1</span> Target County</p>
+            <span className='step-subtitle'>Pick a county from the list or click it on the map</span>
             <div className='menuOption'>
               <TargetCountySelector
                 selectedCounty={selectedCounty}
@@ -152,56 +142,94 @@ const Sidebar = ({
                 selectedStateName={selectedStateName}
                 onSelectStateName={onSelectStateName}
               />
-              {countyError && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{countyError}</div>}
             </div>
           </div>
 
-          <div className='menuSection' id='TimeFrameMenuSection'>
-            <p>Time Frame</p>
+          <div className={`menuSection ${countyDone ? '' : 'step-disabled'}`} id='TimeFrameMenuSection'>
+            <p><span className='step-badge'>2</span> Time Frame</p>
             <div className='menuOption'>
               <TimeScaleSelector
                 timeScale={timeScale}
                 onToggleTimeScale={handleToggleTimeScale}
                 scaleValue={scaleValue}
                 onSelectScaleValue={onSelectScaleValue}
-                targetYear={targetYear}
-                onSelectTargetYear={onSelectTargetYear}
               />
-              {timeFrameError && <div className="error-message"><i className={`fas fa-triangle-exclamation`}></i>{timeFrameError}</div>}
             </div>
           </div>
 
-          <div className='menuSection' id='climateVariablesMenuSection'>
-            <p>Climate Variables</p>
+          <div className={`menuSection ${periodDone ? '' : 'step-disabled'}`} id='YearMenuSection'>
+            <p><span className='step-badge'>3</span> Year</p>
+            <div className='menuOption'>
+              <YearSelector
+                timeScale={timeScale}
+                scaleValue={scaleValue}
+                targetYear={targetYear}
+                onSelectTargetYear={onSelectTargetYear}
+              />
+            </div>
+          </div>
+
+          <div className={`menuSection ${yearDone ? '' : 'step-disabled'}`} id='climateVariablesMenuSection'>
+            <p><span className='step-badge'>4</span> Climate Variables</p>
             <div className='menuOption'>
               <DataTypeSelector
                 selectedDataType={selectedDataType}
                 onDataTypeChange={onDataTypeChange}
               />
             </div>
-            {targetYear === 'top_analogs' && (
-              <div>
-                <button
-                  className={`chart-toggle ${showChart ? 'active' : ''}`}
-                  onClick={toggleChart}
-                  disabled={!mapData || targetYear !== "top_analogs"}
-                  data-tip={!mapData ? "Chart is available after data is displayed on the map" : (targetYear !== "top_analogs" ? "Chart is only available for top analogs by year" : "")}
-                >
-                  <span className="toggle-knob"></span>
-                  <span className="toggle-label">{showChart ? 'Hide Graph' : 'Show Graph'}</span>
-                </button>
-
-                <Tooltip place="top" type="dark" effect="solid" />
-              </div>
-            )}
           </div>
+
+          {/* --- Advanced Settings (collapsible) --- */}
+          {targetYear === 'top_analogs' && (
+            <div className='menuSection advanced-section'>
+              <button
+                type='button'
+                className='advanced-header'
+                onClick={() => setAdvancedOpen(o => !o)}
+                aria-expanded={advancedOpen}
+              >
+                <span>Advanced Settings</span>
+                <i className={`fa-solid fa-chevron-${advancedOpen ? 'up' : 'down'}`}></i>
+              </button>
+              {advancedOpen && (
+                <div className='advanced-body'>
+                  <label
+                    className={`addon-checkbox ${!mapData ? 'disabled' : ''}`}
+                    data-tip={!mapData ? 'Graph is available after data is displayed on the map' : ''}
+                  >
+                    <input type='checkbox' checked={showChart} onChange={toggleChart} disabled={!mapData} />
+                    <span>Show time series graph</span>
+                  </label>
+                  {showChart && (
+                    <div className='mode-toggle graph-mode-toggle'>
+                      <button
+                        type='button'
+                        className={`mode-toggle-button ${graphMode === 'raw' ? 'active' : ''}`}
+                        onClick={() => onGraphModeChange('raw')}
+                      >
+                        Raw Data
+                      </button>
+                      <button
+                        type='button'
+                        className={`mode-toggle-button ${graphMode === 'anomalies' ? 'active' : ''}`}
+                        onClick={() => onGraphModeChange('anomalies')}
+                      >
+                        Anomalies
+                      </button>
+                    </div>
+                  )}
+                  <Tooltip place='top' type='dark' effect='solid' />
+                </div>
+              )}
+            </div>
+          )}
 
           {/* --- Data Export section --- */}
           <div className='menuSection'>
             <p>Download Data</p>
             <div
               className='menuOption'
-              style={{ display: 'flex', gap: 32, marginLeft: '10%' }} // ⬅️ shift start by ~1/3
+              style={{ display: 'flex', gap: 32, marginLeft: '10%' }} // shift start by ~1/3
             >
               <a
                 href="#"
@@ -261,7 +289,7 @@ const Sidebar = ({
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center',   // ⬅️ center buttons horizontally
+                alignItems: 'center',   // center buttons horizontally
                 gap: '6px'
               }}
             >

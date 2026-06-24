@@ -25,8 +25,39 @@ const completedSeasons = {
   Fall: currentMonth > 11, // Fall is complete after November
 };
 
+// Build the "<strong>Season/Month/annual</strong>" time-frame fragment used in popups.
+function buildTimeFrameString(timeScale, scaleValue) {
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  const monthName = timeScale === 'by_month' && !isNaN(scaleValue)
+    ? monthNames[parseInt(scaleValue, 10) - 1]
+    : scaleValue;
+  if (timeScale === 'by_season') return `<strong>${scaleValue}</strong>`;
+  if (timeScale === 'by_month') return `<strong>${monthName}</strong>`;
+  if (timeScale === 'by_year') return `<strong>annual</strong>`;
+  return '';
+}
+
+// Build the "has an average temperature of … and a total precipitation of …" phrase.
+function buildAnalogClimateText(item, selectedDataType) {
+  const temperatureText = (selectedDataType === 'temperature' || selectedDataType === 'both')
+    ? `an <strong>average temperature</strong> of <i class="fas fa-thermometer-half"></i> <strong>${Number(item.AnalogTempNormal)} °F</strong>`
+    : '';
+  const precipitationText = (selectedDataType === 'precipitation' || selectedDataType === 'both')
+    ? `a <strong>total precipitation</strong> of <i class="fas fa-cloud-rain"></i> <strong>${Number(item.AnalogPrecipNormal)} in</strong>`
+    : '';
+  return `has ${temperatureText}${temperatureText && precipitationText ? ' and ' : ''}${precipitationText}`;
+}
+
+// "Set <County> as target county" button (wired by MapComponent's popupopen listener).
+function buildSetTargetButton(countyName) {
+  return `<button class="set-target-btn" data-county="${countyName}">Set as target county</button>`;
+}
+
 const MarkerHandler = {
-  handleMarkers: (map, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear, timeScale, scaleValue) => {
+  handleMarkers: (map, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear, timeScale, scaleValue, selectedCounty) => {
     if (!mapData || !Array.isArray(mapData)) {
       return; // If mapData is null or undefined, do nothing and return
     }
@@ -166,6 +197,12 @@ const MarkerHandler = {
         const fontColor = getContrastColor(markerColor);
         const markerOpacity = yearsArray.some(year => year > highlightedYear) ? 0 : 1;
     
+        // For WI analog counties (other than the current target), add a "set as target" button.
+        const isWiTargetable = item.AnalogCountyStateAbbr === TARGET_STATE_ABBR && item.AnalogCountyName !== selectedCounty;
+        const dotPopupContent = isWiTargetable
+          ? `<div class="target-set-popup">${popupHeader}${yearsList}${buildSetTargetButton(item.AnalogCountyName)}</div>`
+          : `${popupHeader}${yearsList}`;
+
         const marker = L.marker(latlng, {
           icon: L.divIcon({
             html: `<div class="${className}" style="background-color: ${markerColor}; color: ${fontColor}; opacity: ${markerOpacity}; width: ${markerRadius}px; height: ${markerRadius}px; border-radius: 50%;"></div>`,
@@ -174,7 +211,7 @@ const MarkerHandler = {
             popupAnchor: [0, -markerRadius / 2]
           }),
           interactive: true
-        }).bindPopup(`${popupHeader}${yearsList}`, {
+        }).bindPopup(dotPopupContent, {
           className: 'analog-county-popup',
           closeButton: true
         });
@@ -461,11 +498,9 @@ const MarkerHandler = {
           }
           // Add event listener to manage custom popup visibility
           map.on('popupopen', function (e) {
-            if (e.popup !== currentMarker.getPopup()) {
-              // If the opened popup is not the custom one, close the custom popup
-              if (currentMarker && currentMarker.getPopup()) {
-                currentMarker.closePopup();
-              }
+            // If the opened popup is not the target marker's popup, close the target popup.
+            if (currentMarker && currentMarker.getPopup() && e.popup !== currentMarker.getPopup()) {
+              currentMarker.closePopup();
             }
           });
         } else {
@@ -479,6 +514,49 @@ const MarkerHandler = {
     // coloredCounties = null;
     // currentTargetLayer = null;
     // currentMarker = null;
+  },
+
+  // Bind a "Set <County> as target county" popup to every WI county polygon
+  // (except the current target). If the county has analog data for the current
+  // view, that data is shown above the button. Out-of-state counties are untouched.
+  bindWiTargetPopups: (countyLayer, mapData, selectedCounty, targetYear, timeScale, scaleValue, selectedDataType) => {
+    if (!countyLayer || typeof countyLayer.eachLayer !== 'function') return;
+    const tf = buildTimeFrameString(timeScale, scaleValue);
+    const hasData = Array.isArray(mapData) && mapData.length > 0;
+
+    countyLayer.eachLayer((layer) => {
+      const props = layer.feature && layer.feature.properties;
+      if (!props || props.STATEABBR !== TARGET_STATE_ABBR) return; // WI counties only
+      const name = props.COUNTYNAME;
+
+      // The current target keeps its own (button-less) popup from highlightCounty.
+      if (name === selectedCounty) {
+        layer.unbindPopup();
+        return;
+      }
+
+      // Build the data portion of the popup if this county has analog data.
+      let dataHtml = '';
+      if (hasData) {
+        if (targetYear === 'top_analogs') {
+          const matches = mapData.filter(i => i.AnalogCountyName === name && i.AnalogCountyStateAbbr === TARGET_STATE_ABBR);
+          if (matches.length > 0) {
+            const years = [...new Set(matches.map(m => Number(m.Year)))].sort((a, b) => a - b);
+            const yearsList = `<ul class="analog-years-list">${years.map(y => `<li><strong>${y}</strong></li>`).join('')}</ul>`;
+            dataHtml = `The ${tf} climate of <strong>${name}, ${TARGET_STATE_ABBR}</strong> ${buildAnalogClimateText(matches[0], selectedDataType)}. It was the <strong>best analog match</strong> for <strong>${matches[0].TargetCountyName}, ${TARGET_STATE_ABBR}</strong> for the following years:<br><br>${yearsList}`;
+          }
+        } else {
+          const item = mapData.find(i => i.AnalogCountyName === name && i.AnalogCountyStateAbbr === TARGET_STATE_ABBR);
+          if (item) {
+            dataHtml = `The ${tf} climate of <strong>${name}, ${TARGET_STATE_ABBR}</strong> ${buildAnalogClimateText(item, selectedDataType)}.`;
+          }
+        }
+      }
+
+      const labelHtml = dataHtml || `<strong>${name}, ${TARGET_STATE_ABBR}</strong>`;
+      const html = `<div class="target-set-popup">${labelHtml}${buildSetTargetButton(name)}</div>`;
+      layer.bindPopup(html, { className: 'analog-county-popup' });
+    });
   }
 
 };

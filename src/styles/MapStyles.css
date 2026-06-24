@@ -148,3 +148,27 @@ details {
   margin-bottom: 5px
 }
 
+/* "Set as target county" button inside map popups */
+.target-set-popup {
+  font-size: 14px;
+}
+
+.set-target-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #002fa3;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.set-target-btn:hover {
+  background-color: #001f6b;
+}
+

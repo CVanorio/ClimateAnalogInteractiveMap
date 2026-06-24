@@ -49,15 +49,6 @@
   cursor: pointer;
 }
 
-.chart-toggle {
-  display: inline-block;
-  padding: 8px 16px;
-  margin-top: 15px;
-  margin-bottom: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
 .surveyLink {
   padding: 8px 16px;
 }
@@ -256,70 +247,63 @@ p:has(> a) {
   font-weight: bold; /* Bold font weight for label */
 }
 
-.chart-toggle {
-  position: relative;
-  display: inline-flex;
+/* Advanced Settings (collapsible) */
+.advanced-header {
+  display: flex;
   align-items: center;
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
+  justify-content: space-between;
+  width: 100%;
+  padding: 5px;
+  background: none;
   border: none;
-  border-radius: 20px;
-  width: 100px; /* Adjust the width as needed */
-  height: 40px; /* Adjust the height as needed */
-  background-color: #ccc;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 20px;
+  color: #000; /* matches .menuSection p */
+}
+
+.advanced-header i {
+  color: #002fa3;
+  font-size: 16px;
+}
+
+.advanced-body {
+  padding: 6px 10px 4px;
+}
+
+.graph-mode-toggle {
+  margin-top: 10px;
+}
+
+.addon-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
   color: #333;
-  outline: none !important;
-  transition: background-color 0.3s, color 0.3s; /* Transition for color change */
+  cursor: pointer;
 }
 
-.chart-toggle .toggle-knob {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  width: 28px; /* Adjust the width as needed */
-  height: 28px; /* Adjust the height as needed */
-  background-color: #fff;
-  border-radius: 50%;
-  animation: slideKnob 0.3s ease forwards; /* Animation for sliding knob */
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25); /* Box shadow for active tab */
+.addon-checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: #002fa3;
+  cursor: pointer;
 }
 
-.chart-toggle .toggle-label {
-  margin-left: 40px; /* Margin to separate from knob */
-  margin-right: 0;
-  text-align: center;
-  transition: margin 0.3s; /* Transition for margin change */
-  line-height: 14px;
+.addon-checkbox i {
+  color: #002fa3;
+  margin-right: 2px;
 }
 
-.chart-toggle.active .toggle-knob {
-  animation-name: slideKnobActive; /* Animation for active state */
-}
-
-.chart-toggle.active {
-  background-color: #002fa3;
-}
-
-.chart-toggle.active .toggle-label {
-  margin-left: 0; /* Text on the right when active */
-  margin-right: 50px; /* Text on the left when active */
-  color: white;
-}
-
-.chart-toggle:hover {
-  background-color: #b3b3b3; /* Darker background on hover */
-  color: #222; /* Darker text color on hover */
-}
-
-.chart-toggle:disabled {
-  background-color: #eee;
-  color: #666;
+.addon-checkbox.disabled {
+  color: #999;
   cursor: not-allowed;
 }
 
-.chart-toggle:disabled .toggle-knob {
-  background-color: #ddd;
+.addon-checkbox.disabled input {
+  cursor: not-allowed;
 }
 
 /* Logo Container */
@@ -371,27 +355,6 @@ summary:hover {
 ul, ol, p {
   /* margin-left: 0.1em; */
 }
-
-/* Keyframes for slideKnob animation */
-@keyframes slideKnob {
-  0% {
-    left: calc(100% - 37px); /* Start position */
-  }
-  100% {
-    left: 6px; /* End position */
-  }
-}
-
-/* Keyframes for slideKnobActive animation */
-@keyframes slideKnobActive {
-  0% {
-    left: 6px; /* Start position */
-  }
-  100% {
-    left: calc(100% - 37px); /* End position */
-  }
-}
-
 
 /* Sidebar.css */
 
@@ -485,3 +448,181 @@ ul, ol, p {
   transition: background-color 0.3s;
   transition: color 0.3s;
 }
+
+/* ===================== Sidebar UX overhaul ===================== */
+
+/* Unified, branded dropdown / combobox look (overrides older scoped select rules) */
+select.sidebar-select,
+input.sidebar-select {
+  width: 100%;
+  margin: 0;
+  padding: 10px 32px 10px 12px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* custom chevron in brand blue */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23002fa3' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input.sidebar-select {
+  cursor: text;
+}
+
+select.sidebar-select:hover,
+input.sidebar-select:hover {
+  border-color: #999;
+}
+
+select.sidebar-select:focus,
+input.sidebar-select:focus {
+  border-color: #002fa3;
+  box-shadow: 0 0 0 2px rgba(0, 47, 163, 0.2);
+}
+
+/* Guided step badges + subtitles */
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background-color: #002fa3;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.step-subtitle {
+  display: block;
+  margin: -4px 0 8px 2px;
+  font-size: 13px;
+  color: #777;
+}
+
+/* Progressive disclosure: lock later steps until earlier ones are complete */
+.step-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Single year vs all years (time series) toggle */
+.period-selection {
+  margin-top: 10px;
+}
+
+.mode-toggle {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.mode-toggle-button {
+  flex: 1;
+  min-width: 0;
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+  color: #333;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.mode-toggle-button:hover {
+  background-color: #ddd;
+}
+
+.mode-toggle-button.active {
+  background-color: #002fa3;
+  color: #fff;
+}
+
+/* Year picker with +/- steppers */
+.year-stepper {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.year-stepper .year-picker {
+  flex: 1;
+}
+
+.year-step-btn {
+  flex: 0 0 auto;
+  width: 38px;
+  font-size: 18px;
+  line-height: 1;
+  color: #002fa3;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.year-step-btn:hover:not(:disabled) {
+  background-color: #002fa3;
+  color: #fff;
+  border-color: #002fa3;
+}
+
+.year-step-btn:disabled {
+  color: #bbb;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+/* Searchable year picker */
+.year-picker {
+  position: relative;
+  width: 100%;
+}
+
+.year-picker-list {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  max-height: 220px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.year-picker-item {
+  padding: 8px 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.year-picker-item:hover {
+  background-color: #002fa3;
+  color: #fff;
+}
+
+.year-picker-item.selected {
+  font-weight: bold;
+}
+

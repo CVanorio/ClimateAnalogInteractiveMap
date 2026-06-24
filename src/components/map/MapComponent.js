@@ -31,11 +31,16 @@ const MapComponent = ({
   loading,
   years,
   showChart,
-  menuVisible
+  menuVisible,
+  onSelectCounty
 }) => {
   const mapRef = useRef(null);
   const markersRef = useRef([]);
   const countyLayerRef = useRef(null);
+  // Keep the latest county-select callback so the (once-attached) popup button
+  // listener always calls the current handler without re-binding.
+  const onSelectCountyRef = useRef(onSelectCounty);
+  onSelectCountyRef.current = onSelectCounty;
   const [focusToMarkers, setFocusToMarkers] = useState(true);
   const [highlightedYear, setHighlightedYear] = useState(years[0] || null); // Initialize with the first year or null
   const [initialBoundsSet, setInitialBoundsSet] = useState(false);
@@ -66,6 +71,19 @@ const MapComponent = ({
     // Setup base layers and custom controls
     MapInitialization.setupBaseLayers(mapRef.current, stateData);
     countyLayerRef.current = MapInitialization.addCountyLayer(mapRef.current, countyData, handleCountyClick);
+
+    // Wire any "Set as target county" button inside an opened popup (single listener).
+    mapRef.current.on('popupopen', (e) => {
+      const el = e.popup.getElement();
+      const btn = el && el.querySelector('.set-target-btn');
+      if (btn) {
+        btn.onclick = () => {
+          const county = btn.getAttribute('data-county');
+          if (county && onSelectCountyRef.current) onSelectCountyRef.current(county);
+          mapRef.current.closePopup();
+        };
+      }
+    });
 
     // Clean up map instance on component unmount
     return () => {
@@ -110,10 +128,10 @@ const MapComponent = ({
   useEffect(() => {
     if (mapData && yearColors && Object.keys(yearColors).length > 0) {
       // Update markers based on new data and selected year
-      MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear, timeScale, scaleValue);
+      MarkerHandler.handleMarkers(mapRef.current, markersRef, mapData, selectedDataType, initialBoundsSet, highlightedYear, yearColors, targetYear, timeScale, scaleValue, selectedCounty);
       setInitialBoundsSet(true);
     }
-  }, [mapData, selectedDataType, highlightedYear, yearColors, targetYear, timeScale, scaleValue]); // Re-render markers when relevant data changes
+  }, [mapData, selectedDataType, highlightedYear, yearColors, targetYear, timeScale, scaleValue, selectedCounty]); // Re-render markers when relevant data changes
 
   useEffect(() => {
     if (countyLayerRef.current) {
@@ -121,6 +139,13 @@ const MapComponent = ({
       MarkerHandler.highlightCounty(countyLayerRef.current, selectedCounty, countyData, mapData, timeScale, scaleValue, targetYear, selectedDataType, selectedState);
     }
   }, [selectedCounty, selectedState, mapData]); // Update highlighted county when `selectedCounty` or `mapData` changes
+
+  // Bind "Set as target" popups to WI county polygons (runs after markers/highlight).
+  useEffect(() => {
+    if (countyLayerRef.current) {
+      MarkerHandler.bindWiTargetPopups(countyLayerRef.current, mapData, selectedCounty, targetYear, timeScale, scaleValue, selectedDataType);
+    }
+  }, [mapData, selectedCounty, targetYear, timeScale, scaleValue, selectedDataType, highlightedYear, yearColors]);
 
   // Convert month number to month name
   const monthNames = [

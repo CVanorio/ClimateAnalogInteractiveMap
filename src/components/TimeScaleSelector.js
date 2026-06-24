@@ -5,78 +5,7 @@ const TimeScaleSelector = ({
   onToggleTimeScale,
   scaleValue,
   onSelectScaleValue,
-  targetYear,
-  onSelectTargetYear,
 }) => {
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth() + 1; // Months are 0-based (Jan is 0, Dec is 11)
-
-  // Generate years in "YYYY-YYYY" format for Winter, including the current year if the season has ended
-  const getYearOptionsForWinter = () => {
-    const years = [];
-    if (currentMonth > 2) { // Winter season ends in February
-      for (let i = currentYear; i >= 1895; i--) {
-        if (i === 1895) continue; // Skip 1894-1895
-        const displayYear = `${i - 1}-${i}`;
-        years.push(
-          <option key={i} value={i}>
-            {displayYear}
-          </option>
-        );
-      }
-    } else {
-      for (let i = currentYear - 1; i >= 1895; i--) {
-        const displayYear = `${i - 1}-${i}`;
-        years.push(
-          <option key={i} value={i}>
-            {displayYear}
-          </option>
-        );
-      }
-    }
-    return years;
-  };
-
-  // Generate years from 1895 to the current year
-  const getYearOptionsFrom1895 = () => {
-    return Array.from({ length: currentYear - 1894 }, (_, i) => {
-      const year = currentYear - i;
-      return (
-        <option key={year} value={year}>
-          {year}
-        </option>
-      );
-    });
-  };
-
-  // Generate years from 1895 to the current year - 1
-  const getYearOptionsFrom1895ToCurrentYearMinusOne = () => {
-    return Array.from({ length: currentYear - 1895 }, (_, i) => {
-      const year = currentYear - 1 - i;
-      return (
-        <option key={year} value={year}>
-          {year}
-        </option>
-      );
-    });
-  };
-
-  // Determine if the current season has ended based on the scale value
-  const hasSeasonEnded = () => {
-    switch (scaleValue) {
-      case 'Winter':
-        return currentMonth > 2; // Winter ends in February
-      case 'Spring':
-        return currentMonth > 5; // Spring ends in May
-      case 'Summer':
-        return currentMonth > 8; // Summer ends in August
-      case 'Fall':
-        return currentMonth > 11; // Fall ends in November
-      default:
-        return false;
-    }
-  };
-
   return (
     <div className="time-scale-selector">
       <div className="time-scale-button-group">
@@ -102,46 +31,32 @@ const TimeScaleSelector = ({
           onClick={() => onToggleTimeScale('by_month')}
         />
       </div>
-      <div className="time-scale-options">
-        {timeScale === 'by_year' && (
-          <select id='yearSelect' className='yearSelector' value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
-            <option className="selectPrompt" value="">
-              -Select a year-
-            </option>
-            <option key="top_analogs" value="top_analogs">
-              All Years (time series)
-            </option>
-            {getYearOptionsFrom1895ToCurrentYearMinusOne()}
-          </select>
-        )}
-        {timeScale === 'by_season' && (
-          <>
-            <select value={scaleValue} onChange={(e) => onSelectScaleValue(e.target.value)} required>
-              <option className="selectPrompt" value="">
-                -Select a season-
-              </option>
+
+      {/* Season / Month period sub-selection */}
+      {(timeScale === 'by_season' || timeScale === 'by_month') && (
+        <div className="time-scale-options">
+          {timeScale === 'by_season' && (
+            <select
+              className="sidebar-select"
+              value={scaleValue}
+              onChange={(e) => onSelectScaleValue(e.target.value)}
+              required
+            >
+              <option className="selectPrompt" value="">-Select a season-</option>
               <option value="Winter">Winter</option>
               <option value="Spring">Spring</option>
               <option value="Summer">Summer</option>
               <option value="Fall">Fall</option>
             </select>
-            <br />
-            <label>For:</label>
-            <select className='yearSelector' value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
-              <option className="selectPrompt" value="">
-                -Select a year-
-              </option>
-              <option value="top_analogs">All Years (time series)</option>
-              {scaleValue === 'Winter' ? getYearOptionsForWinter() : (hasSeasonEnded() ? getYearOptionsFrom1895() : getYearOptionsFrom1895ToCurrentYearMinusOne())}
-            </select>
-          </>
-        )}
-        {timeScale === 'by_month' && (
-          <>
-            <select value={scaleValue} onChange={(e) => onSelectScaleValue(e.target.value)} required>
-              <option className="selectPrompt" value="">
-                -Select a month-
-              </option>
+          )}
+          {timeScale === 'by_month' && (
+            <select
+              className="sidebar-select"
+              value={scaleValue}
+              onChange={(e) => onSelectScaleValue(e.target.value)}
+              required
+            >
+              <option className="selectPrompt" value="">-Select a month-</option>
               {Array.from({ length: 12 }, (_, i) => {
                 const monthNumber = i + 1;
                 const formattedMonthNumber = monthNumber.toString().padStart(2, '0');
@@ -153,21 +68,9 @@ const TimeScaleSelector = ({
                 );
               })}
             </select>
-            <br />
-            <label>For: </label>
-            <select className='yearSelector' value={targetYear} onChange={(e) => onSelectTargetYear(e.target.value)} required>
-              <option className="selectPrompt" value="">
-                -Select a year-
-              </option>
-              <option value="top_analogs">All Years (time series)</option>
-              {parseInt(scaleValue, 10) <= currentMonth - 1 
-                ? getYearOptionsFrom1895() 
-                : getYearOptionsFrom1895ToCurrentYearMinusOne()
-              }
-            </select>
-          </>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
